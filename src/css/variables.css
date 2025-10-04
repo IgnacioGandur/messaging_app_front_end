@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    /* Fonts */
+    --font-main: "Roboto", sans-serif;
+    --font-secondary: "Montserrat", sans-serif;
+    --font-special: "Great Vibes", cursive;
+
+    /* Colors */
+    --color-main: #2dc653;
+    --color-secondary: #532b88;
+    --color-special: #fee440;
+    --color-background-dark: #0F0E0E;
+    --color-background-light: #dee2e6;
+    --color-font-light: #0F0E0E;
+    --color-font-dark: #EEEEEE;
+    --color-error: #f71735;
+    --color-error-dimmed: #f7173544;
+    --light-dark-background: light-dark(var(--color-background-light), var(--color-background-dark));
+    --light-dark-font: light-dark(var(--color-font-light), var(--color-font-dark));
+
+    /* Spacing Sizes */
+    --size-tiny: .25em;
+    --size-very-small: .5em;
+    --size-small: .75em;
+    --size-normal: 1em;
+    --size-big: 2.25em;
+    --size-very-big: 4em;
+    --size-giant: 6em;
+
+    /* Font Sizes */
+    --font-size-tiny: .5rem;
+    --font-size-small: .75rem;
+    --font-size-normal: 1rem;
+    --font-size-big: 2rem;
+    --font-size-very-big: 4rem;
+    --font-size-giant: 7rem;
+
+    /* Icon Sizes */
+    --icon-size-small: 1rem;
+    --icon-size-normal: 2rem;
+    --icon-size-big: 3rem;
+    --icon-size-giant: 4rem;
+}
