@@ -4,12 +4,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 html,
 body {
     font-family: var(--font-main);
+    font-size: var(--font-size-normal);
 }
 
 html {
@@ -23,7 +24,6 @@ body {
     color: var(--light-dark-font);
     display: flex;
     flex-direction: column;
-    font-size: var(--font-size-normal);
 }
 
 #root {

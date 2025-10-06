@@ -1,13 +1,12 @@
-export default async function appLoader() {
+export default async function logoutLoader() {
     try {
-        const url = import.meta.env.VITE_API_BASE + "/me";
+        const url = import.meta.env.VITE_API_BASE + "/auth/logout";
         const options: RequestInit = {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include",
-            mode: "cors"
+            credentials: "include"
         };
 
         const response = await fetch(url, options);
@@ -16,7 +15,7 @@ export default async function appLoader() {
     } catch (error) {
         return {
             error: true,
-            message: "We were not able to reach the backend. The app will not work correctly.",
+            message: "Server error. We were not able to log you out.",
         }
     }
-}
+} 

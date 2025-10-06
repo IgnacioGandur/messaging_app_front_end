@@ -7,9 +7,12 @@
     --font-special: "Great Vibes", cursive;
 
     /* Colors */
-    --color-main: #2dc653;
-    --color-secondary: #532b88;
+    --color-main: #532b88;
+    --color-main-dimmed: #532b8844;
+    --color-secondary: #2dc653;
+    --color-secondary-dimmed: #2dc65344;
     --color-special: #fee440;
+    --color-special-dimmed: #fee44044;
     --color-background-dark: #0F0E0E;
     --color-background-light: #dee2e6;
     --color-font-light: #0F0E0E;

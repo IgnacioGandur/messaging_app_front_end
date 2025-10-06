@@ -1,5 +1,6 @@
 import { useRouteLoaderData, NavLink } from "react-router";
 import styles from "./Navbar.module.css";
+import { BarLoader } from "react-spinners";
 
 type Link = {
     path: string;
@@ -50,20 +51,25 @@ const Navbar = () => {
             ]
     );
 
-    return <nav className={styles["navbar"]}>
+    return <nav className={styles.navbar}>
         {links.map((link: Link) => {
             return <NavLink
+                prefetch="intent"
+                key={link.path}
                 to={link.path}
-                className={styles["link"]}
+                className={({ isActive }) => isActive ? styles.active : styles.link}
+                viewTransition
             >
-                <span className={`material-symbols-rounded ${styles["icon"]}`}>
-                    {link.icon}
-                </span>
-                <span
-                    className={styles["text"]}
-                >
-                    {link.text}
-                </span>
+                {({ isPending }) => isPending ? <BarLoader color="#fff" /> : (
+                    <>
+                        <span className="material-symbols-rounded">
+                            {link.icon}
+                        </span>
+                        <span className={styles.text}>
+                            {link.text}
+                        </span>
+                    </>
+                )}
             </NavLink>
         })}
     </nav>

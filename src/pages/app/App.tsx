@@ -11,13 +11,12 @@ import ServerError from "../../components/server-error/ServerError";
 
 const App = () => {
     const loaderData = useRouteLoaderData("root");
-    console.log(loaderData);
 
     return <div className={styles["app"]}>
-        {loaderData?.error && <ServerError
+        {loaderData?.error ? <ServerError
             title="Server Error"
             message={loaderData?.message}
-        />}
+        /> : null}
         <Navbar />
         <Outlet />
         <Footer />
