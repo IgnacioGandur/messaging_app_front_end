@@ -4,7 +4,6 @@ import { useNavigate, useLoaderData } from "react-router";
 
 const Logout = () => {
     const loaderData = useLoaderData();
-    console.log("the content of loaderData is:", loaderData);
     const navigate = useNavigate();
 
     useEffect(() => {

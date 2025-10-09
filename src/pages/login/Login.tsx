@@ -1,11 +1,13 @@
 import styles from "./Login.module.css";
 import { useState, useEffect, type ChangeEvent } from "react";
-import { useFetcher, useNavigate } from "react-router";
+import { useFetcher, useNavigate, useSearchParams } from "react-router";
 import InputErrors from "../../components/input-errors/InputErrors";
 
 const Login = () => {
     const fetcher = useFetcher();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const message = searchParams.get("message");
     const [userInputs, setUserInputs] = useState({
         username: "",
         password: ""
@@ -31,6 +33,7 @@ const Login = () => {
         {loginResult && (
             !loginResult?.success && <InputErrors message={loginResult?.message} errors={loginResult?.errors} />
         )}
+        {message && (<p>{message}</p>)}
         <fetcher.Form
             style={{
                 display: "flex",

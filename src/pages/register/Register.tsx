@@ -1,10 +1,12 @@
 import styles from "./Register.module.css";
 import { useState, useEffect, type ChangeEvent } from "react";
-import { useFetcher, useNavigation, useNavigate } from "react-router";
+import { useFetcher, useNavigation, useNavigate, useSearchParams } from "react-router";
 import InputErrors from "../../components/input-errors/InputErrors";
 
 const Register = () => {
     const fetcher = useFetcher();
+    const [searchParams] = useSearchParams();
+    const message = searchParams.get("message");
     const navigation = useNavigation();
     const navigate = useNavigate();
     const [userInputs, setUserInputs] = useState({
@@ -31,6 +33,9 @@ const Register = () => {
     // TODO: Figure out how to handle the cookie.
 
     return <main className={styles["register"]}>
+        {message && (
+            <p>{message}</p>
+        )}
         {registerResult && !registerResult.success ? <InputErrors message={registerResult.message} errors={registerResult.errors} /> : null}
         {navigation.state === "submitting" ? (
             <p>

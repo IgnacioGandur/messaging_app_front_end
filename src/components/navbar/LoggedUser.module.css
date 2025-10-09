@@ -1,0 +1,7 @@
+.logged-user,
+.options {
+    min-width: 125px;
+    border: 2px solid purple;
+    display: flex;
+    flex-direction: column;
+}

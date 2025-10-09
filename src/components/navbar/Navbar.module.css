@@ -3,24 +3,35 @@
     display: flex;
     justify-content: center;
     gap: var(--size-small);
+    border-bottom: 1px solid var(--light-dark-font);
+    justify-content: space-between;
 
-    .link,
-    .pending,
-    .active {
+    .logo {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: var(--light-dark-font);
-        padding: var(--size-tiny);
-
-        .icon {
-            font-size: var(--icon-size-normal);
-        }
     }
 
-    .active {
-        border: 1px solid var(--color-main);
-        background-color: var(--color-main-dimmed);
+    .links {
+        display: flex;
+        gap: var(--size-tiny);
+
+        .link,
+        .pending,
+        .active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--light-dark-font);
+            padding: var(--size-tiny);
+
+            .icon {
+                font-size: var(--icon-size-normal);
+            }
+        }
+
+        .active {
+            border: 1px solid var(--color-main);
+            background-color: var(--color-main-dimmed);
+        }
     }
 }

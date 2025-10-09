@@ -1,0 +1,11 @@
+.settings {
+    display: flex;
+    flex-direction: column;
+    padding: var(--size-normal);
+    border: 2px solid blue;
+    gap: var(--size-normal);
+
+    .delete-account-modal {
+        border: 2px solid cyan;
+    }
+}
