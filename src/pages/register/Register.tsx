@@ -10,6 +10,8 @@ const Register = () => {
     const navigation = useNavigation();
     const navigate = useNavigate();
     const [userInputs, setUserInputs] = useState({
+        firstName: "",
+        lastName: "",
         username: "",
         password: "",
         confirmPassword: "",
@@ -30,8 +32,6 @@ const Register = () => {
         };
     }, [fetcher.data]);
 
-    // TODO: Figure out how to handle the cookie.
-
     return <main className={styles["register"]}>
         {message && (
             <p>{message}</p>
@@ -50,6 +50,26 @@ const Register = () => {
                     flexDirection: "column"
                 }}
             >
+                <label htmlFor="first-name">
+                    First Name
+                    <input
+                        type="text"
+                        id="first-name"
+                        name="firstName"
+                        onChange={(e) => handleUserInput(e, "firstName")}
+                        value={userInputs.firstName}
+                    />
+                </label>
+                <label htmlFor="last-name">
+                    Last Name
+                    <input
+                        type="text"
+                        id="last-name"
+                        name="lastName"
+                        onChange={(e) => handleUserInput(e, "lastName")}
+                        value={userInputs.lastName}
+                    />
+                </label>
                 <label htmlFor="username">
                     Username
                     <input

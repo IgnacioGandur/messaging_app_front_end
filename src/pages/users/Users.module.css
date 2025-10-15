@@ -1,0 +1,19 @@
+.users {
+    width: 100%;
+    border: 2px solid purple;
+    max-width: 1200px;
+    align-self: center;
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-small);
+        padding: var(--size-small);
+
+        .user {
+            border: 2px solid hotpink;
+            display: flex;
+            gap: var(--size-small);
+        }
+    }
+}

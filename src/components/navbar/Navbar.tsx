@@ -36,7 +36,7 @@ const Navbar = () => {
                 },
                 {
                     path: "/conversations",
-                    text: "Conversation",
+                    text: "Conversations",
                     icon: "conversation"
                 },
             ] : [

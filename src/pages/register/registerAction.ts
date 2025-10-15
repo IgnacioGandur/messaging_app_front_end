@@ -3,6 +3,8 @@ import type { ActionFunctionArgs } from "react-router";
 export default async function registerAction({ request }: ActionFunctionArgs) {
     try {
         const formData = await request.formData();
+        const firstName = formData.get("firstName");
+        const lastName = formData.get("lastName");
         const username = formData.get("username");
         const password = formData.get("password");
         const confirmPassword = formData.get("confirmPassword");
@@ -14,6 +16,8 @@ export default async function registerAction({ request }: ActionFunctionArgs) {
             },
             credentials: "include",
             body: JSON.stringify({
+                firstName,
+                lastName,
                 username,
                 password,
                 confirmPassword
@@ -22,7 +26,6 @@ export default async function registerAction({ request }: ActionFunctionArgs) {
 
         const response = await fetch(url, options);
         const result = await response.json();
-        console.log("result is:", result);
         return result;
     } catch (error) {
         return {

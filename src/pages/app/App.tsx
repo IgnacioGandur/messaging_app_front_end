@@ -8,6 +8,7 @@ import { useRouteLoaderData } from "react-router";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import ServerError from "../../components/server-error/ServerError";
+import FloatingChats from "../../components/floating-chats/FloatingChats";
 
 const App = () => {
     const loaderData = useRouteLoaderData("root");
@@ -20,6 +21,7 @@ const App = () => {
         <Navbar />
         <Outlet />
         <Footer />
+        <FloatingChats />
     </div>
 }
 

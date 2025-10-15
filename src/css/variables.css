@@ -16,11 +16,14 @@
     --color-background-dark: #0F0E0E;
     --color-background-light: #dee2e6;
     --color-font-light: #0F0E0E;
+    --color-font-light-dimmed: #0F0E0E44;
     --color-font-dark: #EEEEEE;
+    --color-font-dark-dimmed: #EEEEEE44;
     --color-error: #f71735;
     --color-error-dimmed: #f7173544;
     --light-dark-background: light-dark(var(--color-background-light), var(--color-background-dark));
     --light-dark-font: light-dark(var(--color-font-light), var(--color-font-dark));
+    --light-dark-font-dimmed: light-dark(var(--color-font-light-dimmed), var(--color-font-dark-dimmed));
 
     /* Spacing Sizes */
     --size-tiny: .25em;
@@ -44,4 +47,7 @@
     --icon-size-normal: 2rem;
     --icon-size-big: 3rem;
     --icon-size-giant: 4rem;
+
+    /* Border Radius */
+    --rounding-total: 50%;
 }

@@ -31,7 +31,7 @@ export default async function settingsAction({ request }: ActionFunctionArgs) {
             };
         };
 
-        const username = formData.get("username");
+        const profilePictureUrl = formData.get("profilePictureUrl");
         const firstName = formData.get("firstName");
         const lastName = formData.get("lastName");
         const password = formData.get("password");
@@ -58,7 +58,7 @@ export default async function settingsAction({ request }: ActionFunctionArgs) {
             body: JSON.stringify({
                 firstName,
                 lastName,
-                username,
+                profilePictureUrl,
                 password,
                 confirmPassword
             }),

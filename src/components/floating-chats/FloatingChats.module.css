@@ -1,0 +1,26 @@
+.chats-hidden,
+.chats {
+    border: 2px solid darkcyan;
+    width: 300px;
+    padding: var(--size-normal);
+    position: absolute;
+    bottom: var(--size-very-small);
+    right: var(--size-very-small);
+    display: flex;
+}
+
+.chats-hidden {
+    align-items: center;
+    gap: var(--size-very-small);
+
+    .icon {
+        font-size: var(--icon-size-normal);
+    }
+
+    .separator {
+        width: 5px;
+        height: 5px;
+        border-radius: var(--rounding-total);
+        background-color: var(--light-dark-font-dimmed);
+    }
+}

@@ -1,0 +1,40 @@
+.conversations {
+    display: flex;
+    gap: var(--size-normal);
+    flex-direction: column;
+
+    .wrapper {
+        display: flex;
+        flex: 1;
+
+        .no-conversations,
+        .chats-sidebar {
+            flex: 1;
+            max-width: 325px;
+            border: 2px solid cyan;
+        }
+
+        .chats-sidebar {
+            flex-direction: column;
+
+            .user-conversation-preview {
+                display: flex;
+                flex-direction: column;
+
+                .ppf-and-name {
+                    display: flex;
+
+                    .profile-picture {
+                        width: 35px;
+                        height: 35px;
+                    }
+
+                    .names {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
+    }
+}

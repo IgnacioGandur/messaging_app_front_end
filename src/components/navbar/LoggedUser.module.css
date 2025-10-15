@@ -4,4 +4,30 @@
     border: 2px solid purple;
     display: flex;
     flex-direction: column;
+
+    .user-info {
+        display: flex;
+        flex-direction: row;
+
+        .profile-picture {
+            width: 45px;
+            height: 45px;
+        }
+
+        .names {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+}
+
+.logged-user {
+    flex-direction: row;
+}
+
+.options {
+    .header {
+        display: flex;
+    }
 }

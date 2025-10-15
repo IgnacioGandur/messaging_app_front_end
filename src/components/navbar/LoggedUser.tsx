@@ -27,6 +27,7 @@ type LoggedUserProps = {
         username: string;
         firstName: string | null;
         lastName: string | null;
+        profilePictureUrl: string;
     }
 };
 
@@ -37,15 +38,23 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
         return setShowOptions((prevState) => !prevState);
     };
 
-    return showOptions ? (<button
-        onClick={toggleShowOptions}
-        className={styles["logged-user"]}
-    >
-        <h3 className={styles.username}>
-            {user.username}
-        </h3>
-    </button>) : (
+    return showOptions ? (
         <div className={styles.options}>
+            <div className={styles["user-info"]}>
+                <img
+                    src={user.profilePictureUrl}
+                    alt={`${user.username}'s profile picture.`}
+                    className={styles["profile-picture"]}
+                />
+                <div className={styles.names}>
+                    <h3 className={styles.name}>
+                        {user.firstName} {user.lastName}
+                    </h3>
+                    <p className={styles.username}>
+                        {user.username}
+                    </p>
+                </div>
+            </div>
             <button
                 className={styles.option}
                 onClick={toggleShowOptions}
@@ -62,7 +71,26 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
                 </NavLink>
             })}
         </div>
-    )
+    ) : (<button
+        onClick={toggleShowOptions}
+        className={styles["logged-user"]}
+    >
+        <div className={styles["user-info"]}>
+            <img
+                src={user.profilePictureUrl}
+                alt={`${user.username}'s profile picture.`}
+                className={styles["profile-picture"]}
+            />
+            <div className={styles.names}>
+                <h3 className={styles.name}>
+                    {user.firstName} {user.lastName}
+                </h3>
+                <p className={styles.username}>
+                    {user.username}
+                </p>
+            </div>
+        </div>
+    </button>)
 }
 
 export default LoggedUser;

@@ -13,9 +13,9 @@ const Settings = () => {
     const profileUpdateResult = fetcher.data;
 
     const [userInputs, setUserInputs] = useState({
-        username: user.username,
         firstName: user.firstName === null ? "" : user.firstName,
         lastName: user.lastName === null ? "" : user.lastName,
+        profilePictureUrl: "",
         password: "",
         confirmPassword: "",
     });
@@ -79,14 +79,14 @@ const Settings = () => {
                 flexDirection: "column"
             }}
         >
-            <label htmlFor="username">
-                Update username
+            <label htmlFor="profile-picture-url">
+                Profile Picture URL
                 <input
-                    id="username"
+                    id="profile-picture-url"
                     type="text"
-                    name="username"
-                    value={userInputs.username}
-                    onChange={(e) => handleUserInputs(e, "username")}
+                    name="profilePictureUrl"
+                    value={userInputs.profilePictureUrl}
+                    onChange={(e) => handleUserInputs(e, "profilePictureUrl")}
                 />
             </label>
             <label htmlFor="first-name">
