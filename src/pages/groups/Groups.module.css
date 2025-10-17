@@ -1,0 +1,15 @@
+.groups {
+    display: flex;
+    flex-direction: column;
+
+    .create-group {
+        display: flex;
+        flex-direction: column;
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: fit-content;
+        }
+    }
+}

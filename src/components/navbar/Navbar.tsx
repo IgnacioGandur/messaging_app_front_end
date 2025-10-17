@@ -24,6 +24,11 @@ const Navbar = () => {
             text: "About",
             icon: "info"
         },
+        {
+            path: "/groups",
+            text: "Groups",
+            icon: "communities"
+        },
     ]
 
     const links = commonLinks.concat(

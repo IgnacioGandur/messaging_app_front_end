@@ -11,6 +11,7 @@ import Profile from "./pages/profile/Profile";
 import UserProfile from "./pages/users/user-profile/UserProfile";
 import Conversations from "./pages/conversations/Conversations";
 import NoConversationSelected from "./pages/conversations/child-routes/no-conversation-selected/NoConversationSelected";
+import Groups from "./pages/groups/Groups";
 
 // Child Routes
 import Settings from "./pages/profile/child-routes/settings/Settings";
@@ -22,6 +23,7 @@ import usersLoader from "./pages/users/usersLoader";
 import userProfileLoader from "./pages/users/user-profile/userProfileLoader";
 import conversationsLoader from "./pages/conversations/conversationsLoader";
 import currentConversationLoader from "./pages/conversations/child-routes/current-conversation/currentConversationLoader";
+import groupsLoader from "./pages/groups/groupsLoader";
 
 // Actions
 import registerAction from "./pages/register/registerAction";
@@ -29,6 +31,7 @@ import loginAction from "./pages/login/loginAction";
 import settingsAction from "./pages/profile/child-routes/settings/settingsAction";
 import currentConversationAction from "./pages/conversations/child-routes/current-conversation/currentConversationAction";
 import usersAction from "./pages/users/usersAction";
+import groupsAction from "./pages/groups/groupsAction";
 
 // Components
 import CheckIfUserIsLogged from "./components/check-if-user-is-logged/CheckIfUserIsLogged";
@@ -83,6 +86,12 @@ const router = createBrowserRouter([
                         action: currentConversationAction
                     }
                 ]
+            },
+            {
+                path: "/groups",
+                Component: Groups,
+                loader: groupsLoader,
+                action: groupsAction
             },
             {
                 path: "/profile",
