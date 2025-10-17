@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./CurrentConversation.module.css";
 import { useLoaderData, useFetcher, useRouteLoaderData } from "react-router";
 import ServerError from "../../../../components/server-error/ServerError";
@@ -6,6 +6,7 @@ import type Conversation from "../../../../types/conversation";
 import type Message from "../../../../types/message";
 import type Participant from "../../../../types/participant";
 import type User from "../../../../types/user";
+import InputErrors from "../../../../components/input-errors/InputErrors";
 
 const CurrentConversation = () => {
     const loaderData = useLoaderData();
@@ -21,8 +22,28 @@ const CurrentConversation = () => {
         setMessage(message);
     };
 
+    const deleteMessage = (id: number) => {
+        fetcher.submit(
+            {
+                messageId: id,
+                intent: "delete-message"
+            },
+            {
+                method: "DELETE",
+            }
+        );
+    };
+
+    if (!loaderData?.success) {
+        return <p>no conversation</p>
+    }
+
     return <section className={styles["current-conversation"]}>
         {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
+        {!loaderData.success && <InputErrors
+            message={loaderData?.message}
+            errors={loaderData?.errors}
+        />}
         <header className={styles["user-b-info"]}>
             <img
                 className={styles["profile-picture"]}
@@ -36,14 +57,36 @@ const CurrentConversation = () => {
                 {userB?.username}
             </p>
         </header>
+        {fetcher.state === "submitting" && !fetcher?.formData?.get("intent") && (
+            <p>
+                Sending message
+            </p>
+        )}
+        {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
+            Deleting message...
+        </p>}
         <section className={styles.messages}>
             {messages.map((message: Message) => {
-                return <p
+                return <div
                     key={message.id}
-                    className="message"
+                    className={`${styles.message} ${message.senderId === loggedUser.id ? styles.you : styles.userB}`}
                 >
-                    {message.content}
-                </p>
+                    {(message.senderId === loggedUser.id && !message.deleted) && (
+                        <button
+                            onClick={() => { deleteMessage(message.id) }}
+                        >
+                            <span className="material-symbols-rounded">
+                                close
+                            </span>
+                        </button>
+                    )}
+                    <span className="date">
+                        {message.createdAt.toString()}
+                    </span>
+                    <p className="content">
+                        {message.content}
+                    </p>
+                </div>
             })}
         </section>
         <fetcher.Form

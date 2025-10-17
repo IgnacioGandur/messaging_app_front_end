@@ -22,6 +22,27 @@
     .messages {
         flex: 1;
         border: 2px solid lime;
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-tiny);
+
+        .message {
+            width: fit-content;
+            max-width: 50%;
+            padding: var(--size-very-small);
+        }
+
+        .you {
+            background-color: peachpuff;
+            border: 2px solid darkorchid;
+            align-self: flex-end;
+        }
+
+        .userB {
+            background-color: darkcyan;
+            border: 2px solid gray;
+            align-self: flex-start;
+        }
     }
 
     .send-message {
