@@ -1,0 +1,17 @@
+    .send-message {
+        height: 75px;
+        border: 2px solid hotpink;
+        display: flex;
+        justify-content: center;
+        padding: var(--size-normal);
+        gap: var(--size-normal);
+
+        .attachment {
+            max-width: fit-content;
+            border: 2px solid red;
+        }
+
+        input {
+            flex: 1;
+        }
+    }

@@ -1,3 +1,25 @@
+.group-conversation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-very-small);
+    flex: 1;
+
+    .group-info {
+        border: 2px solid cyan;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--size-very-small);
+        padding: var(--size-very-small);
+        width: 100%;
+
+        .container {
+            display: flex;
+            gap: var(--size-normal);
+        }
+    }
+}
+
 .current-conversation {
     flex: 4;
     border: 2px solid purple;
@@ -16,45 +38,6 @@
         .profile-picture {
             width: 75px;
             height: 75px;
-        }
-    }
-
-    .messages {
-        flex: 1;
-        border: 2px solid lime;
-        display: flex;
-        flex-direction: column;
-        gap: var(--size-tiny);
-
-        .message {
-            width: fit-content;
-            max-width: 50%;
-            padding: var(--size-very-small);
-        }
-
-        .you {
-            background-color: peachpuff;
-            border: 2px solid darkorchid;
-            align-self: flex-end;
-        }
-
-        .userB {
-            background-color: darkcyan;
-            border: 2px solid gray;
-            align-self: flex-start;
-        }
-    }
-
-    .send-message {
-        height: 75px;
-        border: 2px solid hotpink;
-        display: flex;
-        justify-content: center;
-        padding: var(--size-normal);
-        gap: var(--size-normal);
-
-        input {
-            flex: 1;
         }
     }
 }

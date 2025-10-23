@@ -10,4 +10,6 @@ export default interface Conversation {
         user: User
     }[];
     title?: string;
+    profilePicture?: string;
+    description: string;
 }

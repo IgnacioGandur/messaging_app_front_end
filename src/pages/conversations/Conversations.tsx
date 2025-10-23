@@ -22,7 +22,30 @@ const Conversations = () => {
                     </div>
                 ) : (
                     conversations.map((conversation) => {
-                        return conversation.participants.map((participant) => {
+                        return conversation.isGroup ? (
+                            <NavLink
+                                key={conversation.id}
+                                to={`/conversations/${conversation.id}`}
+                                className={styles.group}
+                            >
+                                <img
+                                    src={conversation.profilePicture}
+                                    alt={`Group ${conversation.title} profile's picture.`}
+                                />
+                                <h2
+                                    className={styles["group-title"]}
+                                >
+                                    {conversation.title}
+                                </h2>
+                                <p className={styles["last-message"]}>
+                                    {conversation.messages.length === 0 ? (
+                                        "No messages"
+                                    ) : (
+                                        conversation.messages[0].content
+                                    )}
+                                </p>
+                            </NavLink>
+                        ) : conversation.participants.map((participant) => {
                             return <NavLink
                                 key={`${conversation.id}-${participant.user.id}`}
                                 to={`/conversations/${conversation.id}`}
@@ -50,7 +73,7 @@ const Conversations = () => {
                                             </div>
                                         </div>
                                         <p className={styles["last-message"]}>
-                                            {conversation.messages[0].content}
+                                            {conversation.messages.length > 0 ? conversation.messages[0].content : "No messages."}
                                         </p>
                                     </div>)
                                 }

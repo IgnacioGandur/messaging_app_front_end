@@ -1,12 +1,11 @@
 export default async function groupsLoader() {
     try {
-        const url = import.meta.env.VITE_API_BASE + `/conversations?groups=true`;
+        const url = import.meta.env.VITE_API_BASE + `/groups`;
         const options: RequestInit = {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: "include"
         };
 
         const response = await fetch(url, options);

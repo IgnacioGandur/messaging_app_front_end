@@ -13,6 +13,7 @@ export default async function currentConversationLoader({ params }: LoaderFuncti
 
         const response = await fetch(url, options);
         const result = await response.json();
+        console.log("The content of result is:", result);
         return result;
     } catch (error) {
         return {
