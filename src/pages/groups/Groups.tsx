@@ -1,7 +1,7 @@
 import styles from "./Groups.module.css";
 import { useState, type ChangeEvent, type FormEvent, type MouseEvent } from "react";
 import type Group from "../../types/group";
-import { useLoaderData, useRouteLoaderData, useFetcher } from "react-router";
+import { useLoaderData, useRouteLoaderData, useFetcher, NavLink } from "react-router";
 import InputErrors from "../../components/input-errors/InputErrors";
 
 const Groups = () => {
@@ -54,6 +54,19 @@ const Groups = () => {
             message={fetcher.data?.message}
             errors={fetcher.data?.errors}
         />) : null}
+        <nav>
+            {/* TODO: manage own groups and groups to which the user belongs. */}
+            <NavLink
+                to="your-groups"
+            >
+                Your groups
+            </NavLink>
+            <NavLink
+                to="your-groups"
+            >
+                Your groups
+            </NavLink>
+        </nav>
         {currentGroup && (
             <div
                 style={{
@@ -166,6 +179,10 @@ const Groups = () => {
                             <h2>
                                 {group.title}
                             </h2>
+                            <img
+                                src={group.profilePicture}
+                                alt={`${group.title}'s profile picture`}
+                            />
                             <p className={styles["creation-date"]}>
                                 {String(group.createdAt)}
                             </p>

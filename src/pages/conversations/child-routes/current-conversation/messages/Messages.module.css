@@ -10,10 +10,19 @@
         max-width: 50%;
         padding: var(--size-very-small);
 
-        .image {
-            border: 2px solid hotpink;
-            width: 300px;
-            height: auto;
+        .user-info {
+            display: flex;
+
+            .image {
+                border: 2px solid hotpink;
+                width: 300px;
+                height: auto;
+            }
+        }
+
+        .message-body {
+            display: flex;
+            flex-direction: column;
         }
     }
 

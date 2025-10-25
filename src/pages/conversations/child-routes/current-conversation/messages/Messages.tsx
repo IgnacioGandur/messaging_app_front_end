@@ -30,66 +30,81 @@ const Messages = ({
                 key={message.id}
                 className={`${styles.message} ${message.senderId === loggedUserId ? styles.you : styles.userB}`}
             >
-                <img
-                    className={styles["profile-picture"]}
-                    src={message.sender.profilePictureUrl}
-                    alt={`${message.sender.username}'s profile picture`}
-                />
-                <h2 className={styles.name}>
-                    {message.sender.firstName} {message.sender.lastName}
-                </h2>
-                <p className={styles.username}>
-                    @{message.sender.username}
-                </p>
-                {(message.senderId === loggedUserId && !message.deleted) && (
-                    <button
-                        onClick={() => { deleteMessage(message.id) }}
-                    >
-                        <span className="material-symbols-rounded">
-                            close
-                        </span>
-                    </button>
-                )}
-                {message.attachments.map((a: Attachment) => {
-                    return message.deleted ? (
-                        <p
-                            key={message.id}
-                        >File deleted. </p>
-                    ) : a.fileType.includes("image") ? (
+                {message.senderId === loggedUserId ? (
+                    <p>
+                        You
+                    </p>
+                ) : (
+                    <div className={styles["user-info"]}>
                         <img
-                            key={a.id}
-                            className={`${styles.image} ${styles.attachment}`}
-                            src={a.fileUrl}
-                            alt="Image"
+                            className={styles["profile-picture"]}
+                            src={message.sender.profilePictureUrl}
+                            alt={`${message.sender.username}'s profile picture`}
                         />
-                    ) : (
-                        <div
-                            key={a.id}
-                            className={`${styles.attachment}`}
-                        >
-                            <a
-                                href={`${a.fileUrl}?download`}
-                                download
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="icon"
-                            >
-                                <span className="material-symbols-rounded">
-                                    file_save
-                                </span>
-                                <p>
-                                    {a.fileName}
-                                </p>
-                            </a>
+                        <div className="names">
+                            <h2 className={styles.name}>
+                                {message.sender.firstName} {message.sender.lastName}
+                            </h2>
+                            <p className={styles.username}>
+                                @{message.sender.username}
+                            </p>
                         </div>
-                    )
-                })}
-                <span className="date">
-                    {message.createdAt.toString()}
-                </span>
+                    </div>
+                )}
+                <div className={styles["message-body"]}>
+                    {message.attachments.map((a: Attachment) => {
+                        return message.deleted ? (
+                            <p
+                                key={message.id}
+                            >File deleted. </p>
+                        ) : a.fileType.includes("image") ? (
+                            <img
+                                key={a.id}
+                                className={`${styles.image} ${styles.attachment}`}
+                                src={a.fileUrl}
+                                alt="Image"
+                            />
+                        ) : (
+                            <div
+                                key={a.id}
+                                className={`${styles.attachment}`}
+                            >
+                                <a
+                                    href={`${a.fileUrl}?download`}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="icon"
+                                >
+                                    <span className="material-symbols-rounded">
+                                        file_save
+                                    </span>
+                                    <p>
+                                        {a.fileName}
+                                    </p>
+                                </a>
+                            </div>
+                        )
+                    })}
+                </div>
                 <p className="content">
                     {message.content}
                 </p>
+                <div className={styles["date-and-delete"]}>
+                    <span className={styles.date}>
+                        {message.createdAt.toString()}
+                    </span>
+                    {(message.senderId === loggedUserId && !message.deleted) && (
+                        <button
+                            className={styles["delete-message"]}
+                            onClick={() => { deleteMessage(message.id) }}
+                        >
+                            <span className="material-symbols-rounded">
+                                close
+                            </span>
+                        </button>
+                    )}
+                </div>
             </div>
         })}
     </section>
