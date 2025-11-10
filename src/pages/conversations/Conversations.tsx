@@ -26,9 +26,10 @@ const Conversations = () => {
                             <NavLink
                                 key={conversation.id}
                                 to={`/conversations/${conversation.id}`}
-                                className={styles.group}
+                                className={styles.conversation}
                             >
                                 <img
+                                    className={styles["profile-picture"]}
                                     src={conversation.profilePicture}
                                     alt={`Group ${conversation.title} profile's picture.`}
                                 />
@@ -49,13 +50,13 @@ const Conversations = () => {
                             return <NavLink
                                 key={`${conversation.id}-${participant.user.id}`}
                                 to={`/conversations/${conversation.id}`}
-                                className="conversation"
+                                className={styles.conversations}
                             >
                                 {participant.user.id === loggedUser.id
                                     ? null
                                     : (<div
                                         key={participant.user.username}
-                                        className={styles["user-conversation-preview"]}
+                                        className={styles.conversation}
                                     >
                                         <div className={styles["ppf-and-name"]}>
                                             <img

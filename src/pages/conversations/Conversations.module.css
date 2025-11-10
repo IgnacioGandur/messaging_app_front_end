@@ -15,11 +15,20 @@
         }
 
         .chats-sidebar {
+            display: flex;
+            gap: var(--size-normal);
             flex-direction: column;
+            border: 2px solid purple;
 
-            .user-conversation-preview {
+            .conversation {
                 display: flex;
                 flex-direction: column;
+                border: 2px solid lime;
+
+                .profile-picture {
+                    width: 35px;
+                    height: 35px;
+                }
 
                 .ppf-and-name {
                     display: flex;

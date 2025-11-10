@@ -1,18 +1,24 @@
 import styles from "./Messages.module.css";
 import type Message from "../../../../../types/message";
 import type Attachment from "../../../../../types/attachment";
+import type Participant from "../../../../../types/participant";
 
 type MessagesProps = {
     messages: Message[];
     loggedUserId: number;
     deleteMessage: (id: number) => void;
+    participants?: Participant[];
 };
 
 const Messages = ({
     messages,
     loggedUserId,
     deleteMessage,
+    participants
 }: MessagesProps) => {
+
+    const loggedUserAsParticipant = participants?.find((p) => p.userId === loggedUserId);
+
     return <section className={styles.messages}>
         {messages.length === 0 ? (
             <p
@@ -49,6 +55,16 @@ const Messages = ({
                                 @{message.sender.username}
                             </p>
                         </div>
+                        <div className={styles["group-status"]}>
+                            {(() => {
+                                const isOwner = participants?.find((p) => p.role === "OWNER" && p.userId === message.senderId);
+                                const isAdmin = participants?.find((p) => p.role === "ADMIN" && p.userId === message.senderId);
+
+                                return <span className="material-symbols-rounded">
+                                    {isOwner ? "crown" : isAdmin ? "shield_person" : "person"}
+                                </span>
+                            })()}
+                        </div>
                     </div>
                 )}
                 <div className={styles["message-body"]}>
@@ -67,7 +83,7 @@ const Messages = ({
                         ) : (
                             <div
                                 key={a.id}
-                                className={`${styles.attachment}`}
+                                className={styles.attachment}
                             >
                                 <a
                                     href={`${a.fileUrl}?download`}
@@ -94,16 +110,27 @@ const Messages = ({
                     <span className={styles.date}>
                         {message.createdAt.toString()}
                     </span>
-                    {(message.senderId === loggedUserId && !message.deleted) && (
-                        <button
-                            className={styles["delete-message"]}
-                            onClick={() => { deleteMessage(message.id) }}
-                        >
-                            <span className="material-symbols-rounded">
-                                close
-                            </span>
-                        </button>
-                    )}
+                    {(() => {
+                        const messageSender = participants?.find((p) => p.userId === message.senderId);
+                        const isMessageOwner = messageSender?.userId === loggedUserAsParticipant?.userId;
+                        const isGroupOwner = loggedUserAsParticipant?.role === "OWNER";
+                        const canDeleteMessageAsAdmin = loggedUserAsParticipant?.role === "ADMIN" && messageSender?.role === "USER";
+
+                        return message.deleted
+                            ? null
+                            : isMessageOwner
+                                || isGroupOwner
+                                || canDeleteMessageAsAdmin
+                                ? <button
+                                    className={styles["delete-message"]}
+                                    onClick={() => { deleteMessage(message.id) }}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        close
+                                    </span>
+                                </button>
+                                : null
+                    })()}
                 </div>
             </div>
         })}

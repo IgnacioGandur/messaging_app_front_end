@@ -27,6 +27,47 @@ export default async function currentConversationAction({ request, params }: Act
             };
         }
 
+        // Toggle ADMIN role.
+        if (intent === "toggle-admin-status") {
+            const userId = formData.get("userId");
+            const role = formData.get("role");
+            const url = import.meta.env.VITE_API_BASE + `/groups/${params.conversationId}/participants`;
+            const options: RequestInit = {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    userId,
+                    role
+                })
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
+            return result;
+        }
+
+        if (intent === "remove-from-group") {
+            const userId = formData.get("userId");
+            const url = import.meta.env.VITE_API_BASE + `/groups/${params.conversationId}/participants`;
+            const options: RequestInit = {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    userId
+                })
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
+            return result;
+        }
+
         // Handle sending a message.
         const message = formData.get("message");
         const conversationId = params.conversationId;
