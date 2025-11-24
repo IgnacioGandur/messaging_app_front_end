@@ -12,6 +12,7 @@ import UserProfile from "./pages/users/user-profile/UserProfile";
 import Conversations from "./pages/conversations/Conversations";
 import NoConversationSelected from "./pages/conversations/child-routes/no-conversation-selected/NoConversationSelected";
 import Groups from "./pages/groups/Groups";
+import Friends from "./pages/friends/Friends";
 
 // Child Routes
 import Settings from "./pages/profile/child-routes/settings/Settings";
@@ -24,6 +25,7 @@ import userProfileLoader from "./pages/users/user-profile/userProfileLoader";
 import conversationsLoader from "./pages/conversations/conversationsLoader";
 import currentConversationLoader from "./pages/conversations/child-routes/current-conversation/currentConversationLoader";
 import groupsLoader from "./pages/groups/groupsLoader";
+import friendsLoader from "./pages/friends/friendsLoader";
 
 // Actions
 import registerAction from "./pages/register/registerAction";
@@ -110,6 +112,11 @@ const router = createBrowserRouter([
                     }
                 ]
             },
+            {
+                path: "/friends",
+                Component: Friends,
+                loader: friendsLoader,
+            }
         ],
     },
     {

@@ -2,6 +2,7 @@ import { useRouteLoaderData, NavLink } from "react-router";
 import styles from "./Navbar.module.css";
 import { BarLoader } from "react-spinners";
 import LoggedUser from "./LoggedUser";
+import Notifications from "./Notifications";
 
 type Link = {
     path: string;
@@ -44,6 +45,11 @@ const Navbar = () => {
                     text: "Conversations",
                     icon: "conversation"
                 },
+                {
+                    path: "/friends",
+                    text: "Friends",
+                    icon: "handshake"
+                },
             ] : [
                 {
                     path: "/register",
@@ -84,7 +90,10 @@ const Navbar = () => {
                 </NavLink>
             })}
         </div>
-        {loggedUser ? <LoggedUser user={loggedUser} /> : <div className={styles.empty}></div>}
+        {loggedUser && <Notifications />}
+        {loggedUser
+            ? <LoggedUser user={loggedUser} />
+            : <div className={styles.empty}></div>}
     </nav>
 }
 

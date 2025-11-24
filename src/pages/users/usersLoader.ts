@@ -1,16 +1,25 @@
 export default async function usersLoader() {
     try {
-        const url = import.meta.env.VITE_API_BASE + "/users";
+        const usersUrl = import.meta.env.VITE_API_BASE + "/users";
+        const friendshipsUrl = import.meta.env.VITE_API_BASE + "/friendships";
         const options: RequestInit = {
             method: "GET",
+            credentials: "include",
             headers: {
                 "Content-Type": "application/json"
             }
         };
 
-        const response = await fetch(url, options);
-        const result = await response.json();
-        return result;
+        const usersResponse = await fetch(usersUrl, options);
+        const friendshipsResponse = await fetch(friendshipsUrl, options);
+
+        const usersResult = await usersResponse.json();
+        const friendshipsResult = await friendshipsResponse.json();
+
+        return {
+            users: usersResult?.users,
+            friendships: friendshipsResult?.friendships
+        };
     } catch (error) {
         return {
             error: true,

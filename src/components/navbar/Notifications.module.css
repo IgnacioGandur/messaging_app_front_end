@@ -1,0 +1,27 @@
+.notifications {
+    border: 2px solid lime;
+    position: relative;
+
+    .toggle-notifications {
+        border: 2px solid cyan;
+    }
+
+    .notifications-list {
+        border: 2px solid purple;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        display: flex;
+
+        .friendships {
+            border: 2px solid red;
+
+            .friendship {
+                display: flex;
+                gap: var(--size-small);
+                padding: var(--size-tiny);
+                background-color: white;
+            }
+        }
+    }
+}
