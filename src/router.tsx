@@ -34,6 +34,7 @@ import settingsAction from "./pages/profile/child-routes/settings/settingsAction
 import currentConversationAction from "./pages/conversations/child-routes/current-conversation/currentConversationAction";
 import usersAction from "./pages/users/usersAction";
 import groupsAction from "./pages/groups/groupsAction";
+import friendsAction from "./pages/friends/friendsAction";
 
 // Components
 import CheckIfUserIsLogged from "./components/check-if-user-is-logged/CheckIfUserIsLogged";
@@ -116,6 +117,7 @@ const router = createBrowserRouter([
                 path: "/friends",
                 Component: Friends,
                 loader: friendsLoader,
+                action: friendsAction
             }
         ],
     },

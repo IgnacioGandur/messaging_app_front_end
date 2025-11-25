@@ -10,7 +10,6 @@ export default async function friendsLoader() {
         };
 
         const response = await fetch(url, options);
-        console.log("The content of response is:", response);
         const result = await response.json();
         return result;
     } catch (error) {

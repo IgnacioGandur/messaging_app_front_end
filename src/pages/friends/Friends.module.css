@@ -1,0 +1,9 @@
+.friends {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-normal);
+
+    .friend {
+        border: 2px solid cyan;
+    }
+}
