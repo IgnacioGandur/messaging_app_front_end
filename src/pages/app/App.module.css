@@ -5,5 +5,9 @@
 
     main {
         flex: 1;
+
+        .logged-user {
+            border: 2px solid blue;
+        }
     }
 }

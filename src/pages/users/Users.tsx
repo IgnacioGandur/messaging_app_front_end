@@ -1,9 +1,15 @@
-import { NavLink, useLoaderData } from "react-router";
-import { useState, type FormEvent } from "react";
 import styles from "./Users.module.css"
+import socket from "../../socket";
+
+// Packages
+import { NavLink, useLoaderData } from "react-router";
+import { useState } from "react";
 import { useRouteLoaderData, useFetcher } from "react-router";
+
+// Types
 import type User from "../../types/user";
 import type Friendship from "../../types/friendship";
+import type { FormEvent } from "react";
 
 const Users = () => {
     const fetcher = useFetcher();
@@ -15,6 +21,9 @@ const Users = () => {
     const [showMessageModal, setShowMessageModal] = useState(false);
     const [currentTargetUser, setCurrentTargetUser] = useState<User | null>(null);
     const [message, setMessage] = useState("");
+
+    // TODO: Handle logged users.
+    // const [activeUsers, setActiveUsers] = useState();
 
     const handleMessageButtonClick = (user: User) => {
         setMessage("");
