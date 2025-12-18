@@ -1,29 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
     /* Fonts */
     --font-main: "Roboto", sans-serif;
     --font-secondary: "Montserrat", sans-serif;
-    --font-special: "Great Vibes", cursive;
+    --font-special: "Dancing Script", cursive;
 
     /* Colors */
-    --color-main: #532b88;
-    --color-main-dimmed: #532b8844;
-    --color-secondary: #2dc653;
-    --color-secondary-dimmed: #2dc65344;
+    --color-main: #9b5de5;
+    --color-main-dimmed: #9b5de544;
+    --color-secondary: #00bbf9;
+    --color-secondary-dimmed: #00bbf944;
     --color-special: #fee440;
     --color-special-dimmed: #fee44044;
-    --color-background-dark: #0F0E0E;
+    --color-background-dark: #23272f;
     --color-background-light: #dee2e6;
-    --color-font-light: #0F0E0E;
-    --color-font-light-dimmed: #0F0E0E44;
-    --color-font-dark: #EEEEEE;
+    --color-font-light: #495057;
+    --color-font-light-dimmed: #49505744;
+    --color-font-dark: #EEEEEEDD;
     --color-font-dark-dimmed: #EEEEEE44;
+    --color-success: #06d6a0;
+    --color-success-dimmed: #06d6a044;
     --color-error: #f71735;
     --color-error-dimmed: #f7173544;
     --light-dark-background: light-dark(var(--color-background-light), var(--color-background-dark));
     --light-dark-font: light-dark(var(--color-font-light), var(--color-font-dark));
     --light-dark-font-dimmed: light-dark(var(--color-font-light-dimmed), var(--color-font-dark-dimmed));
+    --light-dark-font-inverted: light-dark(var(--color-font-dark), var(--color-font-light));
 
     /* Spacing Sizes */
     --size-tiny: .25em;
@@ -42,6 +45,12 @@
     --font-size-very-big: 4rem;
     --font-size-giant: 7rem;
 
+    /* Font Thickness */
+    --font-thickness-thinnest: 100;
+    --font-thickness-thin: 200;
+    --font-thickness-thick: 600;
+    --font-thickness-thickest: 900;
+
     /* Icon Sizes */
     --icon-size-small: 1rem;
     --icon-size-normal: 2rem;
@@ -50,4 +59,14 @@
 
     /* Border Radius */
     --rounding-total: 50%;
+    --rounding-small: 5px;
+    --rounding-medium: 10px;
+    --rounding-big: 15px;
+
+    /* Transitions */
+    --transition-normal: all 225ms ease-in-out;
+
+    /* Shadows */
+    --shadow-1: 0px 0px 7px 1px rgba(0, 0, 0, .1);
+    /* --shadow-light: 0px 0px 15px 1px rgba(0, 0, 0, .1); */
 }

@@ -1,37 +1,78 @@
 .navbar {
-    padding: var(--size-small);
+    padding: var(--size-very-small);
     display: flex;
     justify-content: center;
     gap: var(--size-small);
-    border-bottom: 1px solid var(--light-dark-font);
     justify-content: space-between;
+    box-shadow: var(--shadow-1);
 
-    .logo {
+    .logo-container {
         display: flex;
+        gap: var(--size-small);
+        align-items: center;
+
+        .logo {
+            width: 60px;
+        }
+
+        .name {
+            font-family: var(--font-special);
+            font-weight: var(--font-thickness-thin);
+        }
     }
 
     .links {
         display: flex;
-        gap: var(--size-tiny);
+        gap: var(--size-very-small);
 
-        .link,
-        .pending,
-        .active {
+        .link {
+            border: 1px solid transparent;
+            border-radius: var(--rounding-small);
             display: flex;
-            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: var(--size-very-small);
+            position: relative;
             text-decoration: none;
-            color: var(--light-dark-font);
-            padding: var(--size-tiny);
 
             .icon {
                 font-size: var(--icon-size-normal);
+                color: var(--light-dark-font);
+            }
+
+            .text {
+                padding: var(--size-very-small) calc(var(--size-very-small) * 2);
+                border-radius: var(--rounding-small);
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0;
+                background-color: var(--light-dark-background);
+                color: var(--light-dark-font);
+                border: 1px solid var(--light-dark-font-dimmed);
             }
         }
 
-        .active {
-            border: 1px solid var(--color-main);
-            background-color: var(--color-main-dimmed);
+        .link:hover,
+        .link:focus-visible {
+            border: 1px solid var(--color-main-dimmed);
+
+            .text {
+                opacity: 1;
+                transform: translate(-50%, 85%);
+            }
+        }
+
+        .link.active {
+            border: 1px solid var(--light-dark-font);
+        }
+
+        .link.active:hover,
+        .link.active:focus-visible {
+            .text {
+                border: 1px solid var(--light-dark-font);
+            }
         }
     }
 }

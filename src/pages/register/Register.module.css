@@ -1,0 +1,144 @@
+.register,
+.login {
+    display: flex;
+    flex-direction: column;
+
+    .wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .container {
+            height: 80%;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--rounding-big);
+            box-shadow: var(--shadow-1);
+
+            >* {
+                height: 100%;
+                flex: 1;
+            }
+
+            .deco {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+
+                >* {
+                    flex: 1;
+                }
+
+                .title-container {
+                    padding: var(--size-normal);
+
+                    .title {
+                        font-size: 5rem;
+                        font-family: var(--font-secondary);
+                        font-weight: var(--font-thickness-thinnest);
+                        width: 100%;
+                        text-align: center;
+                        background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+                        color: transparent;
+                        background-clip: text;
+                        text-align: center;
+                    }
+                }
+
+                .blob-container {
+                    height: 50%;
+                    width: 100%;
+                    overflow: hidden;
+                    position: relative;
+
+                    .background,
+                    .blob-wrapper {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                    }
+
+                    .background {
+                        background-image: radial-gradient(circle at 50% 100%, transparent, var(--light-dark-background) 55%), url("/wiggle.png");
+                        background-repeat: repeat;
+                    }
+
+                    .blob-wrapper {
+                        width: 65%;
+                        z-index: 1;
+                        left: 50%;
+                        top: 25%;
+                        transform: translateX(-50%);
+                    }
+                }
+            }
+
+            .login {
+                flex-direction: column-reverse;
+            }
+
+            .form-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .form {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    padding: var(--size-normal);
+                    gap: var(--size-normal);
+                    border-radius: var(--rounding-medium);
+                    box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, .1);
+                    margin-right: 3rem;
+
+                    .title {
+                        font-family: var(--font-secondary);
+                        font-weight: var(--font-thickness-thin);
+                    }
+
+                    .title.login {
+                        font-size: var(--font-size-normal);
+                    }
+
+                    .names {
+                        display: flex;
+                        gap: var(--size-normal);
+                    }
+
+                    .passwords {
+                        display: flex;
+                        flex-direction: column;
+                        gap: var(--size-normal);
+
+                        .wrapper {
+                            display: flex;
+                            gap: inherit;
+                        }
+
+                        .message {
+                            font-style: italic;
+                            padding: var(--size-very-small);
+                            color: var(--light-dark-font);
+                            font-family: var(--font-secondary);
+                        }
+
+                        .message.match {
+                            color: var(--color-success);
+                        }
+
+                        .message.dont-match {
+                            color: var(--color-error);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

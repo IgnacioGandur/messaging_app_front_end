@@ -1,7 +1,10 @@
 import styles from "./Register.module.css";
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import { useFetcher, useNavigation, useNavigate, useSearchParams } from "react-router";
 import InputErrors from "../../components/input-errors/InputErrors";
+import Blob from "../../components/blob/Blob";
+import CustomInput from "../../components/custom-input/CustomInput";
+import FormButton from "../../components/form-button/FormButton";
 
 const Register = () => {
     const fetcher = useFetcher();
@@ -17,10 +20,10 @@ const Register = () => {
         confirmPassword: "",
     });
 
-    const handleUserInput = (e: ChangeEvent<HTMLInputElement>, inputField: string) => {
+    const handleUserInput = (field: string, value: string) => {
         setUserInputs((prevInputs) => ({
             ...prevInputs,
-            [inputField]: e.target.value
+            [field]: value
         }))
     };
 
@@ -37,76 +40,129 @@ const Register = () => {
             <p>{message}</p>
         )}
         {registerResult && !registerResult.success ? <InputErrors message={registerResult.message} errors={registerResult.errors} /> : null}
-        {navigation.state === "submitting" ? (
-            <p>
-                Submitting...
-            </p>
-        ) : (
-            <fetcher.Form
-                method="post"
-                style={{
-                    width: "300px",
-                    display: "flex",
-                    flexDirection: "column"
-                }}
-            >
-                <label htmlFor="first-name">
-                    First Name
-                    <input
-                        type="text"
-                        id="first-name"
-                        name="firstName"
-                        onChange={(e) => handleUserInput(e, "firstName")}
-                        value={userInputs.firstName}
-                    />
-                </label>
-                <label htmlFor="last-name">
-                    Last Name
-                    <input
-                        type="text"
-                        id="last-name"
-                        name="lastName"
-                        onChange={(e) => handleUserInput(e, "lastName")}
-                        value={userInputs.lastName}
-                    />
-                </label>
-                <label htmlFor="username">
-                    Username
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        onChange={(e) => handleUserInput(e, "username")}
-                        value={userInputs.username}
-                    />
-                </label>
-                <label htmlFor="password">
-                    Password
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        onChange={(e) => handleUserInput(e, "password")}
-                        value={userInputs.password}
-                    />
-                </label>
-                <label htmlFor="confirm-password">
-                    Confirm Password
-                    <input
-                        type="password"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        onChange={(e) => handleUserInput(e, "confirmPassword")}
-                        value={userInputs.confirmPassword}
-                    />
-                </label>
-                <button
-                    type="submit"
-                >
-                    Register
-                </button>
-            </fetcher.Form>
-        )}
+        <div className={styles.wrapper}>
+            <div className={styles.container}>
+                <div className={styles.deco}>
+                    <div className={styles["title-container"]}>
+                        <h1
+                            className={styles.title}
+                        >
+                            Create an account now!
+                        </h1>
+                    </div>
+                    <div className={styles["blob-container"]}>
+                        <div className={styles.background}></div>
+                        <div className={styles["blob-wrapper"]}>
+                            <Blob
+                                onlyGlow={true}
+                            />
+                        </div>
+                    </div>
+                </div>
+                {navigation.state === "submitting" ? (
+                    <p>
+                        Submitting...
+                    </p>
+                ) : (
+                    <div className={styles["form-wrapper"]}>
+                        <fetcher.Form
+                            method="post"
+                            className={styles.form}
+                        >
+                            <h2
+                                className={styles.title}
+                            >
+                                Please fill in the fields.
+                            </h2>
+                            <div className={styles.names}>
+                                <CustomInput
+                                    id="first-name"
+                                    name="firstName"
+                                    type="text"
+                                    labelText="First name"
+                                    googleIcon="person"
+                                    value={userInputs.firstName}
+                                    onChange={handleUserInput}
+                                    placeholder="John"
+                                    minLength={3}
+                                    maxLength={30}
+                                    description="Between 3 and 30 characters. Only letters."
+                                />
+                                <CustomInput
+                                    id="last-name"
+                                    name="lastName"
+                                    type="text"
+                                    labelText="Last name"
+                                    googleIcon="person"
+                                    value={userInputs.lastName}
+                                    onChange={handleUserInput}
+                                    placeholder="Doe"
+                                    minLength={3}
+                                    maxLength={30}
+                                    description="Between 3 and 30 characters. Only letters."
+                                />
+                            </div>
+                            <CustomInput
+                                id="username"
+                                name="username"
+                                type="text"
+                                labelText="Username"
+                                googleIcon="face"
+                                value={userInputs.username}
+                                onChange={handleUserInput}
+                                placeholder="john_doe"
+                                minLength={3}
+                                maxLength={30}
+                                description="Between 3 and 30 characters. Only letters, numbers, dots and hyphens."
+                                pattern="[\w.-]{1,30}"
+                            />
+                            <div className={styles.passwords}>
+                                <div className={styles.wrapper}>
+                                    <CustomInput
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        labelText="Password"
+                                        googleIcon="lock"
+                                        value={userInputs.password}
+                                        onChange={handleUserInput}
+                                        description="Choose a strong password"
+                                    />
+                                    <CustomInput
+                                        id="confirm-password"
+                                        name="confirmPassword"
+                                        type="password"
+                                        labelText="Confirm your password"
+                                        googleIcon="lock_reset"
+                                        value={userInputs.confirmPassword}
+                                        onChange={handleUserInput}
+                                        description="Repeat your password"
+                                    />
+                                </div>
+                                <p className={`${styles.message} ${userInputs.password === "" || userInputs.confirmPassword === ""
+                                    ? styles.message
+                                    : userInputs.password !== userInputs.confirmPassword
+                                        ? styles.match
+                                        : styles["dont-match"]
+                                    }`}>
+                                    {userInputs.password === "" || userInputs.confirmPassword === ""
+                                        ? "Waiting..."
+                                        : userInputs.password !== userInputs.confirmPassword
+                                            ? "The passwords don't match."
+                                            : "Passwords match!"
+                                    }
+                                </p>
+                            </div>
+                            <FormButton
+                                type="submit"
+                                text="Register"
+                                showGlow={false}
+                            />
+                        </fetcher.Form>
+                    </div>
+                )}
+            </div>
+        </div>
     </main>
 }
 

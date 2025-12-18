@@ -3,6 +3,8 @@ import styles from "./Navbar.module.css";
 import { BarLoader } from "react-spinners";
 import LoggedUser from "./LoggedUser";
 import Notifications from "./Notifications";
+import logo from "../../assets/images/icon.svg";
+import logoDark from "../../assets/images/icon_dark.svg";
 
 type Link = {
     path: string;
@@ -54,7 +56,7 @@ const Navbar = () => {
                 {
                     path: "/register",
                     text: "Register",
-                    icon: "checkbook"
+                    icon: "signature"
                 },
                 {
                     path: "/login",
@@ -65,8 +67,12 @@ const Navbar = () => {
     );
 
     return <nav className={styles.navbar}>
-        <div className={styles.logo}>
-            logo
+        <div className={styles["logo-container"]}>
+            <picture>
+                <source srcSet={logoDark} media="(prefers-color-scheme:dark)" />
+                <img className={styles.logo} src={logo} alt="Website icon" />
+            </picture>
+            <h2 className={styles.name}>Chateá!</h2>
         </div>
         <div className={styles.links}>
             {links.map((link: Link) => {
@@ -74,12 +80,14 @@ const Navbar = () => {
                     prefetch="intent"
                     key={link.path}
                     to={link.path}
-                    className={({ isActive }) => isActive ? styles.active : styles.link}
+                    className={({ isActive }) => isActive
+                        ? `${styles.active} ${styles.link}`
+                        : styles.link}
                     viewTransition
                 >
                     {({ isPending }) => isPending ? <BarLoader color="#fff" /> : (
                         <>
-                            <span className="material-symbols-rounded">
+                            <span className={`material-symbols-rounded ${styles.icon}`}>
                                 {link.icon}
                             </span>
                             <span className={styles.text}>

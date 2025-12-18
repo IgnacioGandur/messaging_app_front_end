@@ -1,0 +1,167 @@
+.custom-input {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-very-small);
+    font-size: var(--font-size-small);
+    font-family: var(--font-main);
+    color: var(--light-dark-font);
+    padding: var(--size-very-small);
+
+    >* {
+        flex: 1;
+    }
+
+    .label {
+        display: flex;
+        flex-direction: column;
+
+        .label-text {
+            display: flex;
+            gap: var(--size-small);
+            align-items: center;
+            justify-content: space-between;
+
+
+            .text {
+                flex: 1;
+            }
+
+            .indicator {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+                opacity: 90%;
+            }
+
+            .feedback-icon {
+                position: relative;
+
+                >* {
+                    opacity: 0;
+                    transition: var(--transition-normal);
+                }
+
+                .success-indicator {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    color: var(--color-success);
+                }
+
+                .error-indicator {
+                    color: var(--color-error);
+                }
+            }
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--size-tiny);
+            gap: var(--size-very-small);
+            border: 1px solid var(--light-dark-font);
+            border-radius: 50px;
+            background-image: linear-gradient(45deg,
+                    var(--light-dark-background),
+                    var(--light-dark-background),
+                    var(--light-dark-background),
+                    var(--light-dark-background),
+                    var(--color-main-dimmed),
+                    var(--color-secondary-dimmed));
+            background-size: 400%;
+            background-position: bottom left;
+            transition: var(--transition-normal);
+
+            .icon {
+                display: grid;
+                place-items: center;
+
+                span {
+                    font-size: var(--icon-size-normal);
+                }
+            }
+
+            .input {
+                flex: 1;
+                background-color: transparent;
+                border: none;
+                outline: none;
+            }
+
+            .toggle-password {
+                background-color: transparent;
+                color: var(--light-dark-font);
+                display: grid;
+                place-items: center;
+                outline: none;
+                border: none;
+                border-radius: var(--rounding-small);
+
+                span {
+                    font-size: var(--icon-size-normal);
+                }
+            }
+
+            .toggle-password:hover,
+            .toggle-password:focus-visible {
+                outline: 2px solid #000;
+            }
+        }
+
+        .wrapper:has(input:hover) {
+            background-position: top right;
+        }
+
+        .wrapper:has(input:focus-visible) {
+            outline: 2px solid var(--color-main);
+            border: 1px solid transparent;
+            background-position: top right;
+        }
+
+        .wrapper:has(input:user-valid) {
+            border: 1px solid var(--color-success);
+            background-color: var(--color-success-dimmed);
+        }
+
+        .wrapper:has(input:user-invalid) {
+            border: 1px solid var(--color-error);
+            background-color: var(--color-error-dimmed);
+        }
+
+        .description {
+            margin-top: calc(var(--size-tiny) * 1.5);
+            opacity: .5;
+        }
+
+        .description::first-letter {
+            text-transform: capitalize;
+        }
+    }
+}
+
+.custom-input:has(input:user-valid) {
+    .label {
+        .label-text {
+            .feedback-icon {
+                .success-indicator {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}
+
+.custom-input:has(input:user-invalid) {
+    .label {
+        .label-text {
+            .feedback-icon {
+                .error-indicator {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

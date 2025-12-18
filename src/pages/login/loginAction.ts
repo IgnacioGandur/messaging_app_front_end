@@ -2,6 +2,7 @@ import type { ActionFunctionArgs } from "react-router";
 
 export default async function loginAction({ request }: ActionFunctionArgs) {
     try {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         const formData = await request.formData();
         const username = formData.get("username");
         const password = formData.get("password");
