@@ -13,6 +13,7 @@ import Conversations from "./pages/conversations/Conversations";
 import NoConversationSelected from "./pages/conversations/child-routes/no-conversation-selected/NoConversationSelected";
 import Groups from "./pages/groups/Groups";
 import Friends from "./pages/friends/Friends";
+import About from "./pages/about/About";
 
 // Child Routes
 import Settings from "./pages/profile/child-routes/settings/Settings";
@@ -118,6 +119,10 @@ const router = createBrowserRouter([
                 Component: Friends,
                 loader: friendsLoader,
                 action: friendsAction
+            },
+            {
+                path: "/about",
+                Component: About
             }
         ],
     },

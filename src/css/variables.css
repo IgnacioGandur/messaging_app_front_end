@@ -17,8 +17,10 @@
     --color-background-light: #dee2e6;
     --color-font-light: #495057;
     --color-font-light-dimmed: #49505744;
+    --color-font-light-dimmed-2: #49505711;
     --color-font-dark: #EEEEEEDD;
     --color-font-dark-dimmed: #EEEEEE44;
+    --color-font-dark-dimmed-2: #EEEEEE11;
     --color-success: #06d6a0;
     --color-success-dimmed: #06d6a044;
     --color-error: #f71735;
@@ -26,6 +28,7 @@
     --light-dark-background: light-dark(var(--color-background-light), var(--color-background-dark));
     --light-dark-font: light-dark(var(--color-font-light), var(--color-font-dark));
     --light-dark-font-dimmed: light-dark(var(--color-font-light-dimmed), var(--color-font-dark-dimmed));
+    --light-dark-font-dimmed-2: light-dark(var(--color-font-light-dimmed-2), var(--color-font-dark-dimmed-2));
     --light-dark-font-inverted: light-dark(var(--color-font-dark), var(--color-font-light));
 
     /* Spacing Sizes */

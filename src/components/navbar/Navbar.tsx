@@ -23,11 +23,6 @@ const Navbar = () => {
             icon: "home"
         },
         {
-            path: "/about",
-            text: "About",
-            icon: "info"
-        },
-        {
             path: "/groups",
             text: "Groups",
             icon: "communities"
@@ -98,10 +93,22 @@ const Navbar = () => {
                 </NavLink>
             })}
         </div>
-        {loggedUser && <Notifications />}
-        {loggedUser
-            ? <LoggedUser user={loggedUser} />
-            : <div className={styles.empty}></div>}
+        {loggedUser ? <div className={styles["notifications-and-user"]}>
+            <Notifications />
+            <LoggedUser user={loggedUser} />
+        </div>
+            : <div className={styles.empty}></div>
+        }
+        <NavLink
+            prefetch="intent"
+            to="/about"
+            className={styles.about}
+            viewTransition
+        >
+            <span className="material-symbols-rounded">
+                info
+            </span>
+        </NavLink>
     </nav>
 }
 

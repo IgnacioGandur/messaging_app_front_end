@@ -10,15 +10,15 @@ type Link = {
 
 const links: Link[] = [
     {
-        to: "/logout",
-        text: "Logout",
-        icon: "logout"
-    },
-    {
         to: "/profile",
         text: "Profile",
         icon: "account_circle"
     },
+    {
+        to: "/logout",
+        text: "Logout",
+        icon: "logout"
+    }
 ];
 
 type LoggedUserProps = {
@@ -35,62 +35,64 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
     const [showOptions, setShowOptions] = useState(false);
 
     const toggleShowOptions = () => {
-        return setShowOptions((prevState) => !prevState);
+        setShowOptions((prevState) => !prevState);
     };
 
-    return showOptions ? (
-        <div className={styles.options}>
-            <div className={styles["user-info"]}>
-                <img
-                    src={user.profilePictureUrl}
-                    alt={`${user.username}'s profile picture.`}
-                    className={styles["profile-picture"]}
-                />
-                <div className={styles.names}>
-                    <h3 className={styles.name}>
-                        {user.firstName} {user.lastName}
-                    </h3>
-                    <p className={styles.username}>
-                        {user.username}
-                    </p>
-                </div>
+    return <div className={styles["profile-dropdown"]}>
+        {showOptions && (
+            <div className={styles.options}>
+                {links.map((link: Link, index) => {
+                    return <>
+                        <NavLink
+                            key={link.text}
+                            to={link.to}
+                            className={styles.option}
+                        >
+                            <span className={` material-symbols-rounded ${styles.icon} `}>
+
+                                {link.icon}
+                            </span>
+                            <span className={styles.text}>
+                                {link.text}
+                            </span>
+                        </NavLink>
+                        {links.length - 2 === index && <div className={styles.separator}></div>}
+                    </>
+                })}
             </div>
-            <button
-                className={styles.option}
-                onClick={toggleShowOptions}
-            >
-                Hide
-            </button>
-            {links.map((link: Link) => {
-                return <NavLink
-                    key={link.text}
-                    to={link.to}
-                    className={styles.option}
-                >
-                    {link.text}
-                </NavLink>
-            })}
-        </div>
-    ) : (<button
-        onClick={toggleShowOptions}
-        className={styles["logged-user"]}
-    >
-        <div className={styles["user-info"]}>
-            <img
-                src={user.profilePictureUrl}
-                alt={`${user.username}'s profile picture.`}
-                className={styles["profile-picture"]}
-            />
+        )}
+        <button
+            onClick={toggleShowOptions}
+            className={styles.user}
+        >
             <div className={styles.names}>
                 <h3 className={styles.name}>
-                    {user.firstName} {user.lastName}
+                    <span className={styles["first-name"]}>
+                        {user.firstName}
+                    </span>
+                    <span className={styles["last-name"]}>
+                        {user.lastName}
+                    </span>
                 </h3>
                 <p className={styles.username}>
-                    {user.username}
+                    @{user.username}
                 </p>
             </div>
-        </div>
-    </button>)
+            <div
+                className={styles["profile-button"]}
+            >
+                <div className={styles["outer-wrapper"]}>
+                    <div className={styles["ppf-wrapper"]}>
+                        <img
+                            src={user.profilePictureUrl}
+                            alt={`${user.username}'s profile picture.`}
+                            className={styles["profile-picture"]}
+                        />
+                    </div>
+                </div>
+            </div>
+        </button>
+    </div>
 }
 
 export default LoggedUser;

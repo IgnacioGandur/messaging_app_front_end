@@ -1,0 +1,88 @@
+.home {}
+
+.home-logged {
+    padding: var(--size-big);
+    max-width: 1240px;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size-big);
+
+    >* {
+        width: 100%;
+    }
+
+    .title-section {
+        width: 100%;
+
+        .title {
+            font-size: 5rem;
+            font-family: var(--font-secondary);
+            font-weight: var(--font-thickness-thinnest);
+            text-align: center;
+            background-image: linear-gradient(45deg,
+                    var(--color-main),
+                    var(--color-secondary));
+            background-clip: text;
+            color: transparent;
+        }
+    }
+
+    .blob-section {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        >* {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .background {
+            background-image:
+                radial-gradient(circle at center, transparent, var(--light-dark-background) 40%),
+                url("/wiggle.png");
+            z-index: 1;
+        }
+
+        .blob-wrapper {
+            max-width: 500px;
+            z-index: 2;
+
+            >* {
+                display: grid;
+            }
+        }
+
+        .logo-wrapper {
+            z-index: 3;
+            mix-blend-mode: overlay;
+
+            .logo {
+                width: 100%;
+                max-width: 230px;
+                opacity: .5;
+            }
+        }
+    }
+
+    .bottom-text {
+        max-width: 100%;
+    }
+
+    .sub-title-section {
+        font-size: var(--font-size-big);
+        text-align: center;
+        font-family: var(--font-secondary);
+        font-weight: var(--font-thickness-thin);
+    }
+}

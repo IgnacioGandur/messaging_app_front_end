@@ -1,0 +1,47 @@
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--size-very-small);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+    position: relative;
+    font-weight: var(--font-thickness-thin);
+
+    >* {
+        transition: all 225ms ease-in-out;
+    }
+
+    .initials {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--size-tiny);
+        position: relative;
+
+        .icon {
+            font-size: 2rem;
+        }
+    }
+
+    .details {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 150%);
+        opacity: 0;
+        font-size: 1.25rem;
+    }
+}
+
+.footer:hover {
+    .initials {
+        transform: translateY(-150%);
+        opacity: 0;
+    }
+
+    .details {
+        transform: translate(-50%, -35%);
+        opacity: 1;
+    }
+}

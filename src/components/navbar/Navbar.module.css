@@ -23,7 +23,8 @@
 
     .links {
         display: flex;
-        gap: var(--size-very-small);
+        gap: var(--size-normal);
+        align-items: center;
 
         .link {
             border: 1px solid transparent;
@@ -31,9 +32,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: var(--size-very-small);
+            padding: var(--size-tiny);
             position: relative;
             text-decoration: none;
+            width: fit-content;
+            height: fit-content;
 
             .icon {
                 font-size: var(--icon-size-normal);
@@ -51,6 +54,7 @@
                 background-color: var(--light-dark-background);
                 color: var(--light-dark-font);
                 border: 1px solid var(--light-dark-font-dimmed);
+                transition: all 225ms ease-in-out;
             }
         }
 
@@ -74,5 +78,27 @@
                 border: 1px solid var(--light-dark-font);
             }
         }
+
+    }
+
+    .notifications-and-user {
+        display: flex;
+        align-items: center;
+        gap: var(--size-very-small);
+    }
+
+    .about {
+        background-color: var(--light-dark-background);
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        border: 1px solid var(--light-dark-font);
+        border-radius: var(--rounding-medium);
+        z-index: 100;
+        padding: var(--size-very-small);
+        display: grid;
+        place-items: center;
+        text-decoration: none;
     }
 }

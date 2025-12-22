@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { NavLink } from "react-router";
 import styles from "./Notifications.module.css";
 import type Friendship from "../../types/friendship";
 
@@ -101,36 +102,74 @@ const Notifications = () => {
             onClick={toggleNotifications}
             className={styles["toggle-notifications"]}
         >
-            <span className="material-symbols-rounded">
-                notifications
+            <span className={`material-symbols-rounded ${styles.icon}`}>
+                group_add
             </span>
+            {friendshipRequests.length > 0 && (<div className={styles.requests}>
+                <span className={styles.number}>
+                    {friendshipRequests.length > 9 ? "+9" : friendshipRequests.length}
+                </span>
+            </div>)}
         </button>
         {(showNotifications && friendshipRequests) && (
-            <div className={styles["notifications-list"]}>
-                <div className={styles.friendships}>
+            <div className={styles["friendship-requests"]}>
+                <div className={styles.header}>
+                    <span className="material-symbols-rounded">
+                        diversity_3
+                    </span>
+                    <h2
+                        className={styles.title}
+                    >Friendship Requests</h2>
+                </div>
+                <div className={styles.separator}></div>
+                <div className={styles["requests-container"]}>
                     {friendshipRequests.map((f: Friendship) => {
-                        return <li
+                        return <NavLink
+                            to={`/users/${f.userAId}`}
                             key={f.id}
-                            className={styles.friendship}
+                            className={styles.request}
                         >
-                            <p className={styles.name}>
-                                {f.userA.firstName} {f.userA.lastName}
-                            </p>
+                            <img
+                                className={styles.ppf}
+                                src={f.userA.profilePictureUrl}
+                                alt="bla"
+                            />
                             <button
+                                className={styles["reject-button"]}
                                 onClick={() => rejectFriendship(f.id)}
                             >
-                                <span className="material-symbols-rounded">
-                                    group_remove
+                                <span className={`material-symbols-rounded ${styles.icon}`}>
+                                    close
+                                </span>
+                                <span className={styles.text}>
+                                    Reject
                                 </span>
                             </button>
                             <button
+                                className={styles["accept-button"]}
                                 onClick={() => acceptFriendship(f.id)}
                             >
-                                <span className="material-symbols-rounded">
-                                    person_heart
+                                <span className={`material-symbols-rounded ${styles.icon}`}>
+                                    check
+                                </span>
+                                <span className={styles.text}>
+                                    Accept
                                 </span>
                             </button>
-                        </li>
+                            <div className={styles.names}>
+                                <p className={styles.name}>
+                                    <span className={styles["first-name"]}>
+                                        {f.userA.firstName}
+                                    </span>
+                                    <span className={styles["last-name"]}>
+                                        {f.userA.lastName}
+                                    </span>
+                                </p>
+                                <p className={styles.username}>
+                                    @{f.userA.username}
+                                </p>
+                            </div>
+                        </NavLink>
                     })}
                 </div>
             </div>
