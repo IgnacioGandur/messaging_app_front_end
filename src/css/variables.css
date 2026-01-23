@@ -51,14 +51,16 @@
     /* Font Thickness */
     --font-thickness-thinnest: 100;
     --font-thickness-thin: 200;
+    --font-thickness-normal: 400;
     --font-thickness-thick: 600;
     --font-thickness-thickest: 900;
 
     /* Icon Sizes */
     --icon-size-small: 1rem;
+    --icon-size-default: 1.5rem;
     --icon-size-normal: 2rem;
     --icon-size-big: 3rem;
-    --icon-size-giant: 4rem;
+    --icon-size-giant: 6rem;
 
     /* Border Radius */
     --rounding-total: 50%;
@@ -71,5 +73,8 @@
 
     /* Shadows */
     --shadow-1: 0px 0px 7px 1px rgba(0, 0, 0, .1);
-    /* --shadow-light: 0px 0px 15px 1px rgba(0, 0, 0, .1); */
+    --shadow-2: 0px 0px 3px 10px rgba(0, 0, 0, .1);
+
+    /* Gradients */
+    --gradient-main-colors: linear-gradient(45deg, var(--color-main), var(--color-secondary));
 }

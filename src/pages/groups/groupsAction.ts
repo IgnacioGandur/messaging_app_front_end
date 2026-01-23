@@ -6,7 +6,6 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
         const intent = formData.get("intent");
         const url = import.meta.env.VITE_API_BASE + `/groups`;
 
-        await new Promise(resolve => setTimeout(resolve, 3000));
         if (intent === "create-group") {
             const groupName = formData.get("groupName");
             const options: RequestInit = {

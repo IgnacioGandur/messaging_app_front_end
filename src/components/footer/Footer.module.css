@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     padding: var(--size-very-small);
-    box-shadow: var(--shadow-1);
+    border-top: 1px solid var(--light-dark-font-dimmed);
     overflow: hidden;
     position: relative;
     font-weight: var(--font-thickness-thin);
@@ -30,7 +30,6 @@
         left: 50%;
         transform: translate(-50%, 150%);
         opacity: 0;
-        font-size: 1.25rem;
     }
 }
 

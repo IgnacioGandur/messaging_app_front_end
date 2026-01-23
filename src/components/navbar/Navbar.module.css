@@ -4,7 +4,7 @@
     justify-content: center;
     gap: var(--size-small);
     justify-content: space-between;
-    box-shadow: var(--shadow-1);
+    border-bottom: 1px solid var(--light-dark-font-dimmed);
 
     .logo-container {
         display: flex;
@@ -25,6 +25,10 @@
         display: flex;
         gap: var(--size-normal);
         align-items: center;
+
+        .loader {
+            width: 2rem !important;
+        }
 
         .link {
             border: 1px solid transparent;
@@ -85,20 +89,5 @@
         display: flex;
         align-items: center;
         gap: var(--size-very-small);
-    }
-
-    .about {
-        background-color: var(--light-dark-background);
-        position: absolute;
-        top: 50%;
-        right: 12px;
-        transform: translateY(-50%);
-        border: 1px solid var(--light-dark-font);
-        border-radius: var(--rounding-medium);
-        z-index: 100;
-        padding: var(--size-very-small);
-        display: grid;
-        place-items: center;
-        text-decoration: none;
     }
 }

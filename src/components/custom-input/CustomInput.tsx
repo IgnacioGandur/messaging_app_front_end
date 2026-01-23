@@ -4,9 +4,9 @@ import { useState } from "react";
 interface CustomInputProps {
     name: string;
     id: string;
-    type: "text" | "password";
-    labelText: string;
-    googleIcon: string;
+    type: "text" | "password" | "url";
+    labelText?: string;
+    googleIcon?: string;
     value: string;
     onChange: (field: string, value: string) => void;
     placeholder?: string;
@@ -44,26 +44,31 @@ const CustomInput = ({
             htmlFor={id}
             className={styles.label}
         >
-            <div className={styles["label-text"]}>
-                <span className={styles.indicator}></span>
-                <p className={styles.text}>
-                    {labelText}
-                </p>
-                <div className={styles["feedback-icon"]}>
-                    <span className={`material-symbols-rounded ${styles["success-indicator"]}`}>
-                        check_circle
-                    </span>
-                    <span className={`material-symbols-rounded ${styles["error-indicator"]}`}>
-                        error
-                    </span>
+            {labelText && (
+                <div className={styles["label-text"]}>
+                    <span className={styles.indicator}></span>
+                    <p className={styles.text}>
+                        {labelText}
+                    </p>
+                    <div className={styles["feedback-icon"]}>
+                        <span className={`material-symbols-rounded ${styles["success-indicator"]}`}>
+                            check_circle
+                        </span>
+                        <span className={`material-symbols-rounded ${styles["error-indicator"]}`}>
+                            error
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div className={styles.wrapper}>
-                <div className={styles.icon}>
-                    <span className="material-symbols-rounded">
-                        {googleIcon}
-                    </span>
-                </div>
+            )}
+            <div
+                className={styles.wrapper}>
+                {googleIcon && (
+                    <div className={styles.icon}>
+                        <span className="material-symbols-rounded">
+                            {googleIcon}
+                        </span>
+                    </div>
+                )}
                 <input
                     id={id}
                     className={styles.input}
@@ -89,9 +94,11 @@ const CustomInput = ({
                     </button>
                 )}
             </div>
-            <p className={styles.description}>
-                {description}
-            </p>
+            {description && (
+                <p className={styles.description}>
+                    {description}
+                </p>
+            )}
         </label>
     </div>
 };

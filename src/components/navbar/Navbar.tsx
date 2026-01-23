@@ -80,7 +80,12 @@ const Navbar = () => {
                         : styles.link}
                     viewTransition
                 >
-                    {({ isPending }) => isPending ? <BarLoader color="#fff" /> : (
+                    {({ isPending }) => isPending ? (
+                        <BarLoader
+                            className={styles.loader}
+                            color={"var(--color-main)"}
+                        />
+                    ) : (
                         <>
                             <span className={`material-symbols-rounded ${styles.icon}`}>
                                 {link.icon}
@@ -99,16 +104,6 @@ const Navbar = () => {
         </div>
             : <div className={styles.empty}></div>
         }
-        <NavLink
-            prefetch="intent"
-            to="/about"
-            className={styles.about}
-            viewTransition
-        >
-            <span className="material-symbols-rounded">
-                info
-            </span>
-        </NavLink>
     </nav>
 }
 

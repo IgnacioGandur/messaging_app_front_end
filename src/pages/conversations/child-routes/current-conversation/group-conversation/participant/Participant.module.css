@@ -1,0 +1,128 @@
+.participant {
+    display: grid;
+    grid-template-areas:
+        "ppf name name options"
+        "ppf username username options"
+    ;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 0 var(--size-small);
+    padding: calc(var(--size-tiny)* 2);
+    border-radius: var(--rounding-medium);
+    background-color: white;
+    box-shadow: var(--shadow-1);
+    border: 1px solid var(--light-dark-font-dimmed);
+
+    .ppf-container {
+        grid-area: ppf;
+        position: relative;
+        display: grid;
+        place-items: center;
+
+        .ppf {
+            border-radius: var(--rounding-total);
+            aspect-ratio: 1/1;
+            width: 50px;
+            height: 50px;
+            place-self: center;
+        }
+
+        .icon {
+            position: absolute;
+            left: -.25rem;
+            bottom: -.25rem;
+            aspect-ratio: 1/1;
+            font-size: 1.5rem;
+            font-variation-settings: 'FILL' 1;
+            background-image: linear-gradient(to top, var(--color-main), var(--color-secondary));
+            background-clip: text;
+            color: transparent;
+        }
+    }
+
+    .name {
+        grid-area: name;
+        text-transform: capitalize;
+        align-self: center;
+        display: flex;
+        align-items: center;
+        gap: var(--size-tiny);
+
+        .you {
+            font-weight: var(--font-thickness-thin);
+            font-size: var(--font-size-small);
+            opacity: .75;
+        }
+    }
+
+    .username {
+        grid-area: username;
+        opacity: .5;
+        font-style: italic;
+        font-size: var(--font-size-small);
+    }
+
+
+    .options-wrapper {
+        grid-area: options;
+        width: fit-content;
+        place-self: center;
+        position: relative;
+
+        .options-button {
+            border-radius: var(--rounding-total);
+            aspect-ratio: 1/1;
+            background-color: var(--light-dark-font-dimmed-2);
+            display: grid;
+            place-items: center;
+            border: 1px solid transparent;
+            outline: none;
+            transition: all 300ms linear;
+            cursor: pointer;
+
+            span {
+                padding: 0;
+            }
+        }
+
+        .options-button:active {
+            background-color: var(--light-dark-font);
+        }
+
+        .options-button:hover,
+        .options-button:focus-visible {
+            border: 1px solid var(--light-dark-font-dimmed);
+        }
+
+        .options {
+            background-color: var(--light-dark-background);
+            position: absolute;
+            top: 0;
+            right: 125%;
+            padding: var(--size-very-small);
+            border-radius: var(--rounding-medium);
+            list-style-type: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--size-tiny);
+            border: 1px solid var(--light-dark-font-dimmed);
+
+            .option {
+                background-color: inherit;
+                white-space: nowrap;
+                padding: var(--size-tiny) calc(var(--size-tiny) * 2);
+                border-radius: var(--rounding-small);
+                display: flex;
+                align-items: center;
+                gap: var(--size-tiny);
+                border: none;
+                outline: none;
+                color: var(--light-dark-font);
+            }
+
+            .option:hover,
+            .option:focus-visible {
+                background-color: white;
+            }
+        }
+    }
+}

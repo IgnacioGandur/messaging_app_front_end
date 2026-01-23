@@ -1,0 +1,168 @@
+                messages.map((m, index) => {
+                    return <div
+                key={m.id}
+                className={`
+                        ${styles.message} 
+                        ${styles["group-message"]} 
+                        ${loggedUserId === m.senderId ? styles.you : styles.userB}
+                    `}
+                // If the user is sending a chain of messages, add 2rem margin bottom in the last message.
+                style={{
+                    marginBottom: messages[index + 1]?.senderId !== m.senderId ? "2rem" : ""
+                }}
+            >
+                {/* If the user is sending a chain of messages, show the profile picture only in the first message. */}
+                {messages[index - 1]?.senderId === m.senderId ? (
+                    <div className={styles.empty}></div>) : (
+                    <img
+                        className={styles.ppf}
+                        src={m.sender.profilePictureUrl}
+                        alt="Group member's profile picture"
+                    />
+                )}
+                <div className={styles["content-wrapper"]}>
+                    {m.deleted ? null : m.senderId === loggedUserId && (
+                        <button
+                            onClick={() => {
+                                setTargetMessage(m.id);
+                                toggleDeleteDialog();
+                            }}
+                            className={styles.delete}
+                        >
+                            <span className="material-symbols-rounded">
+                                delete
+                            </span>
+                        </button>
+                    )}
+                    {m.deleted
+                        ? (
+                            <p className={`${styles.content} ${styles.deleted}`}>
+                                {m.content}
+                            </p>
+                        )
+                        : m.attachments
+                            ? (
+                                <>
+                                    <p className={styles.content}>
+                                        {m.content}
+                                    </p>
+                                    <div
+                                        className={styles.content}
+                                    >
+                                        {m.attachments.map((a) => {
+                                            return a.fileType.includes("image")
+                                                ? (
+                                                    <button
+                                                        onClick={() => setCurrentImage(a.fileUrl)}
+                                                        className={styles.image}
+                                                    >
+                                                        <img
+                                                            className={styles["image-preview"]}
+                                                            src={a.fileUrl}
+                                                            alt=""
+                                                        />
+                                                    </button>
+                                                )
+                                                : (
+                                                    <div className={styles.file}>
+                                                        <div className={styles["icon-container"]}>
+                                                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                                                file_present
+                                                            </span>
+                                                        </div>
+                                                        <p className={styles["file-name"]}>
+                                                            {a.fileName}
+                                                        </p>
+                                                    </div>
+                                                )
+                                        })}
+                                    </div>
+                                </>
+                            ) : (
+                                <p className={styles.content}>
+                                    {m.content}
+                                </p>
+                            )}
+                </div>
+                <span className={styles.date}>
+                    {formatDistanceToNow(m.createdAt, { addSuffix: true, includeSeconds: true })}
+                </span>
+            </div>
+                })
+
+
+                messages.map((m, index) => {
+                    const yourMessage = m.senderId === loggedUserId;
+                    const lastMessage = messages[index + 1]?.senderId !== m.senderId;
+                    const hidePpf = messages[index - 1]?.senderId === m.senderId;
+
+                    return m.deleted ? (<div
+                        key={m.id}
+                        className={`
+                            ${styles.deleted} 
+                            ${styles.message} 
+                            ${yourMessage ? styles.you : styles.userB}
+                            ${lastMessage ? styles["last-message"] : null}
+                        `}
+                    >
+                        {hidePpf ? (
+                            <div className={styles.empty}></div>
+                        ) : (
+                            <img
+                                className={styles.ppf}
+                                src={m.sender.profilePictureUrl}
+                                alt={`${m.sender.username}'s username`}
+                            />
+                        )}
+                        <p className={styles.text}>
+                            {m.content}
+                        </p>
+                    </div>) : m.attachments ? (
+                        <>
+                            <div
+                                key={m.id}
+                                className={`
+                                    ${styles.message} 
+                                    ${styles.attachment} 
+                                    ${yourMessage ? styles.you : styles.userB}
+                                    ${lastMessage ? styles["last-message"] : null}
+                                `}
+                            >
+                                {m.attachments.map((m) => {
+                                    return m.fileType.includes("image") ? (
+                                        <img
+                                            src={m.fileUrl}
+                                            alt="Image"
+                                            className={styles.image}
+                                        />
+                                    ) : (
+                                        <div className={styles.file}>
+                                            not image file here
+                                            {m.fileName}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <p
+                                className={`
+                                    ${styles.message} 
+                                    ${yourMessage ? styles.you : styles.userB}
+                                    ${lastMessage ? styles["last-message"] : null}
+                                `}
+                            >
+                                {m.content}
+                            </p>
+                        </>
+                    ) : (
+                        <p
+                            key={m.id}
+                            className={`
+                                ${styles.message} 
+                                ${yourMessage ? styles.you : styles.userB}
+                                ${lastMessage ? styles["last-message"] : null}
+                            `}
+                        >
+                            {m.content}
+                        </p>
+                    )
+                })

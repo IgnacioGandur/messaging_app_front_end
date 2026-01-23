@@ -1,8 +1,55 @@
 .no-conversation-selected {
     flex: 1;
-    border: 2px solid lime;
     display: flex;
     align-items: center;
+    gap: var(--size-very-small);
     justify-content: center;
     flex-direction: column;
+
+    .outer-wrapper {
+        padding: 2px;
+        display: grid;
+        place-items: center;
+        background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+        border-radius: var(--rounding-total);
+
+        .wrapper {
+            border-radius: var(--rounding-total);
+            padding: 15px;
+            aspect-ratio: 1/1;
+            display: inherit;
+            place-items: inherit;
+            background-color: var(--light-dark-background);
+
+            .logo-container {
+                border-radius: var(--rounding-total);
+                display: inherit;
+                place-items: inherit;
+                background-image: linear-gradient(45deg, var(--color-secondary), var(--color-main));
+                padding: var(--size-normal);
+                mask-image: url("../../../../assets/images/icon.svg");
+                mask-size: 75%;
+                mask-position: center;
+                mask-repeat: no-repeat;
+
+                .logo {
+                    width: 150px;
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    .message {
+        font-weight: 400;
+    }
+
+    .paragraph {
+        text-align: center;
+        opacity: .65;
+
+        .link {
+            color: var(--color-main);
+        }
+    }
 }

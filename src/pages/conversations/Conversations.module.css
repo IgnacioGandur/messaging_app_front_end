@@ -10,40 +10,145 @@
         .no-conversations,
         .chats-sidebar {
             flex: 1;
-            max-width: 325px;
-            border: 2px solid cyan;
         }
 
         .chats-sidebar {
+            min-width: 350px;
+            max-width: 375px;
             display: flex;
-            gap: var(--size-normal);
+            padding: var(--size-very-small);
+            gap: var(--size-very-small);
             flex-direction: column;
-            border: 2px solid purple;
+            border-right: 1px solid var(--light-dark-font-dimmed);
 
-            .conversation {
+            .search-box {
                 display: flex;
-                flex-direction: column;
-                border: 2px solid lime;
+                align-items: center;
 
-                .profile-picture {
-                    width: 35px;
-                    height: 35px;
-                }
+                .search-button {
+                    padding: var(--size-very-small);
+                    display: grid;
+                    place-items: center;
+                    border-radius: var(--rounding-total);
+                    aspect-ratio: 1/1;
+                    border: 1px solid var(--light-dark-font-dimmed);
+                    background-color: var(--light-dark-background);
+                    margin-bottom: calc(var(--size-tiny) + var(--size-very-small) - 4px);
+                    align-self: flex-end;
 
-                .ppf-and-name {
-                    display: flex;
-
-                    .profile-picture {
-                        width: 35px;
-                        height: 35px;
-                    }
-
-                    .names {
-                        display: flex;
-                        flex-direction: column;
+                    span {
+                        color: var(--light-dark-font);
                     }
                 }
             }
+
+            .conversation {
+                display: grid;
+                grid-template-areas:
+                    "ppf name date"
+                    "ppf message message"
+                ;
+                grid-template-columns: auto 1fr;
+                grid-template-rows: 1fr 1fr;
+                align-items: center;
+                padding: var(--size-very-small);
+                gap: var(--size-tiny) var(--size-very-small);
+                text-decoration: none;
+                color: var(--light-dark-font);
+                transition: var(--transition-normal);
+                border: 1px solid transparent;
+
+                .group-ppf-container {
+                    grid-area: ppf;
+                    position: relative;
+
+                    .group-icon {
+                        position: absolute;
+                        left: -.25rem;
+                        bottom: -.25rem;
+                        font-variation-settings: 'FILL' 1;
+                        font-size: var(--icon-size-normal);
+                        background-image: linear-gradient(45deg, var(--color-secondary), var(--color-main));
+                        background-clip: text;
+                        color: transparent;
+                    }
+                }
+
+                .ppf,
+                .group-ppf-container>.ppf {
+                    width: 60px;
+                    height: 60px;
+                    grid-area: ppf;
+                    border-radius: var(--rounding-total);
+                    aspect-ratio: 1/1;
+                    align-self: center;
+                    object-fit: cover;
+                }
+
+                .title,
+                .name {
+                    grid-area: name;
+                    white-space: nowrap;
+                    text-transform: capitalize;
+                    font-size: var(--font-size-normal);
+                    align-self: flex-end;
+                }
+
+                .last-message {
+                    grid-area: message;
+                    font-size: var(--font-size-normal);
+                    align-self: stretch;
+                    display: flex;
+                    align-items: center;
+                    gap: var(--size-tiny);
+                    align-self: flex-start;
+
+                    .you {
+                        opacity: .75;
+                        font-style: italic;
+                    }
+                }
+
+                .date {
+                    grid-area: date;
+                    font-size: var(--font-size-small);
+                    opacity: .75;
+                    font-style: italic;
+                    align-self: flex-end;
+                    margin-bottom: 3px;
+                }
+
+                .date::first-letter {
+                    text-transform: capitalize;
+                }
+            }
+
+            .conversation:has(.loader) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: calc(60px + var(--size-very-small) * 2);
+
+                .loader {
+                    animation: rotate 500ms linear infinite;
+                }
+
+            }
+
+            .conversation.active {
+                background-color: var(--light-dark-font-dimmed-2);
+            }
+
+            .conversation:hover,
+            .conversation:focus-visible {
+                background-color: var(--light-dark-font-dimmed-2);
+            }
         }
+    }
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
     }
 }

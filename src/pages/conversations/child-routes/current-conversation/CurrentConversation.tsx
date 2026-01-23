@@ -1,263 +1,230 @@
-import { useState } from "react";
 import styles from "./CurrentConversation.module.css";
-import { useLoaderData, useFetcher, useRouteLoaderData } from "react-router";
+
+// Packages
+import {
+    useState,
+    useCallback,
+    useEffect
+} from "react";
+
+import {
+    useLoaderData,
+    useFetcher,
+    useRouteLoaderData,
+    useNavigation,
+    useParams
+} from "react-router";
+
+// Components
 import ServerError from "../../../../components/server-error/ServerError";
+import InputErrors from "../../../../components/input-errors/InputErrors";
+import MessageForm from "./message-form/MessageForm";
+import Messages from "./messages/Messages";
+import GroupConversation from "./group-conversation/GroupConversation";
+import Loader from "./loader/Loader";
+
+// Types
 import type Conversation from "../../../../types/conversation";
 import type Message from "../../../../types/message";
 import type User from "../../../../types/user";
-import type Participant from "../../../../types/participant";
-import InputErrors from "../../../../components/input-errors/InputErrors";
-import Messages from "./messages/Messages";
-import MessageForm from "./message-form/MessageForm";
+import type InputErrorsType from "../../../../types/InputErrors";
 
 const CurrentConversation = () => {
-    const loaderData = useLoaderData();
+    const fetcher = useFetcher();
+    const navigation = useNavigation();
+    const loaderData = useLoaderData() as {
+        success: boolean;
+        message: string;
+        conversation: Conversation;
+        error?: boolean;
+        errors?: InputErrorsType[];
+    }
+
     const rootData = useRouteLoaderData("root");
     const loggedUser: User = rootData?.user;
-    const conversation: Conversation = loaderData?.conversation;
+
+    const conversation = loaderData?.conversation;
     const userB = conversation.participants.find((p) => p.user.id !== loggedUser.id)?.user;
-    const messages: Message[] = loaderData?.conversation?.messages;
-    const participants: Participant[] = conversation?.participants;
-    const fetcher = useFetcher();
-    const [message, setMessage] = useState("");
-    const [showParticipants, setShowParticipants] = useState(false);
-    const groupOwner = participants.find((p) => p.role === "OWNER");
-    const loggedUserAsParticipant = participants.find((p) => p.userId === loggedUser.id);
+    const { conversationId } = useParams();
 
-    const handleMessage = (message: string) => {
-        setMessage(message);
-    };
+    // Conversation messages.
+    const initialMessages: Message[] = loaderData?.conversation?.messages;
+    const [messages, setMessages] = useState<Message[]>(
+        initialMessages.slice().reverse()
+    );
+    const [cursor, setCursor] = useState<Date | null>(
+        messages.length ? messages[0].createdAt : null
+    );
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-    const deleteMessage = (id: number): void => {
-        fetcher.submit(
-            {
-                messageId: id,
-                intent: "delete-message"
-            },
-            {
-                method: "DELETE",
-            }
-        );
-    };
+    const loadOlderMessages = useCallback(
+        async () => {
+            if (!cursor || isLoadingMore || !hasMore) return;
 
-    const toggleAdminship = (
-        userId: number,
-        role: "USER" | "ADMIN",
+            setIsLoadingMore(true);
+
+            const cursorDate = cursor ? cursor.toISOString() : "";
+            const response = await fetch(
+                `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/messages?cursor=${cursorDate}&limit=10`,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "include"
+                }
+            );
+
+            const result = await response.json() as {
+                success: boolean;
+                message: string;
+                data: {
+                    messages: Message[];
+                    nextCursor: Date;
+                    hasMore: boolean;
+                }
+            };
+
+            const fetched = result.data.messages;
+
+            if (fetched.length === 0) {
+                setHasMore(false);
+                setIsLoadingMore(false);
+                return;
+            };
+
+            setMessages((prev => {
+                const map = new Map(prev.map((m) => [m.id, m]));
+                fetched.forEach((m) => map.set(m.id, m));
+                return Array.from(map.values()).sort(
+                    (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
+                );
+            }));
+
+            setCursor(fetched[fetched.length - 1].createdAt);
+            setHasMore(result.data.hasMore);
+            setIsLoadingMore(false);
+        }, [cursor, hasMore, isLoadingMore, conversationId]
+    );
+
+    useEffect(() => {
+        if (!fetcher.data) return;
+
+        if (fetcher.data?.intent === "send-message") {
+            setMessages((prev) => [...prev, fetcher.data.message]);
+        }
+
+        if (fetcher.data.intent === "delete-message") {
+            setMessages((prev) =>
+                prev.map((m) =>
+                    m.id === fetcher.data.messageId
+                        ? { ...m, deleted: true }
+                        : m
+                )
+            );
+        };
+    }, [fetcher.data]);
+
+    const [message, setMessage] = useState<
+        {
+            message: string;
+            attachment: null | File;
+        }
+    >({
+        message: "",
+        attachment: null
+    });
+
+    const handleMessage = (
+        field: string,
+        value: string
     ) => {
-        fetcher.submit(
-            {
-                intent: "toggle-admin-status",
-                userId,
-                role
-            },
-            {
-                method: "POST"
-            }
-        );
-    };
-
-    const removeFromGroup = (
-        userId: number,
-    ) => {
-        fetcher.submit(
-            {
-                intent: "remove-from-group",
-                userId
-            },
-            {
-                method: "POST"
-            }
-        )
+        setMessage((prev) => ({
+            ...prev,
+            [field]: value
+        }));
     };
 
     if (!loaderData?.success) {
         return <p>no conversation</p>
     }
 
-    if (loaderData?.conversation?.isGroup) {
-        return <section className={styles["group-conversation"]}>
-            {showParticipants && (
-                <div className={styles.participants}>
-                    <button
-                        onClick={() => setShowParticipants(false)}
-                    >
-                        <span className="material-symbols-rounded">
-                            close
-                        </span>
-                    </button>
-                    {conversation.participants.map((p) => {
-                        return <article
-                            key={p.userId}
-                            className={styles.participant}
-                        >
-                            <span className="material-symbols-rounded">
-                                {p.role === "OWNER"
-                                    ? "crown"
-                                    : p.role === "ADMIN"
-                                        ? "shield_person"
-                                        : "person"}
-                            </span>
-                            <span>
-                                {p.role}
-                            </span>
-                            <h2>
-                                {p.user.firstName} {p.user.lastName}
-                            </h2>
-                            <p>@{p.user.username}</p>
-                            <div className={styles.buttons}>
-                                {loggedUserAsParticipant?.userId === p.userId && (
-                                    <p>
-                                        <i>
-                                            You
-                                        </i>
-                                    </p>
-                                )}
-                                {(() => {
-                                    // HANDLE ADMINSHIP STATUS OF PARTICIPANTS
-                                    // Only group owner can give or take away admin status from group participants.
-
-                                    const loggedUserIsOwner = loggedUserAsParticipant?.role === "OWNER";
-
-                                    return loggedUserIsOwner && p.role === "OWNER"
-                                        ? null
-                                        : loggedUserIsOwner && p.role === "ADMIN"
-                                            || loggedUserIsOwner && p.role === "USER"
-                                            ? (
-                                                <button
-                                                    onClick={() => toggleAdminship(
-                                                        p.userId,
-                                                        p.role === "ADMIN"
-                                                            ? "USER"
-                                                            : "ADMIN"
-                                                    )}
-                                                >
-                                                    {
-                                                        p.role === "USER"
-                                                            ? "Make admin"
-                                                            : "Remove adminship"
-                                                    }
-                                                </button>
-                                            ) : null
-                                })()}
-                                {(() => {
-                                    // HANDLE USER REMOVAL FROM GROUP.
-
-                                    // If logged user is group owner or admin, he can remove user from group.
-                                    // Admin can't remove another admin from group.
-
-                                    const isOwner = loggedUserAsParticipant?.role === "OWNER";
-                                    const isAdmin = loggedUserAsParticipant?.role === "ADMIN";
-
-                                    return isOwner && p.role === "OWNER"
-                                        ? null
-                                        : isOwner
-                                            || isAdmin && p.role === "USER"
-                                            ? (<button
-                                                onClick={() => removeFromGroup(p.userId)}
-                                            >
-                                                Remove from group
-                                            </button>)
-                                            : null
-                                })()}
-                            </div>
-                        </article>
-                    })}
-                </div>
-            )}
-            <header className={styles["group-info"]}>
-                <img
-                    src={conversation.profilePicture}
-                    alt={`${conversation.title}'s profile picture`}
-                    className={styles["group-profile-picture"]}
+    if (conversation?.isGroup) {
+        return navigation.state === "loading"
+            ?
+            <Loader />
+            : <section className={styles["group-conversation"]}>
+                <GroupConversation
+                    groupPpf={conversation.profilePicture}
+                    groupTitle={conversation.title}
+                    participants={conversation.participants}
+                    date={conversation.createdAt}
+                    groupDescription={conversation.description}
                 />
-                <h2>
-                    {conversation.title}
-                </h2>
-                <div className={styles.container}>
-                    <button
-                        onClick={() => setShowParticipants(true)}
-                        className={styles["participants-n"]}
-                    >
-                        Participants: {conversation.participants.length}
-                    </button>
-                    <p className={styles["messages-n"]}>
-                        Messages: {conversation.messages.length}
-                    </p>
-                    {(() => {
-                        const owner = conversation.participants.find((p) => {
-                            return p.role === "OWNER" ? p : null;
-                        });
-                        return <div className={styles["group-owner"]}>
-                            <p className={styles["group-owner"]}>
-                                <span>Group owner: </span><span>{owner?.user.firstName} {owner?.user.lastName}</span>
-                            </p>
-                        </div>
-                    })()}
-                    {(() => {
-                        let admins = 0;
-                        for (let i = 0; i < conversation.participants.length; i++) {
-                            conversation.participants[i].role === "ADMIN" ? admins += 1 : null
-                        }
-
-                        return <div className={styles["group-admins"]}>
-                            <span>Admins: </span><span>{admins}</span>
-                        </div>
-                    })()}
-                </div>
-            </header>
-            <Messages
-                messages={conversation.messages}
-                loggedUserId={loggedUser.id}
-                deleteMessage={deleteMessage}
-                participants={participants}
-            />
-            <MessageForm
-                handleMessage={handleMessage}
-                message={message}
-            />
-        </section>
+                <Messages
+                    messages={messages}
+                    onLoadOlder={loadOlderMessages}
+                    hasMore={hasMore}
+                    loggedUserId={loggedUser.id}
+                    deleteMessage={(id) => fetcher.submit(
+                        { intent: "delete-message", messageId: id },
+                        { method: "DELETE" }
+                    )}
+                />
+                <MessageForm
+                    message={message.message}
+                    handleMessage={handleMessage}
+                    setMessage={setMessage}
+                />
+            </section>
     }
 
-    return <section className={styles["current-conversation"]}>
-        {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
-        {!loaderData.success && <InputErrors
-            message={loaderData?.message}
-            errors={loaderData?.errors}
-        />}
-        {loaderData.data?.error && <p>
-            {loaderData.data?.message}
-        </p>}
-        <header className={styles["user-b-info"]}>
-            <img
-                className={styles["profile-picture"]}
-                src={userB?.profilePictureUrl}
-                alt={`${userB?.firstName} ${userB?.lastName}'s profile picture.`}
+    // If is a private conversation between 2 users.
+    return navigation.state === "loading"
+        ? <Loader />
+        : <section className={styles["current-conversation"]}>
+            {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
+            {!loaderData.success && <InputErrors
+                message={loaderData?.message}
+                errors={loaderData?.errors}
+            />}
+            {/* {loaderData.data?.error && <p> */}
+            {/*     {loaderData.data?.message} */}
+            {/* </p>} */}
+            <header className={styles["user-b-info"]}>
+                <img
+                    className={styles["profile-picture"]}
+                    src={userB?.profilePictureUrl}
+                    alt={`${userB?.firstName} ${userB?.lastName}'s profile picture.`}
+                />
+                <h2
+                    className={styles.name}
+                >
+                    {userB?.firstName} {userB?.lastName}
+                </h2>
+                <p className={styles.username}>
+                    @{userB?.username}
+                </p>
+            </header>
+            {fetcher.state === "submitting" && !fetcher?.formData?.get("intent") && (
+                <p>
+                    Sending message
+                </p>
+            )}
+            {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
+                Deleting message...
+            </p>}
+            {/* <Messages */}
+            {/*     initialMessages={messages} */}
+            {/*     loggedUserId={loggedUser.id} */}
+            {/*     deleteMessage={deleteMessage} */}
+            {/* /> */}
+            <MessageForm
+                message={message.message}
+                handleMessage={handleMessage}
+                setMessage={setMessage}
             />
-            <h2>
-                {userB?.firstName} {userB?.lastName}
-            </h2>
-            <p className={styles.username}>
-                {userB?.username}
-            </p>
-        </header>
-        {fetcher.state === "submitting" && !fetcher?.formData?.get("intent") && (
-            <p>
-                Sending message
-            </p>
-        )}
-        {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
-            Deleting message...
-        </p>}
-        <Messages
-            messages={messages}
-            deleteMessage={deleteMessage}
-            loggedUserId={loggedUser.id}
-        />
-        <MessageForm
-            message={message}
-            handleMessage={handleMessage}
-        />
-    </section>
+        </section>
 }
 
 export default CurrentConversation;

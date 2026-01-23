@@ -60,9 +60,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: var(--size-tiny);
+            padding: var(--size-very-small);
             gap: var(--size-very-small);
-            border: 1px solid var(--light-dark-font);
+            border: 1px solid var(--light-dark-font-dimmed);
             border-radius: 50px;
             background-image: linear-gradient(45deg,
                     var(--light-dark-background),
@@ -80,7 +80,7 @@
                 place-items: center;
 
                 span {
-                    font-size: var(--icon-size-normal);
+                    font-size: var(--icon-size-default);
                 }
             }
 
