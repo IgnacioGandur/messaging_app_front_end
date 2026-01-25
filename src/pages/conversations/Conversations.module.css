@@ -16,29 +16,28 @@
             min-width: 350px;
             max-width: 375px;
             display: flex;
-            padding: var(--size-very-small);
-            gap: var(--size-very-small);
             flex-direction: column;
             border-right: 1px solid var(--light-dark-font-dimmed);
 
-            .search-box {
+            .title {
                 display: flex;
                 align-items: center;
+                gap: var(--size-small);
+                padding: var(--size-very-small);
+                border-bottom: 1px solid var(--light-dark-font-dimmed);
 
-                .search-button {
-                    padding: var(--size-very-small);
-                    display: grid;
-                    place-items: center;
+                .icon {
+                    font-size: var(--icon-size-big);
+                    background-image: var(--gradient-main-colors);
+                    background-clip: text;
+                    color: transparent;
+                }
+
+                .separator {
+                    width: 7px;
+                    height: 7px;
                     border-radius: var(--rounding-total);
-                    aspect-ratio: 1/1;
-                    border: 1px solid var(--light-dark-font-dimmed);
-                    background-color: var(--light-dark-background);
-                    margin-bottom: calc(var(--size-tiny) + var(--size-very-small) - 4px);
-                    align-self: flex-end;
-
-                    span {
-                        color: var(--light-dark-font);
-                    }
+                    background-color: var(--light-dark-font-dimmed);
                 }
             }
 

@@ -5,43 +5,28 @@ import {
     useRef,
     useLayoutEffect,
     useState,
-    useEffect
 } from "react";
+import { PulseLoader } from "react-spinners";
 
 interface MessagesProps {
+    loadOlderMessages: () => void;
+    isLoadingOlderMessages: boolean;
+    hasMoreMessages: boolean;
     messages: Message[];
-    onLoadOlder: () => void;
-    hasMore: boolean;
     loggedUserId: number;
-    deleteMessage: (id: number) => void;
+    handleMessageDeletion: (id: number) => void;
 };
 
 const Messages = ({
+    loadOlderMessages,
+    isLoadingOlderMessages,
+    hasMoreMessages,
     messages,
-    onLoadOlder,
-    hasMore,
     loggedUserId,
-    deleteMessage,
+    handleMessageDeletion,
 }: MessagesProps) => {
-    const topRef = useRef<HTMLDivElement | null>(null);
     const messagesContainerRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (!hasMore) return;
-
-        const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                observer.disconnect();
-                onLoadOlder()
-            };
-        });
-
-        if (topRef.current) {
-            observer.observe(topRef.current);
-        };
-
-        return () => observer.disconnect();
-    }, [hasMore, onLoadOlder]);
+    const anchorRef = useRef<HTMLDivElement | null>(null);
 
     // Confirm message deletion dialog ref.
     const dialogRef = useRef<HTMLDialogElement>(null);
@@ -55,7 +40,7 @@ const Messages = ({
     const currentImageRef = useRef<HTMLDialogElement>(null);
     const [currentImage, setCurrentImage] = useState("");
 
-    // Messages deletion effect.
+    // Handle message deletion confirmation modal/dialog.
     useLayoutEffect(() => {
         if (dialogRef.current && showDeleteDialog) {
             dialogRef.current.showModal();
@@ -64,7 +49,7 @@ const Messages = ({
         }
     }, [showDeleteDialog]);
 
-    // Image effect.
+    // Handle images modal/dialog.
     useLayoutEffect(() => {
         if (currentImageRef.current && currentImage) {
             currentImageRef.current.showModal();
@@ -72,6 +57,27 @@ const Messages = ({
             currentImageRef.current?.close();
         }
     }, [currentImage]);
+
+    // Make messages container take the available space without surpassing 100vh.
+    useLayoutEffect(() => {
+        if (!messagesContainerRef.current) return;
+
+        const navbar = document.querySelector("#navbar");
+        const groupDetails = document.querySelector("#group-details");
+        const userBInfo = document.querySelector("#user-b-info");
+        const messageForm = document.querySelector("#message-form");
+        const footer = document.querySelector("#footer");
+
+        messagesContainerRef.current.style.height = `
+            calc(100vh - (${navbar?.clientHeight}px + ${groupDetails?.clientHeight || userBInfo?.clientHeight}px + ${messageForm?.clientHeight}px + ${footer?.clientHeight}px))
+        `;
+    }, []);
+
+    // Scroll to the bottom of the messages container when page loads.
+    useLayoutEffect(() => {
+        if (!anchorRef.current) return;
+        anchorRef.current.scrollIntoView({ behavior: "auto" });
+    }, []);
 
     return <>
         {currentImage && (
@@ -117,7 +123,7 @@ const Messages = ({
                     </button>
                     <button
                         onClick={() => {
-                            deleteMessage(targetMessage);
+                            handleMessageDeletion(targetMessage);
                             toggleDeleteDialog();
                         }}
                         className={styles.accept}
@@ -137,13 +143,32 @@ const Messages = ({
         </dialog>
         <section
             ref={messagesContainerRef}
-            className={`${styles.group} ${styles.messages}`}
+            className={styles.messages}
         >
-            <div style={{
-                border: "1px solid red",
-                height: "10px",
-            }} ref={topRef}>
-            </div>
+            {isLoadingOlderMessages ? (
+                <div className={styles["more-messages-loader"]}>
+                    <PulseLoader
+                        className={styles.loader}
+                        color="var(--light-dark-font)"
+                        size=".5rem"
+                    />
+                    <p className={styles.message}>Loading older messages...</p>
+                </div>
+            ) : hasMoreMessages ? (
+                <div className={styles["load-more-messages"]}>
+                    <button
+                        className={styles.button}
+                        onClick={loadOlderMessages}
+                    >
+                        <span className="material-symbols-rounded">
+                            arrow_circle_down
+                        </span>
+                    </button>
+                    <p className={styles.text}>
+                        Load more messages
+                    </p>
+                </div>
+            ) : null}
             {messages.length === 0 ? (
                 <div className={styles["no-messages"]}>
                     <div className={styles["outer-wrapper"]}>
@@ -268,6 +293,7 @@ const Messages = ({
                     </div>
                 })
             )}
+            <div ref={anchorRef}></div>
         </section>
     </>
 };

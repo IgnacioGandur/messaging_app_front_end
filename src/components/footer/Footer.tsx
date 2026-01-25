@@ -1,7 +1,10 @@
 import styles from "./Footer.module.css";
 
 const Footer = () => {
-    return <footer className={styles["footer"]}>
+    return <footer
+        id="footer"
+        className={styles["footer"]}
+    >
         <p className={styles.initials}>
             <span className={styles.initial}>
                 I

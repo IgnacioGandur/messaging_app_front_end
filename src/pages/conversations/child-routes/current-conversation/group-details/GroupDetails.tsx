@@ -1,13 +1,13 @@
-import styles from "./GroupConversation.module.css";
+import styles from "./GroupDetails.module.css";
 import { useState, useRef, useLayoutEffect } from "react";
 import type ParticipantType from "../../../../../types/participant";
 import Participant from "./participant/Participant";
-import { useRouteLoaderData, useFetcher, useNavigation, useActionData } from "react-router";
+import { useRouteLoaderData, useFetcher } from "react-router";
 import { format } from "date-fns";
 import CustomInput from "../../../../../components/custom-input/CustomInput";
 import InputErrors from "../../../../../components/input-errors/InputErrors";
 
-interface GroupConversationProps {
+interface GroupDetailsProps {
     groupPpf?: string;
     groupTitle?: string;
     participants: ParticipantType[];
@@ -15,16 +15,14 @@ interface GroupConversationProps {
     groupDescription: string;
 };
 
-const GroupConversation = ({
+const GroupDetails = ({
     groupPpf,
     groupTitle,
     participants,
     date,
     groupDescription,
-}: GroupConversationProps) => {
+}: GroupDetailsProps) => {
     const fetcher = useFetcher();
-    const navigation = useNavigation();
-    const actionData = useActionData();
     const rootLoaderData = useRouteLoaderData("root");
 
     const dialogRef = useRef<HTMLDialogElement>(null);
@@ -328,54 +326,53 @@ const GroupConversation = ({
                 </div>
             )}
         </dialog>
-        <section
-            className={styles["group-conversation"]}
+        <header
+            id="group-details"
+            className={styles["group-details"]}
         >
-            <header className={styles["group-info"]}>
-                <button
-                    onClick={toggleParticipants}
-                    className={styles.participants}
-                >
-                    <div className={styles.container}>
-                        {participants.map((p, index) => {
-                            return <img
-                                key={p.userId}
-                                style={{
-                                    left: index === 0 ? "" : `-${index * 12}px`
-                                }}
-                                className={styles["ppf-mini"]}
-                                src={p.user.profilePictureUrl}
-                                alt={`${p.user.firstName} ${p.user.lastName}'s profile picture.`}
-                            />
-                        })}
-                    </div>
-                    <p className={styles["participants-n"]}>
-                        {participants.length} {participants.length === 1 ? "Participant" : "Participants"}.
-                    </p>
-                </button>
-                <div className={styles["ppf-title"]}>
-                    <img
-                        className={styles.ppf}
-                        src={groupPpf}
-                        alt="Group's profile picture"
-                    />
-                    <h2
-                        className={styles.title}
-                    >
-                        {groupTitle}
-                    </h2>
+            <button
+                onClick={toggleParticipants}
+                className={styles.participants}
+            >
+                <div className={styles.container}>
+                    {participants.map((p, index) => {
+                        return <img
+                            key={p.userId}
+                            style={{
+                                left: index === 0 ? "" : `-${index * 12}px`
+                            }}
+                            className={styles["ppf-mini"]}
+                            src={p.user.profilePictureUrl}
+                            alt={`${p.user.firstName} ${p.user.lastName}'s profile picture.`}
+                        />
+                    })}
                 </div>
-                <button
-                    className={styles["toggle-info"]}
-                    onClick={toggleGroupInfo}
+                <p className={styles["participants-n"]}>
+                    {participants.length} {participants.length === 1 ? "Participant" : "Participants"}.
+                </p>
+            </button>
+            <div className={styles["ppf-title"]}>
+                <img
+                    className={styles.ppf}
+                    src={groupPpf}
+                    alt="Group's profile picture"
+                />
+                <h2
+                    className={styles.title}
                 >
-                    <span className={`material-symbols-rounded ${styles["info-icon"]}`}>
-                        info
-                    </span>
-                </button>
-            </header>
-        </section>
+                    {groupTitle}
+                </h2>
+            </div>
+            <button
+                className={styles["toggle-info"]}
+                onClick={toggleGroupInfo}
+            >
+                <span className={`material-symbols-rounded ${styles["info-icon"]}`}>
+                    info
+                </span>
+            </button>
+        </header>
     </>
 };
 
-export default GroupConversation;
+export default GroupDetails;

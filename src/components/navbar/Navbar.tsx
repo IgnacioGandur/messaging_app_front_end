@@ -61,7 +61,10 @@ const Navbar = () => {
             ]
     );
 
-    return <nav className={styles.navbar}>
+    return <nav
+        id="navbar"
+        className={styles.navbar}
+    >
         <div className={styles["logo-container"]}>
             <picture>
                 <source srcSet={logoDark} media="(prefers-color-scheme:dark)" />

@@ -2,9 +2,8 @@ import styles from "./CurrentConversation.module.css";
 
 // Packages
 import {
+    useEffect,
     useState,
-    useCallback,
-    useEffect
 } from "react";
 
 import {
@@ -20,7 +19,7 @@ import ServerError from "../../../../components/server-error/ServerError";
 import InputErrors from "../../../../components/input-errors/InputErrors";
 import MessageForm from "./message-form/MessageForm";
 import Messages from "./messages/Messages";
-import GroupConversation from "./group-conversation/GroupConversation";
+import GroupDetails from "./group-details/GroupDetails";
 import Loader from "./loader/Loader";
 
 // Types
@@ -31,10 +30,13 @@ import type InputErrorsType from "../../../../types/InputErrors";
 
 const CurrentConversation = () => {
     const fetcher = useFetcher();
+    const { conversationId } = useParams();
     const navigation = useNavigation();
     const loaderData = useLoaderData() as {
         success: boolean;
         message: string;
+        messageCursorId: number;
+        hasMore: boolean;
         conversation: Conversation;
         error?: boolean;
         errors?: InputErrorsType[];
@@ -45,28 +47,26 @@ const CurrentConversation = () => {
 
     const conversation = loaderData?.conversation;
     const userB = conversation.participants.find((p) => p.user.id !== loggedUser.id)?.user;
-    const { conversationId } = useParams();
 
     // Conversation messages.
     const initialMessages: Message[] = loaderData?.conversation?.messages;
     const [messages, setMessages] = useState<Message[]>(
         initialMessages.slice().reverse()
     );
-    const [cursor, setCursor] = useState<Date | null>(
-        messages.length ? messages[0].createdAt : null
+    const [hasMoreMessages, setHasMoreMessages] = useState(
+        loaderData.hasMore
     );
-    const [hasMore, setHasMore] = useState(true);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [cursor, setCursor] = useState<number | null>(loaderData.messageCursorId);
+    const [isLoadingMoreMessages, setIsLoadingMoreMessages] = useState(false);
 
-    const loadOlderMessages = useCallback(
-        async () => {
-            if (!cursor || isLoadingMore || !hasMore) return;
+    const loadOlderMessages = async () => {
+        if (!cursor || isLoadingMoreMessages || !hasMoreMessages) return;
 
-            setIsLoadingMore(true);
-
-            const cursorDate = cursor ? cursor.toISOString() : "";
+        try {
+            setIsLoadingMoreMessages(true);
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await fetch(
-                `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/messages?cursor=${cursorDate}&limit=10`,
+                `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/messages?cursor=${cursor}`,
                 {
                     headers: {
                         "Content-Type": "application/json"
@@ -75,55 +75,27 @@ const CurrentConversation = () => {
                 }
             );
 
-            const result = await response.json() as {
+            const { data } = await response.json() as {
                 success: boolean;
                 message: string;
                 data: {
                     messages: Message[];
-                    nextCursor: Date;
+                    nextCursor: number;
                     hasMore: boolean;
                 }
             };
 
-            const fetched = result.data.messages;
+            const orderedMessages = data.messages.slice().reverse();
 
-            if (fetched.length === 0) {
-                setHasMore(false);
-                setIsLoadingMore(false);
-                return;
-            };
-
-            setMessages((prev => {
-                const map = new Map(prev.map((m) => [m.id, m]));
-                fetched.forEach((m) => map.set(m.id, m));
-                return Array.from(map.values()).sort(
-                    (a, b) => a.createdAt.getTime() - b.createdAt.getTime()
-                );
-            }));
-
-            setCursor(fetched[fetched.length - 1].createdAt);
-            setHasMore(result.data.hasMore);
-            setIsLoadingMore(false);
-        }, [cursor, hasMore, isLoadingMore, conversationId]
-    );
-
-    useEffect(() => {
-        if (!fetcher.data) return;
-
-        if (fetcher.data?.intent === "send-message") {
-            setMessages((prev) => [...prev, fetcher.data.message]);
+            setMessages((prev) => [...orderedMessages, ...prev]);
+            setCursor(data.nextCursor);
+            setHasMoreMessages(data.hasMore);
+        } catch (error) {
+            console.error("Failed to load more messages:", error);
+        } finally {
+            setIsLoadingMoreMessages(false);
         }
-
-        if (fetcher.data.intent === "delete-message") {
-            setMessages((prev) =>
-                prev.map((m) =>
-                    m.id === fetcher.data.messageId
-                        ? { ...m, deleted: true }
-                        : m
-                )
-            );
-        };
-    }, [fetcher.data]);
+    };
 
     const [message, setMessage] = useState<
         {
@@ -145,6 +117,21 @@ const CurrentConversation = () => {
         }));
     };
 
+    const handleMessageDeletion = (messageId: number) => {
+        fetcher.submit({
+            intent: "delete-message",
+            messageId,
+        }, { method: "DELETE" });
+    };
+
+    useEffect(() => {
+        if (loaderData?.conversation?.messages) {
+            setMessages(loaderData?.conversation?.messages.slice().reverse());
+            setHasMoreMessages(loaderData.hasMore);
+            setCursor(loaderData.messageCursorId);
+        };
+    }, [loaderData]);
+
     if (!loaderData?.success) {
         return <p>no conversation</p>
     }
@@ -154,7 +141,7 @@ const CurrentConversation = () => {
             ?
             <Loader />
             : <section className={styles["group-conversation"]}>
-                <GroupConversation
+                <GroupDetails
                     groupPpf={conversation.profilePicture}
                     groupTitle={conversation.title}
                     participants={conversation.participants}
@@ -162,14 +149,12 @@ const CurrentConversation = () => {
                     groupDescription={conversation.description}
                 />
                 <Messages
+                    isLoadingOlderMessages={isLoadingMoreMessages}
+                    loadOlderMessages={loadOlderMessages}
+                    hasMoreMessages={hasMoreMessages}
                     messages={messages}
-                    onLoadOlder={loadOlderMessages}
-                    hasMore={hasMore}
                     loggedUserId={loggedUser.id}
-                    deleteMessage={(id) => fetcher.submit(
-                        { intent: "delete-message", messageId: id },
-                        { method: "DELETE" }
-                    )}
+                    handleMessageDeletion={handleMessageDeletion}
                 />
                 <MessageForm
                     message={message.message}
@@ -182,16 +167,16 @@ const CurrentConversation = () => {
     // If is a private conversation between 2 users.
     return navigation.state === "loading"
         ? <Loader />
-        : <section className={styles["current-conversation"]}>
+        : <section className={styles["private-conversation"]}>
             {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
             {!loaderData.success && <InputErrors
                 message={loaderData?.message}
                 errors={loaderData?.errors}
             />}
-            {/* {loaderData.data?.error && <p> */}
-            {/*     {loaderData.data?.message} */}
-            {/* </p>} */}
-            <header className={styles["user-b-info"]}>
+            <header
+                id="user-b-info"
+                className={styles["user-b-info"]}
+            >
                 <img
                     className={styles["profile-picture"]}
                     src={userB?.profilePictureUrl}
@@ -206,19 +191,17 @@ const CurrentConversation = () => {
                     @{userB?.username}
                 </p>
             </header>
-            {fetcher.state === "submitting" && !fetcher?.formData?.get("intent") && (
-                <p>
-                    Sending message
-                </p>
-            )}
             {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
                 Deleting message...
             </p>}
-            {/* <Messages */}
-            {/*     initialMessages={messages} */}
-            {/*     loggedUserId={loggedUser.id} */}
-            {/*     deleteMessage={deleteMessage} */}
-            {/* /> */}
+            <Messages
+                isLoadingOlderMessages={isLoadingMoreMessages}
+                loadOlderMessages={loadOlderMessages}
+                hasMoreMessages={hasMoreMessages}
+                messages={messages}
+                loggedUserId={loggedUser.id}
+                handleMessageDeletion={handleMessageDeletion}
+            />
             <MessageForm
                 message={message.message}
                 handleMessage={handleMessage}

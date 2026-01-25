@@ -36,9 +36,11 @@ const MessageForm = ({
         </div>
     ) :
         (<fetcher.Form
+            id="message-form"
             method="post"
             className={styles["send-message"]}
             encType="multipart/form-data"
+            onSubmit={() => setMessage({ message: "", attachment: null })}
         >
             <input
                 type="hidden"

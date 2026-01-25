@@ -1,10 +1,8 @@
 import styles from "./Conversations.module.css";
-import { useState } from "react";
 import { useLoaderData, Outlet, NavLink } from "react-router";
 import ServerError from "../../components/server-error/ServerError";
 import { useRouteLoaderData } from "react-router";
 import type Conversation from "../../types/conversation";
-import CustomInput from "../../components/custom-input/CustomInput";
 import { formatDistanceToNow } from "date-fns";
 
 const Conversations = () => {
@@ -12,45 +10,20 @@ const Conversations = () => {
     const loggedUser = rootData?.user;
     const loaderData = useLoaderData();
     const conversations: Conversation[] = loaderData?.conversations;
-    const [searchTerm, setSearchTerm] = useState({
-        search: "",
-    });
-
-    const handleSearchTerm = (
-        field: string,
-        value: string
-    ) => {
-        setSearchTerm((prevData) => ({
-            ...prevData,
-            [field]: value
-        }));
-    };
 
     return <main className={styles.conversations}>
         {loaderData?.error && <ServerError title="Server Error" message={loaderData?.message} />}
         <div className={styles.wrapper}>
             <section className={styles["chats-sidebar"]}>
-                <form
-                    className={styles["search-box"]}>
-                    <CustomInput
-                        id="search"
-                        name="search"
-                        type="text"
-                        labelText="Search chat by user name or group title."
-                        googleIcon="search"
-                        value={searchTerm.search}
-                        onChange={handleSearchTerm}
-                        placeholder="Search..."
-                        minLength={1}
-                        maxLength={40}
-                        required={true}
-                    />
-                    <button className={styles["search-button"]}>
-                        <span className="material-symbols-rounded">
-                            arrow_upward
-                        </span>
-                    </button>
-                </form>
+                <div className={styles.title}>
+                    <span className={`material-symbols-rounded ${styles.icon}`}>
+                        conversation
+                    </span>
+                    <div className={styles.separator}></div>
+                    <h3 className={styles.text}>
+                        Conversations
+                    </h3>
+                </div>
                 {conversations && conversations.length === 0 ? (
                     <div className={styles["no-conversations"]}>
                         <p>
@@ -59,7 +32,8 @@ const Conversations = () => {
                     </div>
                 ) : (
                     conversations.map((conversation) => {
-                        return <NavLink key={conversation.id}
+                        return <NavLink
+                            key={conversation.id}
                             to={`/conversations/${conversation.id}`}
                             className={({ isActive }) =>
                                 isActive ? `
