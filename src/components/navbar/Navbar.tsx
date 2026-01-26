@@ -9,57 +9,26 @@ import logoDark from "../../assets/images/icon_dark.svg";
 type Link = {
     path: string;
     text: string;
-    icon: string;
 };
 
 const Navbar = () => {
     const loaderData = useRouteLoaderData("root");
-    const loggedUser = loaderData.user;
+    const loggedUser = loaderData?.user;
 
-    const commonLinks = [
+    const links = [
         {
             path: "/",
             text: "Home",
-            icon: "home"
         },
         {
-            path: "/groups",
-            text: "Groups",
-            icon: "communities"
+            path: "/register",
+            text: "Register",
         },
-    ]
-
-    const links = commonLinks.concat(
-        loaderData?.success ?
-            [
-                {
-                    path: "/users",
-                    text: "Users",
-                    icon: "groups"
-                },
-                {
-                    path: "/conversations",
-                    text: "Conversations",
-                    icon: "conversation"
-                },
-                {
-                    path: "/friends",
-                    text: "Friends",
-                    icon: "handshake"
-                },
-            ] : [
-                {
-                    path: "/register",
-                    text: "Register",
-                    icon: "signature"
-                },
-                {
-                    path: "/login",
-                    text: "Login",
-                    icon: "login"
-                },
-            ]
-    );
+        {
+            path: "/login",
+            text: "Login",
+        },
+    ];
 
     return <nav
         id="navbar"
@@ -72,41 +41,36 @@ const Navbar = () => {
             </picture>
             <h2 className={styles.name}>Chateá!</h2>
         </div>
-        <div className={styles.links}>
-            {links.map((link: Link) => {
-                return <NavLink
-                    prefetch="intent"
-                    key={link.path}
-                    to={link.path}
-                    className={({ isActive }) => isActive
-                        ? `${styles.active} ${styles.link}`
-                        : styles.link}
-                    viewTransition
-                >
-                    {({ isPending }) => isPending ? (
-                        <BarLoader
-                            className={styles.loader}
-                            color={"var(--color-main)"}
-                        />
-                    ) : (
-                        <>
-                            <span className={`material-symbols-rounded ${styles.icon}`}>
-                                {link.icon}
-                            </span>
+        {!loaderData?.user && (
+            <div className={styles.links}>
+                {links.map((link: Link) => {
+                    return <NavLink
+                        prefetch="intent"
+                        key={link.path}
+                        to={link.path}
+                        className={({ isActive }) => isActive
+                            ? `${styles.active} ${styles.link}`
+                            : styles.link}
+                        viewTransition
+                    >
+                        {({ isPending }) => isPending ? (
+                            <BarLoader
+                                className={styles.loader}
+                                color={"var(--color-main)"}
+                            />
+                        ) : (
                             <span className={styles.text}>
                                 {link.text}
                             </span>
-                        </>
-                    )}
-                </NavLink>
-            })}
-        </div>
-        {loggedUser ? <div className={styles["notifications-and-user"]}>
+                        )}
+                    </NavLink>
+                })}
+            </div>
+        )}
+        {loggedUser && <div className={styles["notifications-and-user"]}>
             <Notifications />
             <LoggedUser user={loggedUser} />
-        </div>
-            : <div className={styles.empty}></div>
-        }
+        </div>}
     </nav>
 }
 

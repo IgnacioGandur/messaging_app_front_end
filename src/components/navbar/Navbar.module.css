@@ -23,7 +23,7 @@
 
     .links {
         display: flex;
-        gap: var(--size-normal);
+        gap: var(--size-tiny);
         align-items: center;
 
         .loader {
@@ -31,58 +31,48 @@
         }
 
         .link {
-            border: 1px solid transparent;
             border-radius: var(--rounding-small);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: var(--size-tiny);
-            position: relative;
             text-decoration: none;
-            width: fit-content;
-            height: fit-content;
-
-            .icon {
-                font-size: var(--icon-size-normal);
-                color: var(--light-dark-font);
-            }
+            padding: var(--size-very-small);
+            transition: var(--transition-normal);
 
             .text {
-                padding: var(--size-very-small) calc(var(--size-very-small) * 2);
-                border-radius: var(--rounding-small);
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                opacity: 0;
-                background-color: var(--light-dark-background);
                 color: var(--light-dark-font);
-                border: 1px solid var(--light-dark-font-dimmed);
-                transition: all 225ms ease-in-out;
+                transition: inherit;
             }
         }
 
         .link:hover,
         .link:focus-visible {
-            border: 1px solid var(--color-main-dimmed);
-
-            .text {
-                opacity: 1;
-                transform: translate(-50%, 85%);
-            }
+            text-decoration: underline;
         }
 
         .link.active {
-            border: 1px solid var(--light-dark-font);
-        }
+            position: relative;
 
-        .link.active:hover,
-        .link.active:focus-visible {
             .text {
-                border: 1px solid var(--light-dark-font);
+                font-weight: var(--font-thickness-thick);
+                background-image: var(--gradient-main-colors);
+                color: transparent;
+                background-clip: text;
             }
         }
 
+        .link.active::after {
+            position: absolute;
+            left: 50%;
+            transform: translateY(-50%);
+            bottom: -5px;
+            content: "";
+            width: 6px;
+            height: 6px;
+            background-image: var(--gradient-main-colors);
+            border-radius: var(--rounding-total);
+        }
     }
 
     .notifications-and-user {

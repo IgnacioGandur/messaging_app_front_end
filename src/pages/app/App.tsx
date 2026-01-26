@@ -4,16 +4,22 @@ import styles from "./App.module.css";
 // Packages
 import { Outlet } from "react-router";
 import { useRouteLoaderData } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Components
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import ServerError from "../../components/server-error/ServerError";
 import FloatingChats from "../../components/floating-chats/FloatingChats";
+import MainSidebar from "../../components/main-sidebar/MainSidebar";
 
 const App = () => {
     const loaderData = useRouteLoaderData("root");
+    const [showSidebar, setShowSidebar] = useState(false);
+
+    const toggleSidebar = () => {
+        setShowSidebar((prev) => !prev);
+    };
 
     useEffect(() => {
         socket.connect();
@@ -28,7 +34,13 @@ const App = () => {
             title="Server Error"
             message={loaderData?.message}
         /> : null}
-        <Navbar />
+        <MainSidebar
+            showSidebar={showSidebar}
+            toggleSidebar={toggleSidebar}
+        />
+        <Navbar
+            toggleSidebar={toggleSidebar}
+        />
         <Outlet />
         <Footer />
         <FloatingChats />
