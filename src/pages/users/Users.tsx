@@ -1,7 +1,14 @@
 import styles from "./Users.module.css"
 
 // Packages
-import { NavLink, useLoaderData, useNavigation, useLocation } from "react-router";
+import {
+    NavLink,
+    useLoaderData,
+    useNavigation,
+    useLocation,
+    useSearchParams,
+    Form
+} from "react-router";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouteLoaderData, useFetcher } from "react-router";
 import { format } from "date-fns";
@@ -10,23 +17,32 @@ import { SyncLoader } from "react-spinners";
 // Types
 import type User from "../../types/user";
 import type Friendship from "../../types/friendship";
-import type { FormEvent } from "react";
 
 const Users = () => {
     const fetcher = useFetcher();
     const navigation = useNavigation();
     const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    // Data
     const loaderData = useLoaderData();
     const rootData = useRouteLoaderData("root");
     const loggedUser = rootData.user;
     const users: User[] = loaderData?.users;
-    console.log("The content of users is:", users);
     const usersMetadata = loaderData?.meta as {
         currentPage: number;
         totalCount: number;
         totalPages: number;
     };
     const friendships: Friendship[] = loaderData?.friendships;
+    const currentSearch = searchParams.get("search") || "";
+
+    // Handle user searching.
+    const createPagePath = (page: number) => {
+        const params = new URLSearchParams(searchParams);
+        params.set("page", page.toString());
+        return `?${params.toString()}`;
+    };
 
     // Handle send message to user.
     const [message, setMessage] = useState("");
@@ -46,7 +62,7 @@ const Users = () => {
         setShowMessageModal(false);
     };
 
-    const startConversation = (e: FormEvent) => {
+    const startConversation = (e: React.FormEvent<HTMLFormElement>) => {
         if (!currentTargetUser) return;
 
         e.preventDefault();
@@ -206,14 +222,18 @@ const Users = () => {
                     Users
                 </span>
             </h2>
-            <div className={styles["form-container"]}>
+            <Form
+                method="get"
+                className={styles["form-container"]}
+            >
                 <p className={styles["users-n"]}>
-                    {usersMetadata.totalCount} Users
+                    ({usersMetadata.totalCount} Users)
                 </p>
-                <fetcher.Form
+                <div
                     className={styles["search-form"]}
                 >
                     <div
+                        key={currentSearch}
                         className={styles["input-wrapper"]}
                     >
                         <span
@@ -223,19 +243,49 @@ const Users = () => {
                         </span>
                         <div className={styles.separator}></div>
                         <input
+                            defaultValue={currentSearch}
                             type="text"
-                            name="searchTerm"
+                            name="search"
                             placeholder="Username"
                         />
                     </div>
+                    <input
+                        type="hidden"
+                        name="page"
+                        value="1"
+                    />
                     <button
                         className={styles["search-button"]}
                     >
                         Search
                     </button>
-                </fetcher.Form>
-            </div>
+                </div>
+            </Form>
         </header>
+        {searchParams.get("search") && (
+            <div
+                className={styles.filtering}
+            >
+                <h3>
+                    Filtering users by username: "{currentSearch}".
+                </h3>
+                <NavLink
+                    to="/users"
+                    replace={true}
+                    onClick={() => searchParams.set("search", "")}
+                    className={styles["clear-search"]}
+                >
+                    <span
+                        className="material-symbols-rounded"
+                    >
+                        close
+                    </span>
+                    <span>
+                        Clear search
+                    </span>
+                </NavLink>
+            </div>
+        )}
         {users.length === 0
             ? (
                 <div
@@ -244,12 +294,12 @@ const Users = () => {
                     <span
                         className={`material-symbols-rounded ${styles.icon}`}
                     >
-                        no_accounts
+                        {currentSearch ? "search_off" : "no_accounts"}
                     </span>
                     <p
                         className={styles.text}
                     >
-                        There are no registered users yet.
+                        {currentSearch ? `No users matched the username containing: "${currentSearch}"` : "There are no registered users yet."}
                     </p>
                 </div>
             )
@@ -295,138 +345,144 @@ const Users = () => {
                                         @{user.username}
                                     </p>
                                 </NavLink>
-                                <div
-                                    className={styles.buttons}
+                                {user.id === loggedUser.id ? <p
+                                    className={styles.you}
                                 >
-                                    {(() => {
-                                        {/* These are the received friendship requests. */ }
-                                        const friendship = friendships.find((f) => f.userAId === loggedUser?.id && f.userBId === user.id);
+                                    (You)
+                                </p> : (
+                                    <div
+                                        className={styles.buttons}
+                                    >
+                                        {(() => {
+                                            {/* These are the received friendship requests. */ }
+                                            const friendship = friendships.find((f) => f.userAId === loggedUser?.id && f.userBId === user.id);
 
-                                        {/* These are the frienships requests sent by the logged user. */ }
-                                        const friendshipReverse = friendships.find((f) => f.userBId === loggedUser?.id && f.userAId === user.id);
+                                            {/* These are the frienships requests sent by the logged user. */ }
+                                            const friendshipReverse = friendships.find((f) => f.userBId === loggedUser?.id && f.userAId === user.id);
 
-                                        if (friendshipReverse) {
-                                            return friendshipReverse.status === "ACCEPTED" ? (
-                                                <>
-                                                    <span
-                                                        className={styles.text}
-                                                    >
-                                                        Already your friend
-                                                    </span>
+                                            if (friendshipReverse) {
+                                                return friendshipReverse.status === "ACCEPTED" ? (
+                                                    <>
+                                                        <span
+                                                            className={styles.text}
+                                                        >
+                                                            Already your friend
+                                                        </span>
+                                                        <button
+                                                            onClick={() => {
+                                                                removeFriendship(friendshipReverse.id);
+                                                            }}
+                                                        >
+                                                            <span
+                                                                className={styles.text}
+                                                            >
+                                                                Remove from friends
+                                                            </span>
+                                                            <span
+                                                                className="material-symbols-rounded"
+                                                            >
+                                                                person_remove
+                                                            </span>
+                                                        </button>
+                                                    </>
+                                                ) : (<div className={styles["answer-friendship"]}>
+                                                    <p className={styles.message}>
+                                                        Wants to be your friend
+                                                    </p>
+                                                    <div className={styles.buttons}>
+                                                        <button
+                                                            onClick={() => handleFriendshipResponse(
+                                                                friendshipReverse.id,
+                                                                "REJECTED"
+                                                            )}
+                                                        >
+                                                            <span className={styles.text}>
+                                                                Reject
+                                                            </span>
+                                                            <span className="material-symbols-rounded">
+                                                                group_remove
+                                                            </span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleFriendshipResponse(
+                                                                friendshipReverse.id,
+                                                                "ACCEPTED"
+                                                            )}
+                                                        >
+                                                            <span className={styles.text}>
+                                                                Accept
+                                                            </span>
+                                                            <span className="material-symbols-rounded">
+                                                                how_to_reg
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>)
+                                            }
+
+                                            return !friendship
+                                                ? (
                                                     <button
-                                                        onClick={() => {
-                                                            removeFriendship(friendshipReverse.id);
-                                                        }}
+                                                        onClick={() => sendFriendshipRequest(
+                                                            user.id,
+                                                        )}
                                                     >
                                                         <span
                                                             className={styles.text}
                                                         >
-                                                            Remove from friends
-                                                        </span>
-                                                        <span
-                                                            className="material-symbols-rounded"
-                                                        >
-                                                            person_remove
-                                                        </span>
-                                                    </button>
-                                                </>
-                                            ) : (<div className={styles["answer-friendship"]}>
-                                                <p className={styles.message}>
-                                                    Wants to be your friend
-                                                </p>
-                                                <div className={styles.buttons}>
-                                                    <button
-                                                        onClick={() => handleFriendshipResponse(
-                                                            friendshipReverse.id,
-                                                            "REJECTED"
-                                                        )}
-                                                    >
-                                                        <span className={styles.text}>
-                                                            Reject
+                                                            Send friendship request
                                                         </span>
                                                         <span className="material-symbols-rounded">
-                                                            group_remove
+                                                            person_add
                                                         </span>
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleFriendshipResponse(
-                                                            friendshipReverse.id,
-                                                            "ACCEPTED"
-                                                        )}
-                                                    >
-                                                        <span className={styles.text}>
-                                                            Accept
-                                                        </span>
-                                                        <span className="material-symbols-rounded">
-                                                            how_to_reg
-                                                        </span>
-                                                    </button>
-                                                </div>
-                                            </div>)
-                                        }
 
-                                        return !friendship
-                                            ? (
-                                                <button
-                                                    onClick={() => sendFriendshipRequest(
-                                                        user.id,
-                                                    )}
-                                                >
-                                                    <span
-                                                        className={styles.text}
-                                                    >
-                                                        Send friendship request
-                                                    </span>
-                                                    <span className="material-symbols-rounded">
-                                                        person_add
-                                                    </span>
-                                                </button>
-
-                                            )
-                                            : friendship.status === "ACCEPTED"
-                                                ? (
-                                                    <p>
-                                                        Friends
-                                                    </p>
                                                 )
-                                                : (
-                                                    <>
-                                                        <span className={styles.text}>
-                                                            Waiting for response
-                                                        </span>
-                                                        <button
-                                                            onClick={() => removeFriendship(
-                                                                friendship.id
-                                                            )}
-                                                        >
+                                                : friendship.status === "ACCEPTED"
+                                                    ? (
+                                                        <p>
+                                                            Friends
+                                                        </p>
+                                                    )
+                                                    : (
+                                                        <>
                                                             <span className={styles.text}>
-                                                                Cancel friendship request
+                                                                Waiting for response
                                                             </span>
-                                                            <span className="material-symbols-rounded">
-                                                                person_cancel
-                                                            </span>
-                                                        </button>
-                                                    </>
-                                                )
-                                    })()}
-                                    <button
-                                        onClick={() => {
-                                            setMessage("");
-                                            setCurrentTargetUser(user);
-                                            toggleMessageDialog();
-                                        }}
-                                        className={styles["send-message"]}
-                                    >
-                                        <span
-                                            className={styles.text}
+                                                            <button
+                                                                onClick={() => removeFriendship(
+                                                                    friendship.id
+                                                                )}
+                                                            >
+                                                                <span className={styles.text}>
+                                                                    Cancel friendship request
+                                                                </span>
+                                                                <span className="material-symbols-rounded">
+                                                                    person_cancel
+                                                                </span>
+                                                            </button>
+                                                        </>
+                                                    )
+                                        })()}
+                                        <button
+                                            onClick={() => {
+                                                setMessage("");
+                                                setCurrentTargetUser(user);
+                                                toggleMessageDialog();
+                                            }}
+                                            className={styles["send-message"]}
                                         >
-                                            Send message
-                                        </span>
-                                        <span className="material-symbols-rounded">
-                                            chat_add_on
-                                        </span>
-                                    </button>
-                                </div>
+                                            <span
+                                                className={styles.text}
+                                            >
+                                                Send message
+                                            </span>
+                                            <span className="material-symbols-rounded">
+                                                chat_add_on
+                                            </span>
+                                        </button>
+                                    </div>
+                                )}
                             </li>
                             <div
                                 className={styles.separator}
@@ -439,7 +495,7 @@ const Users = () => {
         <nav className={styles.pages}>
             {usersMetadata.currentPage > 1 && (
                 <NavLink
-                    to={`?page=${usersMetadata.currentPage - 1}`}
+                    to={createPagePath(usersMetadata.currentPage - 1)}
                     className={styles.previous}
                 >
                     <span className={styles.text}>
@@ -452,9 +508,11 @@ const Users = () => {
             )}
             {Array.from({ length: usersMetadata.totalPages }, (_, i) => {
                 const pageNum = i + 1;
-                const pagePath = `?page=${pageNum}`;
+                const pagePath = createPagePath(pageNum);
 
-                const isActive = location.search === pagePath || (location.search === "" && pageNum === 1);
+                {/* const isActive = location.search === pagePath || (location.search === "" && pageNum === 1); */ }
+                const isActive = location.search === pagePath ||
+                    (location.search === "" && pageNum === 1 && !currentSearch);
 
                 return <NavLink
                     key={pageNum}
@@ -466,7 +524,7 @@ const Users = () => {
             })}
             {usersMetadata.currentPage < usersMetadata.totalPages && (
                 <NavLink
-                    to={`?page=${usersMetadata.currentPage + 1}`}
+                    to={createPagePath(usersMetadata.currentPage + 1)}
                     className={styles.next}
                 >
                     <span className={styles.text}>
