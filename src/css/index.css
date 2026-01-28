@@ -13,6 +13,17 @@ body {
     font-size: var(--font-size-normal);
 }
 
+h1,
+h2,
+h3,
+h4,
+p,
+span,
+input,
+button {
+    color: var(--light-dark-font);
+}
+
 html {
     min-height: 100vh;
     height: 100%;

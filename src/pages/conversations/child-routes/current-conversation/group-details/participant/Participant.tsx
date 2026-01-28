@@ -29,6 +29,8 @@ const Participant = ({
     const fetcher = useFetcher();
     const loaderData = useRouteLoaderData("root");
 
+    const isYou = loaderData.user.id === userId;
+
     const toggleAdminStatus = (
         userId: number,
         role: "ADMIN" | "ROLE",
@@ -85,13 +87,18 @@ const Participant = ({
             <span>
                 {name}
             </span>
-            {loaderData.user.id === userId && (
+            {isYou && (
                 <span
                     className={styles.you}
                 >
                     (You)
                 </span>
             )}
+            {(role !== "USER" && !isYou) && <span
+                className={styles.role}
+            >
+                ({role})
+            </span>}
         </h3>
         <p
             className={styles.username}

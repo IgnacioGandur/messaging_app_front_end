@@ -3,17 +3,18 @@
     height: fit-content;
 
     .options {
+        background-color: var(--light-dark-background);
         display: flex;
         flex-direction: column;
         position: absolute;
         top: 75px;
         right: var(--size-very-small);
-        background-color: var(--light-dark-background);
         border-radius: var(--rounding-medium);
         padding: var(--size-very-small);
         gap: var(--size-very-small);
         box-shadow: var(--shadow-1);
         min-width: 225px;
+        z-index: 100;
 
         .option {
             text-decoration: none;

@@ -27,6 +27,7 @@ import type Conversation from "../../../../types/conversation";
 import type Message from "../../../../types/message";
 import type User from "../../../../types/user";
 import type InputErrorsType from "../../../../types/InputErrors";
+import { NavLink } from "react-router";
 
 const CurrentConversation = () => {
     const fetcher = useFetcher();
@@ -177,19 +178,24 @@ const CurrentConversation = () => {
                 id="user-b-info"
                 className={styles["user-b-info"]}
             >
-                <img
-                    className={styles["profile-picture"]}
-                    src={userB?.profilePictureUrl}
-                    alt={`${userB?.firstName} ${userB?.lastName}'s profile picture.`}
-                />
-                <h2
-                    className={styles.name}
+                <NavLink
+                    to={`/users/${userB?.id}`}
+                    className={styles.user}
                 >
-                    {userB?.firstName} {userB?.lastName}
-                </h2>
-                <p className={styles.username}>
-                    @{userB?.username}
-                </p>
+                    <img
+                        className={styles["profile-picture"]}
+                        src={userB?.profilePictureUrl}
+                        alt={`${userB?.firstName} ${userB?.lastName}'s profile picture.`}
+                    />
+                    <h2
+                        className={styles.name}
+                    >
+                        {userB?.firstName} {userB?.lastName}
+                    </h2>
+                    <p className={styles.username}>
+                        @{userB?.username}
+                    </p>
+                </NavLink>
             </header>
             {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
                 Deleting message...

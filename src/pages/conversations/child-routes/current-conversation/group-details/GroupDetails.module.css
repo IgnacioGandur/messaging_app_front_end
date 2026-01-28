@@ -321,16 +321,18 @@
                     flex: 1;
                 }
 
-                button {
+                .button {
                     padding: var(--size-small);
                     border-radius: 50px;
                     border: 1px solid var(--light-dark-font-dimmed);
                     background-color: transparent;
+                    cursor: pointer;
+                    transition: var(--transition-normal);
                 }
 
-                button:hover,
-                button:focus-visbile {
-                    background-color: var(--light-dark-font-dimmed-2);
+                .button:hover,
+                .button:focus-visible {
+                    background-color: var(--color-secondary-dimmed);
                 }
             }
         }
@@ -380,6 +382,47 @@
     border-bottom: 1px solid var(--light-dark-font-dimmed);
     padding: var(--size-small);
 
+    .ppf-title-description {
+        display: grid;
+        grid-template-areas:
+            "ppf title"
+            "ppf description"
+        ;
+        align-items: center;
+        gap: 0.15rem var(--size-very-small);
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+
+        .ppf {
+            width: 50px;
+            height: 50px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            grid-area: ppf;
+            align-self: center;
+            border-radius: var(--rounding-total)
+        }
+
+        .title {
+            text-align: start;
+            font-weight: var(--font-thickness-thick);
+            grid-area: title;
+            font-size: var(--font-size-normal);
+            align-self: end;
+
+        }
+
+        .description {
+            align-self: flex-start;
+            grid-area: description;
+            font-style: italic;
+            font-size: .78;
+            opacity: .75;
+        }
+    }
+
     .participants {
         display: flex;
         flex-direction: column;
@@ -417,53 +460,6 @@
         .ppf-mini {
             box-shadow: 0px 0px 7px 3px var(--color-main-dimmed);
         }
-    }
-
-    .ppf-title {
-        display: flex;
-        flex-direction: column;
-        gap: var(--size-tiny);
-        align-items: center;
-        justify-content: center;
-
-        .ppf {
-            border-radius: var(--rounding-total);
-            width: 60px;
-            height: 60px;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-        }
-
-        .title {
-            display: none;
-            font-size: var(--font-size-normal);
-        }
-    }
-
-    .toggle-info {
-        display: grid;
-        place-items: center;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        border-radius: var(--rounding-total);
-        transition: var(--transition-normal);
-        cursor: pointer;
-
-        span {
-            font-size: var(--icon-size-normal);
-            color: var(--light-dark-font);
-        }
-    }
-
-    .toggle-info:hover,
-    .toggle-info:focus-visible {
-        transform: scale(1.1);
-    }
-
-    .toggle-info:active {
-        background-color: var(--light-dark-font-dimmed);
-        transform: scale(0.9);
     }
 }
 

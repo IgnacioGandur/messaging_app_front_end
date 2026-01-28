@@ -47,10 +47,15 @@
         align-items: center;
         gap: var(--size-tiny);
 
-        .you {
+        .you,
+        .role {
             font-weight: var(--font-thickness-thin);
             font-size: var(--font-size-small);
             opacity: .75;
+        }
+
+        .role {
+            text-transform: lowercase;
         }
     }
 

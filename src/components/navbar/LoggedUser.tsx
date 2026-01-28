@@ -1,5 +1,5 @@
 import styles from "./LoggedUser.module.css";
-import { useState } from "react";
+import { useState, Fragment, useRef, useEffect } from "react";
 import { NavLink } from "react-router";
 
 type Link = {
@@ -32,19 +32,41 @@ type LoggedUserProps = {
 };
 
 const LoggedUser = ({ user }: LoggedUserProps) => {
+    const optionsRef = useRef<HTMLDivElement | null>(null);
     const [showOptions, setShowOptions] = useState(false);
 
     const toggleShowOptions = () => {
         setShowOptions((prevState) => !prevState);
     };
 
+    useEffect(() => {
+        if (!optionsRef.current) return;
+
+        const handleClick = (e: MouseEvent) => {
+            if (showOptions && optionsRef.current) {
+                if (!optionsRef.current.contains(e.target as Node)) {
+                    setShowOptions(false);
+                }
+            }
+        };
+
+        document.addEventListener("mousedown", handleClick);
+
+        return () => document.removeEventListener("mousedown", handleClick);
+
+    }, [showOptions, optionsRef.current]);
+
     return <div className={styles["profile-dropdown"]}>
         {showOptions && (
-            <div className={styles.options}>
+            <div
+                ref={optionsRef}
+                className={styles.options}
+            >
                 {links.map((link: Link, index) => {
-                    return <>
+                    return <Fragment
+                        key={link.text}
+                    >
                         <NavLink
-                            key={link.text}
                             to={link.to}
                             className={styles.option}
                         >
@@ -57,7 +79,7 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
                             </span>
                         </NavLink>
                         {links.length - 2 === index && <div className={styles.separator}></div>}
-                    </>
+                    </Fragment>
                 })}
             </div>
         )}

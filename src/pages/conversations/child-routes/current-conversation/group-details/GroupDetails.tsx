@@ -241,12 +241,15 @@ const GroupDetails = ({
                                 className={styles.buttons}
                             >
                                 <button
+                                    className={styles.button}
                                     type="button"
                                     onClick={toggleGroupEdit}
                                 >
                                     Cancel
                                 </button>
                                 <button
+                                    disabled={updatedGroup.ppf === groupPpf && updatedGroup.title === groupTitle && updatedGroup.description === groupDescription}
+                                    className={styles.button}
                                 >
                                     Update
                                 </button>
@@ -331,6 +334,24 @@ const GroupDetails = ({
             className={styles["group-details"]}
         >
             <button
+                onClick={toggleGroupInfo}
+                className={styles["ppf-title-description"]}
+            >
+                <img
+                    className={styles.ppf}
+                    src={groupPpf}
+                    alt="Group's profile picture"
+                />
+                <span
+                    className={styles.title}
+                >
+                    {groupTitle}
+                </span>
+                <span className={styles.description}>
+                    {groupDescription}
+                </span>
+            </button>
+            <button
                 onClick={toggleParticipants}
                 className={styles.participants}
             >
@@ -350,26 +371,6 @@ const GroupDetails = ({
                 <p className={styles["participants-n"]}>
                     {participants.length} {participants.length === 1 ? "Participant" : "Participants"}.
                 </p>
-            </button>
-            <div className={styles["ppf-title"]}>
-                <img
-                    className={styles.ppf}
-                    src={groupPpf}
-                    alt="Group's profile picture"
-                />
-                <h2
-                    className={styles.title}
-                >
-                    {groupTitle}
-                </h2>
-            </div>
-            <button
-                className={styles["toggle-info"]}
-                onClick={toggleGroupInfo}
-            >
-                <span className={`material-symbols-rounded ${styles["info-icon"]}`}>
-                    info
-                </span>
             </button>
         </header>
     </>

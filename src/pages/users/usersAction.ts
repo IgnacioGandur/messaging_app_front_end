@@ -60,27 +60,45 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
             return result;
         }
 
-        const message = formData.get("message");
-        const recipientId = formData.get("recipientId");
-        const url = import.meta.env.VITE_API_BASE + "/conversations";
-        const options: RequestInit = {
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                message,
-                recipientId
-            }),
-        };
+        if (intent === "send-message") {
+            const message = formData.get("message");
+            const recipientId = formData.get("recipientId");
+            const url = import.meta.env.VITE_API_BASE + "/conversations";
+            const options: RequestInit = {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    message,
+                    recipientId
+                }),
+            };
 
-        const response = await fetch(url, options);
-        const result = await response.json();
+            const response = await fetch(url, options);
+            const result = await response.json();
 
-        if (result?.success) {
-            return redirect(`/conversations/${result.conversation.id}`);
-        } else {
+            if (result?.success) {
+                return redirect(`/conversations/${result.conversation.id}`);
+            } else {
+                return result;
+            }
+        }
+
+        if (intent === "remove-friend") {
+            const friendshipId = formData.get("friendshipId");
+            const url = `${import.meta.env.VITE_API_BASE}/friendships/${friendshipId}`;
+            const options: RequestInit = {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
             return result;
         }
     } catch (error) {

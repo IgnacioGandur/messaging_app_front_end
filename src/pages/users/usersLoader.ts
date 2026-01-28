@@ -1,6 +1,10 @@
-export default async function usersLoader() {
+import type { LoaderFunctionArgs } from "react-router";
+
+export default async function usersLoader({ request }: LoaderFunctionArgs) {
     try {
-        const usersUrl = import.meta.env.VITE_API_BASE + "/users";
+        const url = new URL(request.url);
+        const page = url.searchParams.get("page") || 1;
+        const usersUrl = import.meta.env.VITE_API_BASE + `/users?page=${page}`;
         const friendshipsUrl = import.meta.env.VITE_API_BASE + "/friendships";
         const options: RequestInit = {
             method: "GET",
@@ -17,7 +21,8 @@ export default async function usersLoader() {
         const friendshipsResult = await friendshipsResponse.json();
 
         return {
-            users: usersResult?.users,
+            users: usersResult?.data.users,
+            meta: usersResult?.data.meta,
             friendships: friendshipsResult?.friendships
         };
     } catch (error) {
