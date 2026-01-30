@@ -65,7 +65,6 @@ const CurrentConversation = () => {
 
         try {
             setIsLoadingMoreMessages(true);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await fetch(
                 `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/messages?cursor=${cursor}`,
                 {

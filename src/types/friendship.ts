@@ -5,7 +5,7 @@ export default interface Friendship {
     userAId: number;
     userBId: number;
     createdAt: Date;
-    status: string;
+    status: "ACCEPTED" | "PENDING";
     userA: User;
     userB: User;
 }

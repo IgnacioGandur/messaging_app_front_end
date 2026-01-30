@@ -65,7 +65,7 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
             const recipientId = formData.get("recipientId");
             const url = import.meta.env.VITE_API_BASE + "/conversations";
             const options: RequestInit = {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },

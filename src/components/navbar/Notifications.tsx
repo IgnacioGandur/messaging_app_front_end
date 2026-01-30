@@ -56,7 +56,7 @@ const Notifications = () => {
 
     useEffect(() => {
         const getFriendships = async () => {
-            const url = import.meta.env.VITE_API_BASE + "/friendships?filter=pending";
+            const url = import.meta.env.VITE_API_BASE + "/friendships?filter=PENDING";
             const options: RequestInit = {
                 method: "GET",
                 credentials: "include",

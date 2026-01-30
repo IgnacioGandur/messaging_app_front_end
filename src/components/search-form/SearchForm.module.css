@@ -1,0 +1,49 @@
+.search-form {
+    display: grid;
+    grid-template-areas:
+        "empty label label"
+        "users-n input button"
+    ;
+    grid-template-columns: 1fr auto;
+    gap: var(--size-tiny);
+
+    >:not(.label) {
+        border-radius: var(--rounding-small);
+        padding: var(--size-very-small);
+    }
+
+    .users-amount {
+        grid-area: users-n;
+        opacity: .75;
+        font-size: var(--font-size-small);
+        align-self: flex-end;
+    }
+
+    .label {
+        grid-area: label;
+        font-size: var(--font-size-small);
+        opacity: .75;
+    }
+
+    .input {
+        background-color: var(--light-dark-font-dimmed-2);
+        grid-area: input;
+        border: none;
+        cursor: pointer;
+    }
+
+    .search-button {
+        grid-area: button;
+        align-self: flex-end;
+        background-color: var(--color-secondary-dimmed);
+        border: none;
+        transition: var(--transition-normal);
+        cursor: pointer;
+    }
+
+    .search-button:hover,
+    .search-button:focus-visible {
+        background-color: var(--color-secondary);
+        color: white;
+    }
+}

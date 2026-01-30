@@ -1,0 +1,70 @@
+    .pages {
+        border-top: 1px solid var(--light-dark-font-dimmed);
+        padding: var(--size-normal);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--size-very-small);
+
+        .previous,
+        .next {
+            text-decoration: none;
+            color: var(--light-dark-font);
+            position: relative;
+
+            .text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(.25);
+                font-size: var(--font-size-small);
+                padding: var(--size-tiny) var(--size-very-small);
+                white-space: nowrap;
+                background-color: var(--light-dark-font);
+                color: var(--light-dark-font-inverted);
+                border-radius: var(--rounding-small);
+                opacity: 0;
+                transition: var(--transition-normal);
+            }
+        }
+
+        >* {
+            width: 1.75rem;
+            height: 1.75rem;
+            display: grid;
+            place-items: center;
+            color: var(--light-dark-font);
+            border: 1px solid var(--light-dark-font-dimmed);
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: var(--transition-normal);
+        }
+
+        .link:hover,
+        .link:focus-visible {
+            text-decoration: underline;
+            transform: scale(1.05) translateY(-4px);
+        }
+
+        .previous:hover,
+        .previous:focus-visible {
+            .text {
+                transform: translate(-125%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .next:hover,
+        .next:focus-visible {
+            .text {
+                transform: translate(35%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .link.active {
+            border: 1px solid var(--color-secondary);
+            background-color: var(--color-secondary-dimmed);
+        }
+    }

@@ -5,23 +5,25 @@ import {
     NavLink,
     useLoaderData,
     useNavigation,
-    useLocation,
     useSearchParams,
-    Form
 } from "react-router";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useRouteLoaderData, useFetcher } from "react-router";
-import { format } from "date-fns";
-import { SyncLoader } from "react-spinners";
+
+// Components
+import PageLinks from "../../components/page-links/PageLinks";
+import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
+import PageLoader from "../../components/page-loader/PageLoader";
+import MessageDialog from "../../components/message-dialog/MessageDialog";
 
 // Types
 import type User from "../../types/user";
 import type Friendship from "../../types/friendship";
+import SearchForm from "../../components/search-form/SearchForm";
 
 const Users = () => {
     const fetcher = useFetcher();
     const navigation = useNavigation();
-    const location = useLocation();
     const [searchParams] = useSearchParams();
 
     // Data
@@ -37,46 +39,12 @@ const Users = () => {
     const friendships: Friendship[] = loaderData?.friendships;
     const currentSearch = searchParams.get("search") || "";
 
-    // Handle user searching.
-    const createPagePath = (page: number) => {
-        const params = new URLSearchParams(searchParams);
-        params.set("page", page.toString());
-        return `?${params.toString()}`;
-    };
-
     // Handle send message to user.
-    const [message, setMessage] = useState("");
     const [showMessageModal, setShowMessageModal] = useState(false);
     const [currentTargetUser, setCurrentTargetUser] = useState<User | null>(null);
     const messageDialogRef = useRef<HTMLDialogElement | null>(null);
 
     const isPageLoading = navigation.state === "loading";
-
-    const toggleMessageDialog = () => {
-        setShowMessageModal((prev) => !prev);
-    };
-
-    const closeMessageModal = () => {
-        setMessage("");
-        setCurrentTargetUser(null);
-        setShowMessageModal(false);
-    };
-
-    const startConversation = (e: React.FormEvent<HTMLFormElement>) => {
-        if (!currentTargetUser) return;
-
-        e.preventDefault();
-        fetcher.submit(
-            {
-                intent: "send-message",
-                message,
-                recipientId: currentTargetUser.id
-            },
-            {
-                method: "POST",
-            }
-        );
-    };
 
     const sendFriendshipRequest = (
         userBId: number
@@ -133,82 +101,13 @@ const Users = () => {
     }, [showMessageModal]);
 
     return <main className={styles.users}>
-        {fetcher.state === "submitting" && <p>Submitting...</p>}
-        <dialog
-            ref={messageDialogRef}
-            className={styles["message-dialog"]}
-        >
-            <div className={styles.wrapper}>
-                <button
-                    className={styles.close}
-                    onClick={closeMessageModal}
-                >
-                    <span className="material-symbols-rounded">
-                        close
-                    </span>
-                </button>
-                <h2
-                    className={styles.title}
-                >
-                    Start a conversation
-                </h2>
-                {currentTargetUser && (
-                    <NavLink
-                        to={`/users/${currentTargetUser.id}`}
-                        className={styles["target-user"]}>
-                        <p className={styles.name}>
-                            {currentTargetUser?.firstName} {currentTargetUser?.lastName}
-                        </p>
-                        <p className={styles.username}>
-                            @{currentTargetUser?.username}
-                        </p>
-                        <p className={styles.date}>
-                            <span className="material-symbols-rounded">
-                                calendar_month
-                            </span>
-                            <span className={styles.text}>
-                                Joined on {format(currentTargetUser?.joinedOn, "MMMM do, yyyy")}
-                            </span>
-                        </p>
-                        <img
-                            className={styles.ppf}
-                            src={currentTargetUser?.profilePictureUrl}
-                            alt={`${currentTargetUser?.username}'s profile picture`}
-                        />
-                    </NavLink>
-                )}
-                <fetcher.Form
-                    onSubmit={startConversation}
-                    method="POST"
-                    className={styles["message-form"]}
-                >
-                    <p
-                        className={styles.title}
-                    >
-                        What do you want to say?
-                    </p>
-                    <input
-                        className={styles.input}
-                        value={message}
-                        onChange={((e) => {
-                            setMessage(e.target.value);
-                        })}
-                        type="text"
-                        name="message"
-                        id="message"
-                    />
-                    <button
-                        className={styles.button}
-                    >
-                        <span
-                            className="material-symbols-rounded"
-                        >
-                            arrow_upward
-                        </span>
-                    </button>
-                </fetcher.Form>
-            </div>
-        </dialog>
+        {fetcher.state !== "idle" && <SubmitionLoader message="Please wait..." />}
+        <MessageDialog
+            showMessageModal={showMessageModal}
+            setShowMessageModal={setShowMessageModal}
+            currentTargetUser={currentTargetUser}
+            setCurrentTargetUser={setCurrentTargetUser}
+        />
         <header
             className={styles.header}
         >
@@ -222,45 +121,11 @@ const Users = () => {
                     Users
                 </span>
             </h2>
-            <Form
-                method="get"
-                className={styles["form-container"]}
-            >
-                <p className={styles["users-n"]}>
-                    ({usersMetadata.totalCount} Users)
-                </p>
-                <div
-                    className={styles["search-form"]}
-                >
-                    <div
-                        key={currentSearch}
-                        className={styles["input-wrapper"]}
-                    >
-                        <span
-                            className="material-symbols-rounded"
-                        >
-                            search
-                        </span>
-                        <div className={styles.separator}></div>
-                        <input
-                            defaultValue={currentSearch}
-                            type="text"
-                            name="search"
-                            placeholder="Username"
-                        />
-                    </div>
-                    <input
-                        type="hidden"
-                        name="page"
-                        value="1"
-                    />
-                    <button
-                        className={styles["search-button"]}
-                    >
-                        Search
-                    </button>
-                </div>
-            </Form>
+            <SearchForm
+                currentSearch={currentSearch}
+                labelText="Search users by their usernames."
+                usersAmout={`(${usersMetadata.totalCount} users)`}
+            />
         </header>
         {searchParams.get("search") && (
             <div
@@ -304,20 +169,7 @@ const Users = () => {
                 </div>
             )
             : (
-                isPageLoading ? <div
-                    className={styles["users-loader"]}
-                >
-                    <SyncLoader
-                        size=".5rem"
-                        color="var(--light-dark-font)"
-                        className={styles.loader}
-                    />
-                    <p
-                        className={styles.text}
-                    >
-                        Getting users...
-                    </p>
-                </div> : <ul className={styles.container}>
+                isPageLoading ? <PageLoader message="Getting users..." /> : <ul className={styles.container}>
                     {users.map((user) => {
                         return <Fragment
                             key={user.username}
@@ -385,6 +237,7 @@ const Users = () => {
                                                             </span>
                                                         </button>
                                                     </>
+                                                    // If the user received a friendship request, let the user respond to it.
                                                 ) : (<div className={styles["answer-friendship"]}>
                                                     <p className={styles.message}>
                                                         Wants to be your friend
@@ -420,6 +273,7 @@ const Users = () => {
                                                 </div>)
                                             }
 
+                                            // If the rendered user is not a friend to the logged user, let the logged user send a friendship request.
                                             return !friendship
                                                 ? (
                                                     <button
@@ -440,9 +294,11 @@ const Users = () => {
                                                 )
                                                 : friendship.status === "ACCEPTED"
                                                     ? (
-                                                        <p>
-                                                            Friends
-                                                        </p>
+                                                        <span
+                                                            className={styles.text}
+                                                        >
+                                                            Already friends
+                                                        </span>
                                                     )
                                                     : (
                                                         <>
@@ -466,9 +322,8 @@ const Users = () => {
                                         })()}
                                         <button
                                             onClick={() => {
-                                                setMessage("");
                                                 setCurrentTargetUser(user);
-                                                toggleMessageDialog();
+                                                setShowMessageModal(true);
                                             }}
                                             className={styles["send-message"]}
                                         >
@@ -492,50 +347,12 @@ const Users = () => {
                     })}
                 </ul>
             )}
-        <nav className={styles.pages}>
-            {usersMetadata.currentPage > 1 && (
-                <NavLink
-                    to={createPagePath(usersMetadata.currentPage - 1)}
-                    className={styles.previous}
-                >
-                    <span className={styles.text}>
-                        Previous page
-                    </span>
-                    <span className="material-symbols-rounded">
-                        arrow_back
-                    </span>
-                </NavLink>
-            )}
-            {Array.from({ length: usersMetadata.totalPages }, (_, i) => {
-                const pageNum = i + 1;
-                const pagePath = createPagePath(pageNum);
-
-                {/* const isActive = location.search === pagePath || (location.search === "" && pageNum === 1); */ }
-                const isActive = location.search === pagePath ||
-                    (location.search === "" && pageNum === 1 && !currentSearch);
-
-                return <NavLink
-                    key={pageNum}
-                    to={pagePath}
-                    className={isActive ? `${styles.active} ${styles.link}` : styles.link}
-                >
-                    {pageNum}
-                </NavLink>
-            })}
-            {usersMetadata.currentPage < usersMetadata.totalPages && (
-                <NavLink
-                    to={createPagePath(usersMetadata.currentPage + 1)}
-                    className={styles.next}
-                >
-                    <span className={styles.text}>
-                        Next page
-                    </span>
-                    <span className="material-symbols-rounded">
-                        arrow_forward
-                    </span>
-                </NavLink>
-            )}
-        </nav>
+        <PageLinks
+            currentPage={usersMetadata.currentPage}
+            currentSearch={currentSearch}
+            searchParams={searchParams}
+            totalPages={usersMetadata.totalPages}
+        />
     </main>
 }
 

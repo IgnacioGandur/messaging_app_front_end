@@ -1,0 +1,130 @@
+.message-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    outline: none;
+    border-radius: var(--rounding-medium);
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-normal);
+        padding: var(--size-normal);
+        box-shadow: var(--shadow-1);
+
+        .close,
+        .message-form>.button {
+            position: absolute;
+            top: var(--size-small);
+            right: var(--size-small);
+            display: grid;
+            place-items: center;
+            border-radius: var(--rounding-total);
+            border: 1px solid var(--light-dark-font-dimmed);
+            padding: var(--size-tiny);
+
+            span {
+                font-size: 1.25rem;
+            }
+        }
+
+        .title {
+            color: var(--light-dark-font);
+
+            span {
+                text-transform: capitalize;
+            }
+        }
+
+        .target-user,
+        .message-form {
+            padding: var(--size-small);
+            border-radius: var(--rounding-medium);
+            border: 1px solid var(--light-dark-font-dimmed);
+        }
+
+        .target-user {
+            --small-font: .85rem;
+            --opacity: .75;
+
+            cursor: pointer;
+            color: var(--light-dark-font);
+            text-decoration: none;
+            display: grid;
+            grid-template-areas:
+                "ppf name"
+                "ppf username"
+                "ppf date"
+            ;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 0 var(--size-very-small);
+
+            .ppf {
+                grid-area: ppf;
+                border-radius: var(--rounding-total);
+                width: 75px;
+                height: 75px;
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                object-position: center;
+                border: 2px solid var(--light-dark-font-dimmed);
+            }
+
+            .name {
+                grid-area: name;
+                font-weight: var(--font-thickness-thick);
+                text-transform: capitalize;
+                font-size: 1.25rem;
+            }
+
+            .username {
+                grid-area: username;
+                font-size: var(--small-font);
+                opacity: var(--opacity);
+            }
+
+            .date {
+                grid-area: date;
+                display: flex;
+                align-items: center;
+                font-size: var(--small-font);
+                opacity: var(--opacity);
+            }
+        }
+
+        .message-form {
+            display: grid;
+            grid-template-areas:
+                "title title"
+                "input button"
+            ;
+            grid-template-columns: 1fr auto;
+            gap: var(--size-very-small);
+
+            .title {
+                grid-area: title;
+                font-weight: var(--font-thickness-thick);
+            }
+
+            .input {
+                grid-area: input;
+                border: 1px solid var(--light-dark-font);
+                border-radius: var(--rounding-medium);
+                padding: 0 var(--size-very-small);
+            }
+
+            .button {
+                position: initial;
+                grid-area: button;
+                border: 1px solid var(--light-dark-font);
+
+                span {
+                    color: var(--light-dark-font);
+                }
+            }
+        }
+    }
+}

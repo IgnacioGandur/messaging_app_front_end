@@ -1,0 +1,18 @@
+.users-loader {
+    flex: 1;
+    opacity: .75;
+    gap: var(--size-normal);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--size-small);
+
+    .loader {
+        color: var(--light-dark-font);
+    }
+
+    .text {
+        font-style: italic;
+    }
+}
