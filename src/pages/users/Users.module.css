@@ -81,36 +81,6 @@
         }
     }
 
-    .filtering {
-        border-bottom: 1px solid var(--light-dark-font-dimmed);
-        padding: var(--size-normal);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .clear-search {
-            padding: var(--size-very-small) calc(var(--size-very-small) * 2);
-            font-size: var(--font-size-small);
-            border-radius: var(--rounding-small);
-            background-color: var(--light-dark-font-dimmed-2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--size-tiny);
-            text-decoration: none;
-            transition: var(--transition-normal);
-        }
-
-        .clear-search:hover,
-        .clear-search:focus-visible {
-            background-color: var(--color-secondary);
-
-            span {
-                color: white;
-            }
-        }
-    }
-
     .container {
         gap: var(--size-small);
         padding: var(--size-small);

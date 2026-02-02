@@ -5,12 +5,14 @@ interface SearchFormProps {
     currentSearch: string;
     labelText: string;
     usersAmout: string;
+    placeholder: string;
 };
 
 const SearchForm = ({
     currentSearch,
     labelText,
     usersAmout,
+    placeholder
 }: SearchFormProps) => {
     return <Form
         key={currentSearch}
@@ -37,7 +39,7 @@ const SearchForm = ({
             id="search"
             type="text"
             name="search"
-            placeholder="Username"
+            placeholder={placeholder}
             required
         />
         <button

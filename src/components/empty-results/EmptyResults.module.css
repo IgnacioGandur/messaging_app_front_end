@@ -1,0 +1,30 @@
+.empty-results {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--size-normal);
+    flex: 1;
+
+    .icon {
+        font-size: calc(var(--icon-size-giant) + 3rem);
+        background-image: var(--gradient-main-colors);
+        background-clip: text;
+        color: transparent;
+    }
+
+    .text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--size-very-small);
+
+        .paragraph {
+            opacity: .75;
+
+            .link {
+                color: var(--color-main);
+            }
+        }
+    }
+}

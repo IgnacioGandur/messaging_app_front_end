@@ -29,7 +29,7 @@
         background-color: var(--light-dark-font-dimmed-2);
         grid-area: input;
         border: none;
-        cursor: pointer;
+        cursor: text;
     }
 
     .search-button {

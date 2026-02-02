@@ -9,7 +9,6 @@ import { useState } from "react";
 import { format } from "date-fns";
 import { Fragment } from "react";
 import {
-    NavLink,
     useNavigation,
     useRouteLoaderData,
     useSearchParams,
@@ -23,6 +22,8 @@ import SearchForm from "../../components/search-form/SearchForm";
 import PageLoader from "../../components/page-loader/PageLoader";
 import MessageDialog from "../../components/message-dialog/MessageDialog";
 import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
+import Filtering from "../../components/filtering/Filtering";
+import EmptyResults from "../../components/empty-results/EmptyResults";
 
 const Friends = () => {
     const fetcher = useFetcher();
@@ -46,6 +47,7 @@ const Friends = () => {
 
     const isLoading = navigation.state === "loading";
     const isSubmitting = fetcher.state === "submitting";
+    const isRemovingFriend = fetcher.state === "submitting" && fetcher.formData?.get("intent") === "remove-friend";
 
     const [searchParams] = useSearchParams();
 
@@ -70,7 +72,11 @@ const Friends = () => {
     const [showMessageModal, setShowMessageModal] = useState(false);
 
     return <main className={styles.friends}>
-        {isSubmitting && <SubmitionLoader message="Removing friend, please wait..." />}
+        {isSubmitting && (<SubmitionLoader
+            message={`${isRemovingFriend
+                ? "Removing friend"
+                : null}, please wait...`}
+        />)}
         <MessageDialog
             currentTargetUser={currentTargetUser}
             setCurrentTargetUser={setCurrentTargetUser}
@@ -92,118 +98,88 @@ const Friends = () => {
                 currentSearch={currentSearch}
                 labelText="Search friend by username"
                 usersAmout={`(${friendsMetadata.friendsCount} users)`}
+                placeholder="John"
             />
         </header>
         {currentSearch && (
-            <div
-                className={styles.filtering}
-            >
-                <h3>
-                    Filtering friends by username: "{currentSearch}".
-                </h3>
-                <NavLink
-                    to="/friends"
-                    replace={true}
-                    onClick={() => searchParams.set("search", "")}
-                    className={styles["clear-search"]}
-                >
-                    <span
-                        className="material-symbols-rounded"
-                    >
-                        close
-                    </span>
-                    <span>
-                        Clear search
-                    </span>
-                </NavLink>
-            </div>
+            <Filtering
+                filteringText="Filtering friends by username:"
+                currentSearch={currentSearch}
+                searchParams={searchParams}
+                to="/friends"
+            />
         )}
-        {isLoading ? <PageLoader message="Getting friends..." /> : friends.length === 0 ? (
-            <div className={styles["no-friends"]}>
-                <span className={`material-symbols-rounded ${styles.icon}`}>
-                    {currentSearch ? "search_off" : "sentiment_frustrated"}
-                </span>
-                <div className={styles.text}>
-                    <h2
-                        className={styles.title}
-                    >
-                        {currentSearch ? `We couldn't find any friends with a username containing: "${currentSearch}".` : "Seems like you don't have any friends"}
+        {isLoading
+            ? <PageLoader message="Getting friends..." />
+            : friends.length === 0
+                ? (
+                    <EmptyResults
+                        to="/users"
+                        currentSearch={currentSearch}
+                        emptyDataIcon="sentiment_frustrated"
+                        emptyDataMessage="Seems like you don't have any friends yet."
+                        emptySearchResultMessage="You don't have any friends that contain the username: "
+                        redirectText="You can look for new friends "
+                        showRedirect={true}
+                    />
+                ) : (
+                    <ul className={styles.container}>
+                        {friends.map((f) => {
+                            const user = f.userAId === loggedUser.id ? f.userB : f.userA;
 
-                    </h2>
-                    {!currentSearch && (
-                        <p
-                            className={styles.paragraph}
-                        >
-                            You can look for friends
-                            {" "}
-                            <NavLink
-                                to="/users"
-                                className={styles.link}
+                            return <Fragment
+                                key={f.id}
                             >
-                                here
-                            </NavLink>
-                        </p>
-                    )}
-                </div>
-            </div>
-        ) : (
-            <ul className={styles.container}>
-                {friends.map((f) => {
-                    const user = f.userAId === loggedUser.id ? f.userB : f.userA;
-
-                    return <Fragment
-                        key={f.id}
-                    >
-                        <li
-                            className={styles.friend}
-                        >
-                            <h2 className={styles.name}>
-                                {user.firstName} {user.lastName}
-                            </h2>
-                            <p className={styles["friends-since"]}>
-                                Friends since {format(f.createdAt, "MMMM do, yyyy")}
-                            </p>
-                            <span className={styles.username}>
-                                @{user.username}
-                            </span>
-                            <img
-                                src={user.profilePictureUrl}
-                                alt={`${user.username}'s profile picture.`}
-                                className={styles.ppf}
-                            />
-                            <div className={styles.buttons}>
-                                <button
-                                    onClick={() => {
-                                        deleteFriendship(f.id);
-                                    }}
+                                <li
+                                    className={styles.friend}
                                 >
-                                    <span className={`material-symbols-rounded ${styles.icon}`}>
-                                        person_remove
+                                    <h2 className={styles.name}>
+                                        {user.firstName} {user.lastName}
+                                    </h2>
+                                    <p className={styles["friends-since"]}>
+                                        Friends since {format(f.createdAt, "MMMM do, yyyy")}
+                                    </p>
+                                    <span className={styles.username}>
+                                        @{user.username}
                                     </span>
-                                    <span className={styles.text}>
-                                        Remove friend
-                                    </span>
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentTargetUser(user);
-                                        setShowMessageModal(true);
-                                    }}
-                                >
-                                    <span className={`material-symbols-rounded ${styles.icon}`}>
-                                        conversation
-                                    </span>
-                                    <span className={styles.text}>
-                                        Send message
-                                    </span>
-                                </button>
-                            </div>
-                        </li>
-                        <div className={styles.separator}></div>
-                    </Fragment>
-                })}
-            </ul>
-        )}
+                                    <img
+                                        src={user.profilePictureUrl}
+                                        alt={`${user.username}'s profile picture.`}
+                                        className={styles.ppf}
+                                    />
+                                    <div className={styles.buttons}>
+                                        <button
+                                            onClick={() => {
+                                                deleteFriendship(f.id);
+                                            }}
+                                        >
+                                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                                person_remove
+                                            </span>
+                                            <span className={styles.text}>
+                                                Remove friend
+                                            </span>
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setCurrentTargetUser(user);
+                                                setShowMessageModal(true);
+                                            }}
+                                        >
+                                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                                conversation
+                                            </span>
+                                            <span className={styles.text}>
+                                                Send message
+                                            </span>
+                                        </button>
+                                    </div>
+                                </li>
+                                <div className={styles.separator}></div>
+                            </Fragment>
+                        })}
+                    </ul>
+                )}
         <PageLinks
             currentSearch={currentSearch}
             currentPage={friendsMetadata.currentPage}

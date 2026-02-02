@@ -6,8 +6,10 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
         const intent = formData.get("intent");
         const url = import.meta.env.VITE_API_BASE + `/groups`;
 
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         if (intent === "create-group") {
-            const groupName = formData.get("groupName");
+            const title = formData.get("title");
+            const description = formData.get("description");
             const options: RequestInit = {
                 method: "POST",
                 headers: {
@@ -15,7 +17,8 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
                 },
                 credentials: "include",
                 body: JSON.stringify({
-                    groupName
+                    title,
+                    description
                 })
             };
 
@@ -40,6 +43,25 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
             return result;
         }
 
+        if (intent === "leave-group") {
+            const groupId = formData.get("groupId");
+            const userId = formData.get("userId");
+            const leaveGroupUrl = `${url}/${groupId}/participants`;
+            const options: RequestInit = {
+                method: "DELETE",
+                body: JSON.stringify({
+                    userId,
+                }),
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            };
+
+            const response = await fetch(leaveGroupUrl, options);
+            const result = await response.json();
+            return result;
+        }
     } catch (error) {
         return {
             error: true,

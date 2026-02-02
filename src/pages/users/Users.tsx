@@ -20,6 +20,8 @@ import MessageDialog from "../../components/message-dialog/MessageDialog";
 import type User from "../../types/user";
 import type Friendship from "../../types/friendship";
 import SearchForm from "../../components/search-form/SearchForm";
+import Filtering from "../../components/filtering/Filtering";
+import EmptyResults from "../../components/empty-results/EmptyResults";
 
 const Users = () => {
     const fetcher = useFetcher();
@@ -45,6 +47,10 @@ const Users = () => {
     const messageDialogRef = useRef<HTMLDialogElement | null>(null);
 
     const isPageLoading = navigation.state === "loading";
+
+    const isSendingRequest = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "send-friendship-request";
+    const isRespondingToRequest = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "handle-friendship-response";
+    const isRemovingFriend = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "remove-friend";
 
     const sendFriendshipRequest = (
         userBId: number
@@ -101,7 +107,15 @@ const Users = () => {
     }, [showMessageModal]);
 
     return <main className={styles.users}>
-        {fetcher.state !== "idle" && <SubmitionLoader message="Please wait..." />}
+        {fetcher.state === "submitting" && (<SubmitionLoader
+            message={`${isSendingRequest
+                ? "Sending request"
+                : isRespondingToRequest
+                    ? "Responding to request"
+                    : isRemovingFriend
+                        ? "Removing friend"
+                        : null}, please wait...`}
+        />)}
         <MessageDialog
             showMessageModal={showMessageModal}
             setShowMessageModal={setShowMessageModal}
@@ -125,48 +139,27 @@ const Users = () => {
                 currentSearch={currentSearch}
                 labelText="Search users by their usernames."
                 usersAmout={`(${usersMetadata.totalCount} users)`}
+                placeholder="John"
             />
         </header>
         {searchParams.get("search") && (
-            <div
-                className={styles.filtering}
-            >
-                <h3>
-                    Filtering users by username: "{currentSearch}".
-                </h3>
-                <NavLink
-                    to="/users"
-                    replace={true}
-                    onClick={() => searchParams.set("search", "")}
-                    className={styles["clear-search"]}
-                >
-                    <span
-                        className="material-symbols-rounded"
-                    >
-                        close
-                    </span>
-                    <span>
-                        Clear search
-                    </span>
-                </NavLink>
-            </div>
+            <Filtering
+                filteringText="Filtering users by username:"
+                currentSearch={currentSearch}
+                searchParams={searchParams}
+                to="/users"
+            />
         )}
         {users.length === 0
             ? (
-                <div
-                    className={styles["no-users"]}
-                >
-                    <span
-                        className={`material-symbols-rounded ${styles.icon}`}
-                    >
-                        {currentSearch ? "search_off" : "no_accounts"}
-                    </span>
-                    <p
-                        className={styles.text}
-                    >
-                        {currentSearch ? `No users matched the username containing: "${currentSearch}"` : "There are no registered users yet."}
-                    </p>
-                </div>
+                <EmptyResults
+                    currentSearch={currentSearch}
+                    emptyDataIcon="no_accounts"
+                    emptySearchResultMessage="We couldn't find any users with a username containing:"
+                    emptyDataMessage="There are no users registered yet."
+                    to="/users"
+                    showRedirect={false}
+                />
             )
             : (
                 isPageLoading ? <PageLoader message="Getting users..." /> : <ul className={styles.container}>
