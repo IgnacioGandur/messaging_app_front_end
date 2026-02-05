@@ -22,12 +22,13 @@ import type Group from "../../types/group";
 import InputErrors from "../../components/input-errors/InputErrors";
 import SearchForm from "../../components/search-form/SearchForm";
 import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
-import CustomInput from "../../components/custom-input/CustomInput";
 import PageLoader from "../../components/page-loader/PageLoader";
 import PageLinks from "../../components/page-links/PageLinks";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
 import SingleGroup from "./components/SingleGroup";
+import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
+import CreateGroupDialog from "./create-group-dialog/CreateGroupDialog";
 
 const navLinks: {
     to: string;
@@ -148,79 +149,20 @@ const Groups = () => {
         {isCreatingGroup && <SubmitionLoader message="Creating group, please wait..." />}
         {isJoiningGroup && <SubmitionLoader message="Joining group, please wait..." />}
         {isLeavingGroup && <SubmitionLoader message="Leaving group, please wait..." />}
-        <dialog
-            ref={createGroupDialogRef}
-            className={styles["create-group-dialog"]}
+        <CreateGroupDialog
+            createGroupDialogRef={createGroupDialogRef}
+            fetcher={fetcher}
+            groupDescription={groupInfo.description}
+            groupTitle={groupInfo.title}
+            handleFormSubmition={handleFormSubmition}
+            handleGroupInfo={handleGroupInfo}
+            toggleGroupDialog={toggleGroupDialog}
+        />
+        <CurrentPageHeader
+            altClassName={styles.header}
+            icon="groups_3"
+            text="Groups"
         >
-            <fetcher.Form
-                method="POST"
-                className={styles.wrapper}
-                onSubmit={handleFormSubmition}
-            >
-                <button
-                    type="button"
-                    className={styles.close}
-                    onClick={toggleGroupDialog}
-                >
-                    <span className="material-symbols-rounded">
-                        close
-                    </span>
-                </button>
-                <div className={styles.text}>
-                    <h2>Create your own group!</h2>
-                    <p>What is your group about? Let us know in the description!</p>
-                </div>
-                <input
-                    name="intent"
-                    value="create-group"
-                    type="hidden"
-                />
-                <CustomInput
-                    id="group-title"
-                    name="title"
-                    type="text"
-                    labelText="Name"
-                    googleIcon="draw"
-                    value={groupInfo.title}
-                    onChange={handleGroupInfo}
-                    placeholder="Group name..."
-                    required={false}
-                />
-                <CustomInput
-                    id="group-description"
-                    name="description"
-                    type="text"
-                    labelText="Description"
-                    googleIcon="draw"
-                    value={groupInfo.description}
-                    onChange={handleGroupInfo}
-                    placeholder="Group name..."
-                    required={false}
-                />
-                <button
-                    type="submit"
-                    className={styles.create}
-                >
-                    <span className="material-symbols-rounded">
-                        group_add
-                    </span>
-                    <span>
-                        Create group
-                    </span>
-                </button>
-            </fetcher.Form>
-        </dialog>
-        <header className={styles.header}>
-            <h1
-                className={styles.title}
-            >
-                <span className={`material-symbols-rounded ${styles.icon}`}>
-                    groups_3
-                </span>
-                <span className={styles.text}>
-                    Groups
-                </span>
-            </h1>
             <div className={styles.buttons}>
                 <button
                     className={styles.button}
@@ -268,7 +210,7 @@ const Groups = () => {
                 usersAmout={`(${groups.length} ${groups.length !== 1 ? "groups" : "group"})`}
                 placeholder="Programming"
             />
-        </header>
+        </CurrentPageHeader>
         {(currentSearch || filteringByYourGroups || filteringByJoinedGroups) && <Filtering
             filteringText={currentSearch
                 ? "Filtering groups by title:"

@@ -1,0 +1,244 @@
+.message {
+    display: grid;
+    gap: var(--messages-gap);
+
+    .ppf,
+    .pad {
+        width: var(--pad-ppf-size);
+        height: var(--pad-ppf-size);
+        border-radius: var(--rounding-total);
+    }
+
+    .ppf {
+        grid-area: ppf;
+        border: 1px solid var(--light-dark-font-dimmed);
+    }
+
+    .name {
+        grid-area: name;
+        text-transform: capitalize;
+        font-size: .9rem;
+        align-self: center;
+    }
+
+    .message-wrapper {
+        grid-area: message;
+        display: flex;
+        flex-direction: column;
+        gap: var(--messages-gap);
+        position: relative;
+        max-width: 50%;
+
+        .message-content,
+        .file {
+            width: fit-content;
+            background-color: var(--color-secondary-dimmed);
+            padding: var(--size-very-small);
+            border-radius: var(--rounding-medium);
+
+            .image {
+                display: grid;
+                place-items: center;
+                border-radius: var(--rounding-medium);
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                position: relative;
+
+                .image-preview {
+                    border-radius: var(--rounding-medium);
+                }
+
+                .text {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0;
+                    font-weight: 700;
+                    transition: var(--transition-normal);
+                }
+            }
+
+            .image:hover {
+                .text {
+                    opacity: .5;
+                }
+            }
+        }
+
+        .delete {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -3rem;
+            border-radius: var(--rounding-total);
+            display: grid;
+            place-items: center;
+            padding: var(--size-tiny);
+            border: 1px solid var(--light-dark-font-dimmed);
+            outline: none;
+            opacity: 0;
+            cursor: pointer;
+            transition: var(--transition-normal);
+
+            span {
+                font-size: 1.25rem;
+            }
+        }
+
+        .delete:hover,
+        .delete:focus-visible {
+            background-color: var(--light-dark-font-dimmed);
+        }
+
+        .file {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas:
+                "title title"
+                "icon filename";
+            gap: var(--size-tiny);
+            text-decoration: none;
+            color: var(--light-dark-font);
+            cursor: pointer;
+            position: relative;
+
+            .title {
+                grid-area: title;
+                font-size: .8rem;
+                font-weight: 700;
+                text-decoration: underline;
+            }
+
+            .wrapper {
+                display: grid;
+                grid-column: 1/-1;
+                grid-template-columns: subgrid;
+                grid-template-rows: subgrid;
+                grid-template-areas:
+                    "icon filename";
+                gap: calc(var(--size-tiny) * 2);
+                padding: var(--size-tiny);
+                border-radius: var(--rounding-small);
+                border: 1px solid var(--light-dark-font-dimmed);
+
+                .icon {
+                    grid-area: icon;
+                    font-size: var(--icon-size-normal);
+                    position: relative;
+                }
+
+                .icon::after {
+                    content: "";
+                    width: 3px;
+                    height: 3px;
+                    border-radius: var(--rounding-total);
+                    background-color: var(--light-dark-font);
+                    position: absolute;
+                    top: 50%;
+                    right: -var(--size-tiny);
+                    transform: translateY(-50%);
+                    opacity: .75;
+                }
+
+                .filename {
+                    grid-area: filename;
+                    align-self: center;
+                }
+            }
+        }
+    }
+
+    .date {
+        grid-area: date;
+        align-self: center;
+        text-transform: capitalize;
+        font-size: .8rem;
+        opacity: .8;
+        text-align: end;
+    }
+}
+
+.message:hover {
+    .message-wrapper {
+        .delete {
+            opacity: 1;
+        }
+    }
+}
+
+.message.show-sender {
+    grid-template-areas:
+        "ppf name date"
+        "pad message date"
+    ;
+    grid-template-columns: auto 1fr var(--date-size);
+
+}
+
+.message.hidden-sender {
+    grid-template-areas:
+        "pad message date"
+    ;
+    grid-template-columns: auto 1fr var(--date-size);
+
+    .pad {
+        grid-area: pad;
+    }
+}
+
+.message.you {
+    .message-wrapper {
+        align-items: flex-end;
+
+        .message-content,
+        .file {
+            .title {
+                text-align: end;
+            }
+        }
+    }
+}
+
+.message.you.show-sender {
+    grid-template-areas:
+        "name ppf date"
+        "message pad date"
+    ;
+    grid-template-columns: 1fr auto var(--date-size);
+    justify-items: end;
+}
+
+.message.you.hidden-sender {
+    grid-template-areas:
+        "message pad date"
+    ;
+    grid-template-columns: 1fr auto var(--date-size);
+    justify-items: end;
+}
+
+.message.userB {
+    .message-wrapper {
+
+        .message-content,
+        .file {
+            background-color: var(--color-main-dimmed);
+        }
+    }
+}
+
+.message.deleted {
+    .message-wrapper {
+
+        .message-content,
+        .file {
+            background-color: var(--color-error-dimmed);
+        }
+    }
+}
+
+.message.last-message {
+    margin-bottom: 2rem;
+}

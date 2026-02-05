@@ -28,6 +28,9 @@ import currentConversationLoader from "./pages/conversations/child-routes/curren
 import groupsLoader from "./pages/groups/groupsLoader";
 import friendsLoader from "./pages/friends/friendsLoader";
 
+// Component Loaders
+import AppLoader from "./pages/app/app-loader/AppLoader";
+
 // Actions
 import registerAction from "./pages/register/registerAction";
 import loginAction from "./pages/login/loginAction";
@@ -47,7 +50,7 @@ const router = createBrowserRouter([
         path: "/",
         Component: App,
         loader: appLoader,
-        hydrateFallbackElement: <p>loading...</p>,
+        hydrateFallbackElement: <AppLoader />,
         children: [
             {
                 index: true,

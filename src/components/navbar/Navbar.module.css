@@ -5,6 +5,7 @@
     gap: var(--size-small);
     justify-content: space-between;
     border-bottom: 1px solid var(--light-dark-font-dimmed);
+    flex-shrink: 0;
 
     .logo-container {
         display: flex;

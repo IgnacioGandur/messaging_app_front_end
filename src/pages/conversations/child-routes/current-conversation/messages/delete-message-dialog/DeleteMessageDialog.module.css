@@ -1,0 +1,104 @@
+.delete-message-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--rounding-medium);
+    outline: none;
+    border: none;
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: calc(var(--size-normal) * 2) calc(var(--size-normal) * 3);
+        gap: var(--size-normal);
+        background-color: var(--light-dark-background);
+
+        .icon-wrapper {
+            padding: var(--size-small);
+            border-radius: var(--rounding-total);
+            aspect-ratio: 1/1;
+            background-color: var(--light-dark-font-dimmed-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .icon {
+                font-size: var(--icon-size-giant);
+                background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+                background-clip: text;
+                color: transparent;
+            }
+        }
+
+        h2 {
+            font-weight: var(--font-thickness-normal);
+        }
+
+        p {
+            opacity: .60;
+        }
+
+        .buttons {
+            align-self: stretch;
+            display: flex;
+            gap: var(--size-normal);
+
+            >* {
+                flex: 1;
+                padding: var(--size-small);
+                border-radius: var(--rounding-medium);
+                border: none;
+                outline: none;
+                background-color: var(--light-dark-font-dimmed-2);
+                transition: var(--transition-normal);
+                cursor: pointer;
+            }
+
+            .cancel:hover,
+            .cancel:focus-visible {
+                background-color: var(--color-secondary-dimmed);
+            }
+
+            .accept:hover,
+            .accept:focus-visible {
+                background-color: var(--color-error-dimmed);
+            }
+
+        }
+
+        .close {
+            position: absolute;
+            top: var(--size-normal);
+            right: var(--size-normal);
+            display: grid;
+            place-items: center;
+            background-color: var(--light-dark-font-dimmed-2);
+            border-radius: var(--rounding-total);
+            padding: var(--size-very-small);
+            outline: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-normal);
+
+            span {
+                font-size: var(--icon-size-small);
+                font-weight: var(--font-thickness-thick);
+            }
+        }
+
+        .close:hover,
+        .close:focus-visible {
+            background-color: var(--light-dark-font);
+
+            span {
+                color: var(--light-dark-font-inverted);
+            }
+        }
+    }
+}
+
+.delete-message-dialog::backdrop {
+    background-color: rgba(0, 0, 0, .75);
+}

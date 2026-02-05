@@ -1,0 +1,51 @@
+.app-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    background-color: var(--light-dark-background);
+    padding: var(--size-big);
+
+    .logo-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .chatea {
+            background-image: var(--gradient-main-colors);
+            color: transparent;
+            background-clip: text;
+            font-family: var(--font-special);
+            padding: var(--size-tiny);
+            font-size: 2.5rem;
+            font-weight: 100;
+        }
+
+        .logo-container {
+            background-image: linear-gradient(45deg, var(--color-secondary), var(--color-main));
+            padding: var(--size-normal);
+            mask-image: url("../../../assets/images/icon.svg");
+            mask-size: 75%;
+            mask-position: center;
+            mask-repeat: no-repeat;
+
+            .logo {
+                width: 225px;
+                opacity: 0;
+            }
+        }
+    }
+
+    .message-container {
+        display: inherit;
+        flex-direction: inherit;
+        gap: var(--size-normal);
+        align-items: center;
+
+        .message {
+            opacity: .75;
+            font-style: italic;
+        }
+    }
+}

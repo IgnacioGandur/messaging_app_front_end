@@ -8,6 +8,7 @@ export default async function currentConversationAction({ request, params }: Act
 
         // Handle messages deletion.
         if (intent === "delete-message") {
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             const messageId = formData.get("messageId");
             const url = import.meta.env.VITE_API_BASE + `/conversations/${params.conversationId}/messages/${messageId}`;
 
@@ -69,6 +70,7 @@ export default async function currentConversationAction({ request, params }: Act
         }
 
         if (intent === "update-group-info") {
+            await new Promise((resolve) => setTimeout(resolve, 3000));
             const title = formData.get("title");
             const ppf = formData.get("ppf");
             const description = formData.get("description");

@@ -1,13 +1,17 @@
 .app {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    height: 100%;
 
-    main {
+    .outlet-wrapper {
         flex: 1;
+        min-height: 0;
+        display: flex;
+        justify-content: center;
 
-        .logged-user {
-            border: 2px solid blue;
+        >* {
+            height: 100%;
         }
     }
 }

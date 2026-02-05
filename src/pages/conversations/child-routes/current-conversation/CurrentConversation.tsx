@@ -27,7 +27,9 @@ import type Conversation from "../../../../types/conversation";
 import type Message from "../../../../types/message";
 import type User from "../../../../types/user";
 import type InputErrorsType from "../../../../types/InputErrors";
-import { NavLink } from "react-router";
+import type Group from "../../../../types/group";
+import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
+import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
 
 const CurrentConversation = () => {
     const fetcher = useFetcher();
@@ -38,7 +40,7 @@ const CurrentConversation = () => {
         message: string;
         messageCursorId: number;
         hasMore: boolean;
-        conversation: Conversation;
+        conversation: Conversation | Group;
         error?: boolean;
         errors?: InputErrorsType[];
     }
@@ -46,11 +48,11 @@ const CurrentConversation = () => {
     const rootData = useRouteLoaderData("root");
     const loggedUser: User = rootData?.user;
 
-    const conversation = loaderData?.conversation;
+    const conversation = loaderData?.conversation as Group;
     const userB = conversation.participants.find((p) => p.user.id !== loggedUser.id)?.user;
 
     // Conversation messages.
-    const initialMessages: Message[] = loaderData?.conversation?.messages;
+    const initialMessages = loaderData?.conversation?.messages;
     const [messages, setMessages] = useState<Message[]>(
         initialMessages.slice().reverse()
     );
@@ -59,6 +61,11 @@ const CurrentConversation = () => {
     );
     const [cursor, setCursor] = useState<number | null>(loaderData.messageCursorId);
     const [isLoadingMoreMessages, setIsLoadingMoreMessages] = useState(false);
+
+    const isPageLoading = navigation.state === "loading";
+
+    const isDeletingMessage = fetcher.state === "submitting"
+        && fetcher?.formData?.get("intent") === "delete-message"
 
     const loadOlderMessages = async () => {
         if (!cursor || isLoadingMoreMessages || !hasMoreMessages) return;
@@ -136,75 +143,23 @@ const CurrentConversation = () => {
         return <p>no conversation</p>
     }
 
-    if (conversation?.isGroup) {
-        return navigation.state === "loading"
-            ?
-            <Loader />
-            : <section className={styles["group-conversation"]}>
-                <GroupDetails
-                    groupPpf={conversation.profilePicture}
-                    groupTitle={conversation.title}
-                    participants={conversation.participants}
-                    date={conversation.createdAt}
-                    groupDescription={conversation.description}
-                />
-                <Messages
-                    isLoadingOlderMessages={isLoadingMoreMessages}
-                    loadOlderMessages={loadOlderMessages}
-                    hasMoreMessages={hasMoreMessages}
-                    messages={messages}
-                    loggedUserId={loggedUser.id}
-                    handleMessageDeletion={handleMessageDeletion}
-                />
-                <MessageForm
-                    message={message.message}
-                    handleMessage={handleMessage}
-                    setMessage={setMessage}
-                />
-            </section>
+    if (isPageLoading) {
+        return <Loader />
     }
 
-    // If is a private conversation between 2 users.
-    return navigation.state === "loading"
-        ? <Loader />
-        : <section className={styles["private-conversation"]}>
-            {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
-            {!loaderData.success && <InputErrors
-                message={loaderData?.message}
-                errors={loaderData?.errors}
+    if (conversation?.isGroup) {
+        return <section className={styles["group-conversation"]}>
+            {isDeletingMessage && <SubmitionLoader
+                message="Deleting message, please wait..."
             />}
-            <header
-                id="user-b-info"
-                className={styles["user-b-info"]}
-            >
-                <NavLink
-                    to={`/users/${userB?.id}`}
-                    className={styles.user}
-                >
-                    <img
-                        className={styles["profile-picture"]}
-                        src={userB?.profilePictureUrl}
-                        alt={`${userB?.firstName} ${userB?.lastName}'s profile picture.`}
-                    />
-                    <h2
-                        className={styles.name}
-                    >
-                        {userB?.firstName} {userB?.lastName}
-                    </h2>
-                    <p className={styles.username}>
-                        @{userB?.username}
-                    </p>
-                </NavLink>
-            </header>
-            {fetcher.state === "submitting" && fetcher?.formData?.get("intent") === "delete-message" && <p>
-                Deleting message...
-            </p>}
+            <GroupDetails
+                group={conversation}
+            />
             <Messages
                 isLoadingOlderMessages={isLoadingMoreMessages}
                 loadOlderMessages={loadOlderMessages}
                 hasMoreMessages={hasMoreMessages}
                 messages={messages}
-                loggedUserId={loggedUser.id}
                 handleMessageDeletion={handleMessageDeletion}
             />
             <MessageForm
@@ -213,6 +168,36 @@ const CurrentConversation = () => {
                 setMessage={setMessage}
             />
         </section>
+    }
+
+    // If is a private conversation between 2 users.
+    return <section className={styles["private-conversation"]}>
+        {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
+        {!loaderData.success && <InputErrors
+            message={loaderData?.message}
+            errors={loaderData?.errors}
+        />}
+        {isDeletingMessage && <SubmitionLoader
+            message="Deleting message, please wait..."
+        />}
+        {userB && (
+            <PrivateConversationDetails
+                userB={userB}
+            />
+        )}
+        <Messages
+            isLoadingOlderMessages={isLoadingMoreMessages}
+            loadOlderMessages={loadOlderMessages}
+            hasMoreMessages={hasMoreMessages}
+            messages={messages}
+            handleMessageDeletion={handleMessageDeletion}
+        />
+        <MessageForm
+            message={message.message}
+            handleMessage={handleMessage}
+            setMessage={setMessage}
+        />
+    </section>
 }
 
 export default CurrentConversation;

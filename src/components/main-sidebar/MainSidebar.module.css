@@ -184,11 +184,15 @@
     transition: var(--transition-normal);
     transform-origin: center;
     cursor: pointer;
-    border: 1px solid var(--light-dark-font-dimmed);
+    border: 2px solid white;
     padding: var(--size-very-small);
+    background-color: var(--color-secondary);
+    box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .5);
 
     span {
         font-size: var(--icon-size-default);
+        color: white;
+        font-variation-settings: 'FILL' 1;
     }
 }
 

@@ -1,4 +1,5 @@
 import type Participant from "./participant";
+import type Message from "./message";
 
 export default interface Group {
     profilePicture: string;
@@ -7,6 +8,7 @@ export default interface Group {
     id: number;
     isGroup: boolean;
     participants: Participant[];
+    messages: Message[];
     title: string;
     _count: {
         participants: number;

@@ -1,0 +1,49 @@
+.user-b-info {
+    border-bottom: 1px solid var(--light-dark-font-dimmed);
+
+    .user {
+        width: fit-content;
+        display: grid;
+        grid-template-areas:
+            "ppf name"
+            "ppf username"
+        ;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 0.15rem var(--size-very-small);
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: var(--size-small);
+        text-decoration: none;
+        color: var(--light-dark-font);
+
+        .profile-picture {
+            width: 50px;
+            height: 50px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            grid-area: ppf;
+            align-self: center;
+            border-radius: var(--rounding-total)
+        }
+
+        .name {
+            text-align: start;
+            font-weight: var(--font-thickness-thick);
+            grid-area: name;
+            font-size: var(--font-size-normal);
+            align-self: end;
+            text-transform: capitalize;
+        }
+
+        .username {
+            align-self: flex-start;
+            grid-area: username;
+            font-style: italic;
+            font-size: .78;
+            opacity: .75;
+        }
+    }
+}

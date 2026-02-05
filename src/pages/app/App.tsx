@@ -38,10 +38,10 @@ const App = () => {
             showSidebar={showSidebar}
             toggleSidebar={toggleSidebar}
         />
-        <Navbar
-            toggleSidebar={toggleSidebar}
-        />
-        <Outlet />
+        <Navbar />
+        <div className={styles["outlet-wrapper"]}>
+            <Outlet />
+        </div>
         <Footer />
         <FloatingChats />
     </div>

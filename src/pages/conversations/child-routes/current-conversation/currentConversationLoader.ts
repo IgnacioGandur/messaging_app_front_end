@@ -2,6 +2,7 @@ import type { LoaderFunctionArgs } from "react-router";
 
 export default async function currentConversationLoader({ params }: LoaderFunctionArgs) {
     try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const url = `${import.meta.env.VITE_API_BASE}/conversations/${params.conversationId}`;
         const options: RequestInit = {
             method: "GET",

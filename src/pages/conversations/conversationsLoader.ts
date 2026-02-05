@@ -1,6 +1,13 @@
-export default async function conversationsLoader() {
+import type { LoaderFunctionArgs } from "react-router";
+
+export default async function conversationsLoader({ request }: LoaderFunctionArgs) {
     try {
-        const url = import.meta.env.VITE_API_BASE + "/conversations";
+        const url = new URL(request.url);
+        const search = url.searchParams.get("search") || "";
+        const conversationsUrl = new URL(import.meta.env.VITE_API_BASE + "/conversations");
+
+        if (search) conversationsUrl.searchParams.set("search", search);
+
         const options: RequestInit = {
             method: "GET",
             headers: {
@@ -9,7 +16,7 @@ export default async function conversationsLoader() {
             credentials: "include",
         };
 
-        const response = await fetch(url, options);
+        const response = await fetch(conversationsUrl.href, options);
         const result = await response.json();
         return result;
     } catch (error) {

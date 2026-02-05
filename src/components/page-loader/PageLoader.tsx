@@ -1,13 +1,13 @@
 import styles from "./PageLoader.module.css";
 import { SyncLoader } from "react-spinners";
 
-interface PageLoader {
+interface PageLoaderProps {
     message: string;
 };
 
 const PageLoader = ({
     message,
-}: PageLoader) => {
+}: PageLoaderProps) => {
     return <div
         className={styles["users-loader"]}
     >

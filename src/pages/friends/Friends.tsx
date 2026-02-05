@@ -24,6 +24,7 @@ import MessageDialog from "../../components/message-dialog/MessageDialog";
 import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
+import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 
 const Friends = () => {
     const fetcher = useFetcher();
@@ -83,24 +84,17 @@ const Friends = () => {
             showMessageModal={showMessageModal}
             setShowMessageModal={setShowMessageModal}
         />
-        <header className={styles.header}>
-            <h1
-                className={styles.title}
-            >
-                <span className={`material-symbols-rounded ${styles.icon}`}>
-                    handshake
-                </span>
-                <span className={styles.text}>
-                    Friends
-                </span>
-            </h1>
+        <CurrentPageHeader
+            icon="handshake"
+            text="Friends"
+        >
             <SearchForm
                 currentSearch={currentSearch}
                 labelText="Search friend by username"
                 usersAmout={`(${friendsMetadata.friendsCount} users)`}
                 placeholder="John"
             />
-        </header>
+        </CurrentPageHeader>
         {currentSearch && (
             <Filtering
                 filteringText="Filtering friends by username:"
