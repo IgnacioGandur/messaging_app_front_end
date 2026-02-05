@@ -2,13 +2,12 @@ import styles from "./Users.module.css"
 
 // Packages
 import {
-    NavLink,
     useLoaderData,
     useNavigation,
     useSearchParams,
+    useFetcher,
 } from "react-router";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useRouteLoaderData, useFetcher } from "react-router";
 
 // Components
 import PageLinks from "../../components/page-links/PageLinks";
@@ -32,8 +31,6 @@ const Users = () => {
 
     // Data
     const loaderData = useLoaderData();
-    const rootData = useRouteLoaderData("root");
-    const loggedUser = rootData.user;
     const users: User[] = loaderData?.users;
     const usersMetadata = loaderData?.meta as {
         currentPage: number;

@@ -1,17 +1,21 @@
 import styles from "./Home.module.css";
-import { useRouteLoaderData } from "react-router";
-import Blob from "../../components/blob/Blob";
+
+// Assets
 import logo from "../../assets/images/icon.svg";
 
-const Home = () => {
-    const loaderData = useRouteLoaderData("root");
-    const user = loaderData?.user;
+// Packages
+import { useRouteLoaderData } from "react-router";
 
-    if (user) {
-        return <main className={styles.home}>
-            logged home
-        </main>
-    }
+// Components
+import Blob from "../../components/blob/Blob";
+
+// Types
+import type RootLoaderDataProps from "../../types/rootLoaderData";
+
+
+const Home = () => {
+    const loaderData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const user = loaderData?.user;
 
     return <main className={styles["home-logged"]}>
         <div className={styles["title-section"]}>

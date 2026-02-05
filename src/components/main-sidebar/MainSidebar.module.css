@@ -17,8 +17,7 @@
     .logo-container {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        gap: var(--size-normal);
+        gap: 1.5rem;
 
         .image-container {
 
@@ -64,6 +63,7 @@
             background-color: var(--light-dark-background);
             cursor: pointer;
             transition: var(--transition-normal);
+            margin-left: auto;
         }
 
         .hide-sidebar:hover,
