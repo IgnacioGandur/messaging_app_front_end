@@ -4,7 +4,6 @@ import { BarLoader } from "react-spinners";
 import LoggedUser from "./LoggedUser";
 import Notifications from "./Notifications";
 import logo from "../../assets/images/icon.svg";
-import logoDark from "../../assets/images/icon_dark.svg";
 
 type Link = {
     path: string;
@@ -34,12 +33,18 @@ const Navbar = () => {
         id="navbar"
         className={styles.navbar}
     >
-        <div className={styles["logo-container"]}>
-            <picture>
-                <source srcSet={logoDark} media="(prefers-color-scheme:dark)" />
-                <img className={styles.logo} src={logo} alt="Website icon" />
-            </picture>
-            <h2 className={styles.name}>Chateá!</h2>
+        <div className={styles["icon-container"]}>
+            <div className={styles["image-container"]}>
+                <div className={styles.mask}></div>
+                <img
+                    className={styles.image}
+                    src={logo}
+                    alt="Website's logo"
+                />
+            </div>
+            <h2 className={styles.title}>
+                Chateá
+            </h2>
         </div>
         {!loaderData?.user && (
             <div className={styles.links}>
