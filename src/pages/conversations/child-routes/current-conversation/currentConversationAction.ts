@@ -5,6 +5,12 @@ export default async function currentConversationAction({ request, params }: Act
     try {
         const formData = await request.formData();
         const intent = formData.get("intent");
+        const baseOptions: RequestInit = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include"
+        }
 
         // Handle messages deletion.
         if (intent === "delete-message") {
@@ -13,11 +19,8 @@ export default async function currentConversationAction({ request, params }: Act
             const url = import.meta.env.VITE_API_BASE + `/conversations/${params.conversationId}/messages/${messageId}`;
 
             const options: RequestInit = {
+                ...baseOptions,
                 method: "DELETE",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
             };
 
             const response = await fetch(url, options);
@@ -30,19 +33,12 @@ export default async function currentConversationAction({ request, params }: Act
 
         // Toggle ADMIN role.
         if (intent === "toggle-admin-status") {
-            const userId = formData.get("userId");
-            const role = formData.get("role");
+            const data = Object.fromEntries(formData);
             const url = import.meta.env.VITE_API_BASE + `/groups/${params.conversationId}/participants`;
             const options: RequestInit = {
+                ...baseOptions,
                 method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    userId,
-                    role
-                })
+                body: JSON.stringify(data)
             };
 
             const response = await fetch(url, options);
@@ -54,11 +50,8 @@ export default async function currentConversationAction({ request, params }: Act
             const userId = formData.get("userId");
             const url = import.meta.env.VITE_API_BASE + `/groups/${params.conversationId}/participants`;
             const options: RequestInit = {
+                ...baseOptions,
                 method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
                 body: JSON.stringify({
                     userId
                 })
@@ -71,21 +64,12 @@ export default async function currentConversationAction({ request, params }: Act
 
         if (intent === "update-group-info") {
             await new Promise((resolve) => setTimeout(resolve, 3000));
-            const title = formData.get("title");
-            const ppf = formData.get("ppf");
-            const description = formData.get("description");
+            const data = Object.fromEntries(formData);
             const url = `${import.meta.env.VITE_API_BASE}/groups/${params.conversationId}`;
             const options: RequestInit = {
+                ...baseOptions,
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    title,
-                    ppf,
-                    description
-                })
+                body: JSON.stringify(data),
             };
             const response = await fetch(url, options);
             const result = await response.json();
@@ -116,10 +100,8 @@ export default async function currentConversationAction({ request, params }: Act
                 } else {
                     const fileData = supabase.storage.from("attachments").getPublicUrl(data?.path);
                     const options: RequestInit = {
+                        ...baseOptions,
                         method: "post",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
                         body: JSON.stringify({
                             message,
                             conversationId,
@@ -129,7 +111,6 @@ export default async function currentConversationAction({ request, params }: Act
                                 url: fileData.data.publicUrl
                             } : null
                         }),
-                        credentials: "include",
                     };
 
                     const responseWithAttachment = await fetch(url, options);
@@ -139,11 +120,8 @@ export default async function currentConversationAction({ request, params }: Act
             };
 
             const options: RequestInit = {
+                ...baseOptions,
                 method: "post",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include",
                 body: JSON.stringify({
                     message,
                     conversationId,

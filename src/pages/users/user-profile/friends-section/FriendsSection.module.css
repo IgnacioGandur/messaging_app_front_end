@@ -1,0 +1,161 @@
+.header {
+    display: flex;
+    align-items: center;
+    gap: var(--size-tiny);
+    grid-area: header;
+
+    .icon {
+        font-size: var(--icon-size-big);
+        background-image: var(--gradient-main-colors);
+        color: transparent;
+        background-clip: text;
+    }
+}
+
+.tooltip {
+    background-color: var(--light-dark-font);
+    color: white;
+    padding: var(--size-very-small);
+    border-radius: var(--rounding-medium);
+    font-size: var(--tooltip-font-size);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.25);
+    white-space: nowrap;
+    transition: var(--transition-normal);
+    z-index: 0;
+    opacity: 0;
+    text-transform: capitalize;
+}
+
+.tooltip:hover,
+.tooltip:focus-visible,
+.tooltip:focus-within,
+*:hover+.tooltip,
+*:focus-visible+.tooltip,
+*:focus-within+.tooltip {
+    transform: translate(-50%, 90%) scale(1);
+    opacity: 1;
+}
+
+.friends {
+    grid-area: friends;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-very-small);
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: inherit;
+
+        .icon {
+            font-size: var(--icon-size-normal);
+        }
+    }
+
+    .no-friends {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            font-size: var(--icon-size-giant);
+            background-image: var(--gradient-main-colors);
+            background-clip: text;
+            color: transparent;
+        }
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: var(--size-tiny);
+
+        .friend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--size-tiny);
+            position: relative;
+
+            .ppf {
+                border-radius: var(--rounding-total);
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                object-position: center;
+                width: 50px;
+                height: 50px;
+                border: 1px solid var(--light-dark-font-dimmed);
+            }
+        }
+
+        .group {
+            anchor-name: group;
+
+            .button {
+                background-color: transparent;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                transition: var(--transition-normal);
+            }
+
+            .button:hover,
+            .button:focus-visible {
+                transform: scale(1.05);
+            }
+
+            .button:active {
+                transform: scale(0.95);
+            }
+
+            .group-tooltip {
+                position-anchor: group;
+                position-area: bottom span-all;
+                background-color: var(--light-dark-font);
+                border-radius: var(--rounding-medium);
+                padding: var(--size-small);
+                border: none;
+                outline: none;
+                box-shadow: var(--shadow-1);
+                margin-top: 3px;
+
+                .content-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--size-very-small);
+                    align-items: center;
+
+                    >* {
+                        color: white;
+                        text-align: center;
+                    }
+
+                    .ppf {
+                        width: 75px;
+                        height: 75px;
+                        border-radius: var(--rounding-total);
+                        aspect-ratio: 1/1;
+                        object-fit: cover;
+                        object-position: center;
+                    }
+
+                    .title {
+                        max-width: 250px;
+                        text-transform: capitalize;
+                    }
+
+                    .description::first-letter {
+                        text-transform: capitalize;
+                    }
+                }
+            }
+        }
+    }
+}

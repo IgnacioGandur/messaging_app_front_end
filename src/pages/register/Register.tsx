@@ -1,17 +1,32 @@
 import styles from "./Register.module.css";
-import { useState, useEffect } from "react";
-import { useFetcher, useNavigation, useNavigate, useSearchParams } from "react-router";
+
+// Packages
+import { useEffect, useState } from "react";
+import {
+    useSearchParams,
+    Form,
+    useNavigation,
+    useActionData,
+    useNavigate
+} from "react-router";
+
+// Components
 import InputErrors from "../../components/input-errors/InputErrors";
 import Blob from "../../components/blob/Blob";
 import CustomInput from "../../components/custom-input/CustomInput";
 import FormButton from "../../components/form-button/FormButton";
+import { Submitter } from "../login/Login";
+
+//Types
+import type { RegisterActionResponseType } from "./registerAction";
+
 
 const Register = () => {
-    const fetcher = useFetcher();
+    const navigate = useNavigate();
+    const navigation = useNavigation();
+    const actionData = useActionData() as RegisterActionResponseType;
     const [searchParams] = useSearchParams();
     const message = searchParams.get("message");
-    const navigation = useNavigation();
-    const navigate = useNavigate();
     const [userInputs, setUserInputs] = useState({
         firstName: "",
         lastName: "",
@@ -24,22 +39,28 @@ const Register = () => {
         setUserInputs((prevInputs) => ({
             ...prevInputs,
             [field]: value
-        }))
+        }));
     };
 
-    const registerResult = fetcher.data;
+    const isSubmittingForm = navigation.state === "submitting";
+    const registerResult = actionData;
+    const hasInputErrors = registerResult && ("errors" in registerResult);
 
     useEffect(() => {
-        if (fetcher?.data?.success) {
-            navigate("/");
-        };
-    }, [fetcher.data]);
+        if (actionData && actionData.success) {
+            navigate("/", { replace: true });
+        }
+    }, [actionData])
 
     return <main className={styles["register"]}>
         {message && (
             <p>{message}</p>
         )}
-        {registerResult && !registerResult.success ? <InputErrors message={registerResult.message} errors={registerResult.errors} /> : null}
+        {hasInputErrors
+            && <InputErrors
+                message={registerResult.message}
+                errors={registerResult.errors}
+            />}
         <div className={styles.wrapper}>
             <div className={styles.container}>
                 <div className={styles.deco}>
@@ -59,14 +80,12 @@ const Register = () => {
                         </div>
                     </div>
                 </div>
-                {navigation.state === "submitting" ? (
-                    <p>
-                        Submitting...
-                    </p>
+                {isSubmittingForm ? (
+                    <Submitter text="Registering, please wait..." />
                 ) : (
                     <div className={styles["form-wrapper"]}>
-                        <fetcher.Form
-                            method="post"
+                        <Form
+                            method="POST"
                             className={styles.form}
                         >
                             <h2
@@ -74,91 +93,84 @@ const Register = () => {
                             >
                                 Please fill in the fields.
                             </h2>
-                            <div className={styles.names}>
-                                <CustomInput
-                                    id="first-name"
-                                    name="firstName"
-                                    type="text"
-                                    labelText="First name"
-                                    googleIcon="person"
-                                    value={userInputs.firstName}
-                                    onChange={handleUserInput}
-                                    placeholder="John"
-                                    minLength={3}
-                                    maxLength={30}
-                                    description="Between 3 and 30 characters. Only letters."
-                                />
-                                <CustomInput
-                                    id="last-name"
-                                    name="lastName"
-                                    type="text"
-                                    labelText="Last name"
-                                    googleIcon="person"
-                                    value={userInputs.lastName}
-                                    onChange={handleUserInput}
-                                    placeholder="Doe"
-                                    minLength={3}
-                                    maxLength={30}
-                                    description="Between 3 and 30 characters. Only letters."
-                                />
-                            </div>
-                            <CustomInput
-                                id="username"
-                                name="username"
-                                type="text"
-                                labelText="Username"
-                                googleIcon="face"
-                                value={userInputs.username}
-                                onChange={handleUserInput}
-                                placeholder="john_doe"
-                                minLength={3}
-                                maxLength={30}
-                                description="Between 3 and 30 characters. Only letters, numbers, dots and hyphens."
-                                pattern="[\w.-]{1,30}"
-                            />
-                            <div className={styles.passwords}>
-                                <div className={styles.wrapper}>
-                                    <CustomInput
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        labelText="Password"
-                                        googleIcon="lock"
-                                        value={userInputs.password}
-                                        onChange={handleUserInput}
-                                        description="Choose a strong password"
-                                    />
-                                    <CustomInput
-                                        id="confirm-password"
-                                        name="confirmPassword"
-                                        type="password"
-                                        labelText="Confirm your password"
-                                        googleIcon="lock_reset"
-                                        value={userInputs.confirmPassword}
-                                        onChange={handleUserInput}
-                                        description="Repeat your password"
-                                    />
-                                </div>
-                                <p className={`${styles.message} ${userInputs.password === "" || userInputs.confirmPassword === ""
-                                    ? styles.message
-                                    : userInputs.password !== userInputs.confirmPassword
-                                        ? styles.match
-                                        : styles["dont-match"]
-                                    }`}>
-                                    {userInputs.password === "" || userInputs.confirmPassword === ""
-                                        ? "Waiting..."
-                                        : userInputs.password !== userInputs.confirmPassword
-                                            ? "The passwords don't match."
-                                            : "Passwords match!"
+                            {Object.entries(userInputs).map(([key, value]) => {
+                                let placeholder: string = "Placeholder";
+                                const type = key === "password" || key === "confirmPassword" ? "password" : "text";
+                                let icon: string = "info";
+                                let minLength: number = 1;
+                                let maxLength: number = 30;
+                                let description: string = "Description";
+                                let pattern: string = ".{1,}";
+                                switch (key) {
+                                    case "firstName": {
+                                        icon = "person";
+                                        placeholder = "John"
+                                        minLength = 1;
+                                        maxLength = 30;
+                                        description = "Between 1 and 30 characters long, only letters."
+                                        pattern = "[a-zA-Z]{1,30}"
                                     }
-                                </p>
-                            </div>
+                                        break;
+                                    case "lastName": {
+                                        icon = "signature";
+                                        placeholder = "Doe"
+                                        minLength = 1;
+                                        maxLength = 30;
+                                        description = "Between 1 and 30 characters long, only letters."
+                                        pattern = "[a-zA-Z]{1,30}"
+                                    };
+                                        break;
+                                    case "username": {
+                                        icon = "badge";
+                                        placeholder = "john_doe"
+                                        minLength = 3;
+                                        maxLength = 30;
+                                        description = "Between 3 and 30 characters long, only letters, numbers, dots and hyphens (-, _)."
+                                        pattern = ".{3,30}"
+                                    };
+                                        break;
+                                    case "password": {
+                                        placeholder = "*******"
+                                        icon = "passkey"
+                                        description = "Pick a strong password."
+                                    }
+                                        break;
+                                    case "confirmPassword": {
+                                        placeholder = "*******"
+                                        icon = "passkey"
+                                        description = "Repeat your password."
+                                    };
+                                        break;
+                                    default: {
+                                        icon = "info";
+                                        placeholder = "Placeholder"
+                                    };
+                                }
+                                return <CustomInput
+                                    key={key}
+                                    id={key}
+                                    name={key}
+                                    type={type}
+                                    labelText={key.split(/(?=[A-Z])/).join(" ")}
+                                    googleIcon={icon}
+                                    value={value}
+                                    onChange={handleUserInput}
+                                    placeholder={placeholder}
+                                    minLength={minLength}
+                                    maxLength={maxLength}
+                                    description={description}
+                                    pattern={pattern}
+                                    required={true}
+                                    className={styles[key]}
+                                />
+                            })}
                             <FormButton
+                                className={styles.button}
                                 type="submit"
                                 text="Register"
-                                showGlow={false}
+                                showGlow={true}
                             />
-                        </fetcher.Form>
+                        </Form>
                     </div>
                 )}
             </div>

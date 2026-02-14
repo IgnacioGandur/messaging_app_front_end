@@ -17,7 +17,6 @@ import Filtering from "../../components/filtering/Filtering";
 import SingleConversation from "./single-conversation/SingleConversation";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 import SearchForm from "../../components/search-form/SearchForm";
-import ServerError from "../../components/server-error/ServerError";
 
 const Conversations = () => {
     const rootData = useRouteLoaderData("root");
@@ -39,19 +38,14 @@ const Conversations = () => {
 
 
     return <main className={styles.conversations}>
-        {loaderData?.error
-            && <ServerError
-                title="Server Error"
-                message={loaderData?.message}
-            />}
         <CurrentPageHeader
             icon="conversation"
             text="Conversations"
         >
             <SearchForm
                 currentSearch={currentSearch}
-                labelText="Search a conversation by user's name"
-                usersAmout={`(${conversationsCount}) users`}
+                labelText="Search a conversation by username or by group title"
+                usersAmout={`(${conversationsCount}) conversations`}
                 placeholder="John"
             />
         </CurrentPageHeader>

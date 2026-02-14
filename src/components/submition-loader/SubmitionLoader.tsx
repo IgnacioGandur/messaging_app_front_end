@@ -9,12 +9,16 @@ const SubmitionLoader = ({
     message,
 }: SubmitionLoaderProps) => {
     return <div className={styles["loader-container"]}>
-        <PuffLoader
-            color="var(--color-secondary)"
-        />
-        <p className={styles.message}>
-            {message}
-        </p>
+        <div className={styles.backdrop}>
+        </div>
+        <div className={styles.loader}>
+            <PuffLoader
+                color="var(--color-secondary)"
+            />
+            <p className={styles.message}>
+                {message}
+            </p>
+        </div>
     </div>
 };
 

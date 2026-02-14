@@ -25,6 +25,8 @@
     --color-success-dimmed: #06d6a044;
     --color-error: #f71735;
     --color-error-dimmed: #f7173544;
+    --color-warning: #ffd60a;
+    --color-warning-dimmed: #ffd60a44;
     --light-dark-background: light-dark(var(--color-background-light), var(--color-background-dark));
     --light-dark-font: light-dark(var(--color-font-light), var(--color-font-dark));
     --light-dark-font-dimmed: light-dark(var(--color-font-light-dimmed), var(--color-font-dark-dimmed));

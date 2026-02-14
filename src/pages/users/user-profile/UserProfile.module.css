@@ -1,0 +1,74 @@
+.not-found,
+.user-profile {
+    border-right: 1px solid var(--light-dark-font-dimmed);
+    border-left: 1px solid var(--light-dark-font-dimmed);
+    flex: 1;
+    max-width: 1420px;
+}
+
+.user-profile {
+    --tooltip-font-size: .9rem;
+
+    padding: var(--size-normal);
+    display: grid;
+    grid-template-areas:
+        "header header header"
+        "user-info user-info user-info"
+        "friends owned-groups joined-groups"
+    ;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: max-content max-content 1fr;
+    gap: var(--size-normal);
+
+    >:not(.title) {
+        border-radius: var(--rounding-medium);
+        padding: var(--size-normal);
+        border: 1px solid var(--light-dark-font-dimmed);
+        background-color: var(--light-dark-background);
+    }
+
+    .name {
+        text-transform: capitalize;
+    }
+
+    .tooltip {
+        background-color: var(--light-dark-font);
+        color: white;
+        padding: var(--size-very-small);
+        border-radius: var(--rounding-medium);
+        font-size: var(--tooltip-font-size);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(.25);
+        white-space: nowrap;
+        transition: var(--transition-normal);
+        z-index: 0;
+        opacity: 0;
+        text-transform: capitalize;
+    }
+
+    .tooltip:hover,
+    .tooltip:focus-visible,
+    .tooltip:focus-within,
+    *:hover+.tooltip,
+    *:focus-visible+.tooltip,
+    *:focus-within+.tooltip {
+        transform: translate(-50%, 90%) scale(1);
+        opacity: 1;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: var(--size-tiny);
+        grid-area: header;
+
+        .icon {
+            font-size: var(--icon-size-big);
+            background-image: var(--gradient-main-colors);
+            color: transparent;
+            background-clip: text;
+        }
+    }
+}

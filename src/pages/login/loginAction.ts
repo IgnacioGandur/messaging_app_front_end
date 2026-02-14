@@ -1,30 +1,31 @@
 import type { ActionFunctionArgs } from "react-router";
+import apiRequest from "../../utils/apiRequest";
+import type InputError from "../../types/InputErrors";
+import type { User } from "@supabase/supabase-js";
+import { redirect } from "react-router";
+
+export interface LoginResponseType {
+    success: boolean;
+    message: string;
+    errors?: InputError[];
+    user?: User;
+};
 
 export default async function loginAction({ request }: ActionFunctionArgs) {
-    try {
-        const formData = await request.formData();
-        const username = formData.get("username");
-        const password = formData.get("password");
-        const url = import.meta.env.VITE_API_BASE + "/auth/login";
-        const options: RequestInit = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                username,
-                password
-            })
-        };
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    const url = import.meta.env.VITE_API_BASE + "/auth/login";
+    const options: RequestInit = {
+        method: "POST",
+        body: JSON.stringify(data)
+    };
 
-        const response = await fetch(url, options);
-        const result = await response.json();
+    const result = await apiRequest<LoginResponseType>(url, options);
+
+    if (result?.success) {
+        return redirect("/");
+    } else {
         return result;
-    } catch (error) {
-        return {
-            error: true,
-            message: "Server error. We were not able to log you in.",
-        }
     }
 }

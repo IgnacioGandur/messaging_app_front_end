@@ -1,70 +1,43 @@
 import type { ActionFunctionArgs } from "react-router"
+import apiRequest from "../../utils/apiRequest";
 
 export default async function groupsAction({ request }: ActionFunctionArgs) {
-    try {
-        const formData = await request.formData();
-        const intent = formData.get("intent");
-        const url = import.meta.env.VITE_API_BASE + `/groups`;
+    const formData = await request.formData();
+    const intent = formData.get("intent");
+    const url = import.meta.env.VITE_API_BASE + `/groups`;
 
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        if (intent === "create-group") {
-            const title = formData.get("title");
-            const description = formData.get("description");
-            const options: RequestInit = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    title,
-                    description
-                })
-            };
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (intent === "create-group") {
+        const data = Object.fromEntries(formData);
+        const options: RequestInit = {
+            method: "POST",
+            body: JSON.stringify(data),
+        };
 
-            const response = await fetch(url, options);
-            const result = await response.json();
-            return result;
-        }
+        return await apiRequest(url, options);
+    }
 
-        if (intent === "join-group") {
-            const groupId = formData.get("groupId");
-            const joinGroupUrl = url + `/${groupId}`;
-            const options: RequestInit = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-            };
+    if (intent === "join-group") {
+        const groupId = formData.get("groupId");
+        const joinGroupUrl = url + `/${groupId}`;
+        const options: RequestInit = {
+            method: "POST",
+        };
 
-            const response = await fetch(joinGroupUrl, options);
-            const result = await response.json();
-            return result;
-        }
+        return await apiRequest(joinGroupUrl, options);
+    }
 
-        if (intent === "leave-group") {
-            const groupId = formData.get("groupId");
-            const userId = formData.get("userId");
-            const leaveGroupUrl = `${url}/${groupId}/participants`;
-            const options: RequestInit = {
-                method: "DELETE",
-                body: JSON.stringify({
-                    userId,
-                }),
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "include"
-            };
+    if (intent === "leave-group") {
+        const groupId = formData.get("groupId");
+        const userId = formData.get("userId");
+        const leaveGroupUrl = `${url}/${groupId}/participants`;
+        const options: RequestInit = {
+            method: "DELETE",
+            body: JSON.stringify({
+                userId,
+            }),
+        };
 
-            const response = await fetch(leaveGroupUrl, options);
-            const result = await response.json();
-            return result;
-        }
-    } catch (error) {
-        return {
-            error: true,
-        }
+        return await apiRequest(leaveGroupUrl, options);
     }
 }

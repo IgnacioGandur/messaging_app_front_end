@@ -39,10 +39,16 @@ import currentConversationAction from "./pages/conversations/child-routes/curren
 import usersAction from "./pages/users/usersAction";
 import groupsAction from "./pages/groups/groupsAction";
 import friendsAction from "./pages/friends/friendsAction";
+import userProfileAction from "./pages/users/user-profile/userProfileAction";
 
 // Components
-import CheckIfUserIsLogged from "./components/check-if-user-is-logged/CheckIfUserIsLogged";
 import CurrentConversation from "./pages/conversations/child-routes/current-conversation/CurrentConversation";
+import RedirectIfLogged from "./components/redirects/RedirectIfLogged";
+import RedirectIfNotLogged from "./components/redirects/RedirectIfNotLogged";
+
+// Error pages
+import NotFoundPage from "./pages/not-found-page/NotFoundPage";
+import ServerErrorPage from "./pages/server-error-page/ServerErrorPage";
 
 const router = createBrowserRouter([
     {
@@ -58,29 +64,45 @@ const router = createBrowserRouter([
             },
             {
                 path: "/register",
-                Component: Register,
-                action: registerAction
+                element: <RedirectIfLogged>
+                    <Register />
+                </RedirectIfLogged>,
+                action: registerAction,
+                errorElement: <ServerErrorPage />
             },
             {
                 path: "/login",
-                Component: Login,
+                element: <RedirectIfLogged>
+                    <Login />
+                </RedirectIfLogged>,
                 action: loginAction,
+                errorElement: <ServerErrorPage />,
             },
             {
                 path: "/users",
-                Component: Users,
+                element: <RedirectIfNotLogged>
+                    <Users />
+                </RedirectIfNotLogged>,
                 loader: usersLoader,
                 action: usersAction,
+                errorElement: <ServerErrorPage />
             },
             {
                 path: "/users/:id",
-                Component: UserProfile,
-                loader: userProfileLoader
+                element: <RedirectIfNotLogged>
+                    <UserProfile />
+                </RedirectIfNotLogged>,
+                loader: userProfileLoader,
+                action: userProfileAction,
+                errorElement: <ServerErrorPage />
             },
             {
                 path: "/conversations",
-                Component: Conversations,
+                element: <RedirectIfNotLogged>
+                    <Conversations />
+                </RedirectIfNotLogged>,
                 loader: conversationsLoader,
+                errorElement: <ServerErrorPage />,
                 children: [
                     {
                         index: true,
@@ -88,23 +110,27 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ":conversationId",
-                        Component: CurrentConversation,
+                        Component: CurrentConversation, // FIX: When CurrentConversation receivess invalid data and then you change back to a valid converastion, the route crashes.
                         loader: currentConversationLoader,
-                        action: currentConversationAction
+                        action: currentConversationAction,
+                        errorElement: <ServerErrorPage />,
                     }
                 ]
             },
             {
-                path: "/groups",
-                Component: Groups,
+                path: "/groups", // TODO: Addapt loader/function to current back-end error structure.
+                element: <RedirectIfNotLogged>
+                    <Groups />
+                </RedirectIfNotLogged>,
                 loader: groupsLoader,
                 action: groupsAction,
+                errorElement: <ServerErrorPage />,
             },
             {
                 path: "/profile",
-                element: <CheckIfUserIsLogged>
+                element: <RedirectIfNotLogged>
                     <Profile />
-                </CheckIfUserIsLogged>,
+                </RedirectIfNotLogged>,
                 children: [
                     {
                         index: true,
@@ -119,21 +145,28 @@ const router = createBrowserRouter([
             },
             {
                 path: "/friends",
-                Component: Friends,
+                element: <RedirectIfNotLogged>
+                    <Friends />
+                </RedirectIfNotLogged>,
                 loader: friendsLoader,
-                action: friendsAction
+                action: friendsAction,
+                errorElement: <ServerErrorPage />,
             },
             {
                 path: "/about",
                 Component: About
-            }
+            },
+            {
+                path: "*",
+                Component: NotFoundPage,
+            },
         ],
     },
     {
         path: "/logout",
         Component: Logout,
         loader: logoutLoader
-    }
+    },
 ]);
 
 export default router;

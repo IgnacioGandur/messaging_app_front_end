@@ -1,37 +1,29 @@
+import apiRequest from "../../utils/apiRequest";
+
+// Types
 import type { ActionFunctionArgs } from "react-router";
+import type InputError from "../../types/InputErrors";
+import type User from "../../types/user";
+
+export interface RegisterActionResponseType {
+    success: boolean;
+    message: string;
+    errors?: InputError[]
+    user?: User;
+};
 
 export default async function registerAction({ request }: ActionFunctionArgs) {
-    try {
-        const formData = await request.formData();
-        const firstName = formData.get("firstName");
-        const lastName = formData.get("lastName");
-        const username = formData.get("username");
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirmPassword");
-        const url = import.meta.env.VITE_API_BASE + "/auth/register";
-        const options: RequestInit = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                username,
-                password,
-                confirmPassword
-            })
-        };
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    const url = import.meta.env.VITE_API_BASE + "/auth/register";
+    const options: RequestInit = {
+        method: "POST",
+        cache: "no-store",
+        body: JSON.stringify(data)
+    };
 
-        const response = await fetch(url, options);
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        return {
-            success: true,
-            message: "Server error. User registration failed.",
-        }
-    }
+
+    return await apiRequest<RegisterActionResponseType>(url, options);
 }
 

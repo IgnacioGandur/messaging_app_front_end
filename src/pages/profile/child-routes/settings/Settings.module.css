@@ -1,11 +1,253 @@
 .settings {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    padding: var(--size-normal);
-    border: 2px solid blue;
-    gap: var(--size-normal);
+    padding: var(--size-small);
+    gap: var(--size-small);
+    align-items: start;
+
+    .update-result,
+    .main-title,
+    .wrapper {
+        width: 100%;
+    }
 
     .delete-account-modal {
-        border: 2px solid cyan;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        outline: none;
+        border: 1px solid var(--light-dark-font-dimmed);
+        border-radius: var(--rounding-big);
+        box-shadow: var(--shadow-1);
+
+        .delete-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--size-big);
+            gap: var(--size-small);
+
+            .sub-title {
+                font-size: .88rem;
+                font-weight: var(--font-thickness-thick);
+                opacity: .75;
+            }
+
+            .icon {
+                font-size: 10rem;
+                background-image: var(--gradient-main-colors);
+                color: transparent;
+                background-clip: text;
+            }
+
+            .buttons {
+                display: flex;
+                gap: var(--size-small);
+                align-self: stretch;
+
+                >* {
+                    flex: 1;
+                }
+
+                button {
+                    padding: var(--size-small);
+                    border-radius: 50px;
+                    border: 2px solid var(--light-dark-font-dimmed);
+                    outline: none;
+                    transition: var(--transition-normal);
+                    cursor: pointer;
+                }
+
+                button:hover,
+                button:focus {
+                    background-color: var(--light-dark-font-dimmed);
+                }
+
+                button:last-of-type:hover,
+                button:last-of-type:focus-visible {
+                    background-color: var(--color-error-dimmed);
+                    border: 2px solid var(--color-error);
+                }
+            }
+        }
+    }
+
+    .update-result {
+        grid-area: update-result;
+    }
+
+    .update-result.success {
+        background-color: var(--color-success-dimmed);
+        padding: var(--size-normal);
+        display: flex;
+        gap: var(--size-tiny);
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+
+        span {
+            font-size: var(--icon-size-default);
+        }
+    }
+
+    .main-title {
+        grid-area: header;
+    }
+
+    .title {
+        display: flex;
+        align-items: center;
+        gap: var(--size-tiny);
+
+        .icon {
+            font-size: 2.25rem;
+            background-image: var(--gradient-main-colors);
+            color: transparent;
+            background-clip: text;
+        }
+
+        .text {
+            font-size: var(--font-size-normal);
+        }
+    }
+
+    .wrapper {
+        display: flex;
+        gap: var(--size-small);
+        flex: 1;
+        width: 100%;
+
+        .current-profile,
+        .form-wrapper {
+            border: 1px solid var(--light-dark-font-dimmed);
+            border-radius: var(--rounding-big);
+            padding: var(--size-normal);
+            gap: var(--size-small);
+            height: 100%;
+            flex: 1;
+        }
+
+        .current-profile {
+            grid-area: current-profile;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--size-normal);
+
+            .current-ppf {
+                width: 125px;
+                height: 125px;
+                border-radius: var(--rounding-total);
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                object-position: center;
+                align-self: center;
+                margin-top: auto;
+            }
+
+            .title {
+                align-self: flex-start;
+            }
+
+            .name {
+                text-transform: capitalize;
+            }
+
+            .username {
+                opacity: .75;
+                font-style: italic;
+                font-size: .88rem;
+            }
+
+            .join-date {
+                display: flex;
+                align-items: center;
+                gap: var(--size-tiny);
+                margin-bottom: auto;
+            }
+
+            .delete-account {
+                position: absolute;
+                top: var(--size-small);
+                right: var(--size-small);
+                display: grid;
+                place-items: center;
+                border-radius: var(--rounding-total);
+                padding: var(--size-tiny);
+                border: 1px solid var(--light-dark-font-dimmed);
+                transition: var(--transition-normal);
+                cursor: pointer;
+                background-color: var(--light-dark-background);
+
+                span {
+                    font-size: var(--icon-size-default);
+                }
+            }
+
+            .delete-account:hover,
+            .delete-account:focus-visible {
+                background-color: var(--light-dark-font-dimmed);
+            }
+        }
+
+        .form-wrapper {
+            display: flex;
+            flex-direction: column;
+
+            .form {
+                grid-area: update-profile;
+                display: grid;
+                grid-template-areas:
+                    "first-name last-name"
+                    "ppf ppf"
+                    "password confirm-password"
+                    "passwords-message passwords-message"
+                ;
+                gap: inherit;
+
+                >* {
+                    text-transform: capitalize;
+                }
+
+                .firstName {
+                    grid-area: first-name
+                }
+
+                .lastName {
+                    grid-area: last-name
+                }
+
+                .profilePictureUrl {
+                    grid-area: ppf
+                }
+
+                .password {
+                    grid-area: password
+                }
+
+                .confirm-password {
+                    grid-area: confirm-password
+                }
+
+                .passwords-message {
+                    grid-area: passwords-message;
+                    text-align: center;
+                    background-color: var(--color-error-dimmed);
+                    padding: var(--size-small);
+                    border-radius: 50px;
+                }
+
+                .button {
+                    width: 100%;
+                    grid-column: span 2;
+                    height: fit-content;
+                    align-self: end;
+                    padding-bottom: var(--size-very-small);
+                }
+            }
+        }
     }
 }

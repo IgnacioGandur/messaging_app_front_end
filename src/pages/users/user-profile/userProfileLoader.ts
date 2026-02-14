@@ -1,24 +1,23 @@
+import apiRequest from "../../../utils/apiRequest";
 import type { ActionFunctionArgs } from "react-router";
+import type User from "../../../types/user";
+import type Friendship from "../../../types/friendship";
+import type Group from "../../../types/group";
+
+export interface CurrentUserResponseType {
+    success: boolean;
+    message: string;
+    data: {
+        user: User;
+        ownedGroups: Group[];
+        friendships: Friendship[];
+        joinedGroups: Group[];
+    }
+}
 
 export default async function userProfileLoader({ params }: ActionFunctionArgs) {
-    try {
-        const userId = params.id;
-        const url = import.meta.env.VITE_API_BASE + "/users/" + userId;
-        const options: RequestInit = {
-            method: "GET",
-            headers: {
-                "Content-Type": "appliaction/json"
-            },
-        };
+    const userId = params.id;
+    const url = import.meta.env.VITE_API_BASE + "/users/" + userId;
 
-        const response = await fetch(url, options);
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error("Fetch error:", error);
-        return {
-            error: true,
-            message: "Server error. We were not able to retrieve the user's profile.",
-        }
-    }
+    return await apiRequest<CurrentUserResponseType>(url);
 }

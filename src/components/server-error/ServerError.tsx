@@ -1,16 +1,16 @@
 import styles from "./ServerError.module.css";
 
 type ServerErrorProps = {
-    title: string;
     message: string;
 };
 
 const ServerError = ({
-    title,
     message
 }: ServerErrorProps) => {
     return <section className={styles["server-error"]}>
-        <h3 className={styles["title"]}>{title}</h3>
+        <span className={`material-symbols-rounded ${styles.icon}`}>
+            conversion_path_off
+        </span>
         <p className={styles["message"]}>{message}</p>
     </section>
 }

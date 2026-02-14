@@ -1,10 +1,10 @@
 .input-errors {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--size-very-small);
     padding: var(--size-very-small);
     background-color: var(--color-error-dimmed);
-    border: 1px solid var(--color-error);
     align-items: center;
 
     .message {
@@ -16,4 +16,17 @@
         flex-direction: column;
         align-items: center;
     }
+}
+
+.input-errors::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: linear-gradient(to right,
+            var(--light-dark-background),
+            transparent 10% 90%,
+            var(--light-dark-background));
 }

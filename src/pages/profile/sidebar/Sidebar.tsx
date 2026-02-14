@@ -20,9 +20,9 @@ const Sidebar = () => {
             return <NavLink
                 key={link.text}
                 to={link.path}
-                className={styles.option}
+                className={({ isActive }) => isActive ? `${styles.active} ${styles.link}` : styles.link}
             >
-                <span className="material-symbols-rounded">
+                <span className={`material-symbols-rounded ${styles.icon}`}>
                     {link.icon}
                 </span>
                 <span className={styles.text}>

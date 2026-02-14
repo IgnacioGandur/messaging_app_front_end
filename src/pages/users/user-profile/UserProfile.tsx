@@ -1,17 +1,92 @@
+import { Helmet } from "react-helmet-async";
 import styles from "./UserProfile.module.css";
-import { useLoaderData } from "react-router";
+import {
+    useLoaderData,
+    useParams,
+    useRouteLoaderData
+} from "react-router";
+
+import UserInfoSection from "./user-info-section/UserInfoSection";
+import FriendsSection from "./friends-section/FriendsSection";
+// import OwnedGroupsSection from "./owned-groups-section/OwnedGroupsSection";
+import GroupsSection from "./groups-section/GroupsSection";
+
+import type { CurrentUserResponseType } from "./userProfileLoader";
+import type RootLoaderDataProps from "../../../types/rootLoaderData";
+
+const UserNotFound = () => {
+    return <main className={styles["not-found"]}>
+        <h1>user not found</h1>
+        <span className={`material-symbols-rounded ${styles.icon}`}>
+            person_off
+        </span>
+        <p>The user you are looking for doesn't exist.</p>
+    </main>
+};
 
 const UserProfile = () => {
-    const loaderData = useLoaderData();
-    const user = loaderData?.user;
+    const rootLoaderData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const loggedUser = rootLoaderData.user;
+    const loaderData = useLoaderData() as CurrentUserResponseType;
+
+    if (!loaderData?.success) {
+        return <UserNotFound />
+    }
+
+    const params = useParams();
+    const user = loaderData?.data.user;
+    const name = user.firstName + " " + user.lastName;
+
+    const friends = loaderData.data.friendships
+        .filter(f => f.status === "ACCEPTED")
+        .map(f =>
+            f.userAId === Number(params.id)
+                ? f.userB
+                : f.userA);
+    const friendship = loaderData.data.friendships.find(f =>
+        f.userAId === loggedUser?.id
+        || f.userBId === loggedUser?.id);
+    const ownedGroups = loaderData.data.ownedGroups;
+    const joinedGroups = loaderData.data.joinedGroups;
+    const isYou = rootLoaderData?.user?.id === user.id;
+
     return <main className={styles["user-profile"]}>
-        user profile
-        <h2 className={styles.name}>
-            {user.firstName} {user.lastName}
-        </h2>
-        <p className={styles.username}>
-            {user.username}
-        </p>
+        <Helmet>
+            <title>{name} | Chateá!</title>
+        </Helmet>
+        <header
+            className={styles.header}
+        >
+            <span className={`material-symbols-rounded ${styles.icon}`}>
+                account_circle
+            </span>
+            <h1
+                className={styles.title}
+            >
+                User Profile
+            </h1>
+        </header>
+        <UserInfoSection
+            friendship={friendship}
+            isYou={isYou}
+            user={user}
+            name={name}
+        />
+        <FriendsSection
+            friends={friends}
+        />
+        <GroupsSection
+            gridArea="owned-groups"
+            headerTitle="Owned"
+            groups={ownedGroups}
+            user={user}
+        />
+        <GroupsSection
+            gridArea="joined-groups"
+            headerTitle="Joined"
+            groups={joinedGroups}
+            user={user}
+        />
     </main>
 }
 

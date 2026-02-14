@@ -129,7 +129,7 @@ const SingleMessage = ({
             )}
         </div>
         <span className={styles.date}>
-            {formatDistanceToNow(message.createdAt, { addSuffix: true, includeSeconds: true })}
+            {formatDistanceToNow(message.createdAt, { addSuffix: true })}
         </span>
     </div>
 }

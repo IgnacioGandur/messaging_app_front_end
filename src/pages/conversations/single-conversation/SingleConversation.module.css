@@ -1,13 +1,12 @@
 .conversation {
     display: grid;
     grid-template-areas:
-        "ppf name date"
-        "ppf username username"
+        "ppf date date"
+        "ppf name name"
         "ppf message message"
     ;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr 1fr;
-    align-items: center;
     padding: var(--size-very-small);
     gap: 0 var(--size-very-small);
     text-decoration: none;
@@ -51,24 +50,14 @@
         white-space: nowrap;
         text-transform: capitalize;
         font-size: var(--font-size-normal);
-        align-self: flex-end;
-    }
-
-    .username {
-        grid-area: username;
-        font-size: var(--font-size-small);
-        opacity: .75;
-        font-style: italic;
     }
 
     .last-message {
         grid-area: message;
         font-size: var(--font-size-normal);
-        align-self: stretch;
         display: flex;
         align-items: center;
         gap: var(--size-tiny);
-        align-self: flex-start;
 
         .you {
             opacity: .75;
@@ -81,8 +70,7 @@
         font-size: var(--font-size-small);
         opacity: .75;
         font-style: italic;
-        align-self: flex-end;
-        margin-bottom: 3px;
+        align-self: center;
     }
 
     .date::first-letter {
@@ -92,7 +80,8 @@
 
 .conversation.group {
     grid-template-areas:
-        "ppf name date"
+        "ppf date date"
+        "ppf name name"
         "ppf message message"
     ;
 }

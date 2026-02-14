@@ -1,0 +1,215 @@
+.user-info {
+    grid-area: user-info;
+    display: grid;
+    grid-template-areas:
+        "ppf name message-button friendship-button"
+        "ppf username username username"
+        "ppf date date date"
+    ;
+    grid-template-columns: max-content 1fr max-content max-content;
+    grid-auto-rows: min-content;
+    gap: 0 var(--size-very-small);
+
+    .name {
+        text-transform: capitalize;
+    }
+
+    .message-button,
+    .you,
+    .friendship-button {
+        align-self: end;
+    }
+
+    .you,
+    .frienship-button {
+        grid-area: friendship-button;
+    }
+
+    .message-button,
+    .friendship-button {
+        position: relative;
+
+        .button {
+            border: 1px solid var(--light-dark-font-dimmed);
+            border-radius: var(--rounding-total);
+            padding: var(--size-tiny);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            background-color: var(--color-secondary);
+            z-index: 10;
+
+            span {
+                font-size: var(--icon-size-normal);
+                color: white;
+            }
+        }
+
+        .loader {
+            animation: spin 500ms linear infinite;
+        }
+
+        .tooltip {
+            background-color: var(--light-dark-font);
+            color: white;
+            padding: var(--size-very-small);
+            border-radius: var(--rounding-medium);
+            font-size: var(--tooltip-font-size);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(.25);
+            white-space: nowrap;
+            transition: var(--transition-normal);
+            z-index: 0;
+            opacity: 0;
+        }
+
+        .button:hover+.tooltip,
+        .tooltip:hover,
+        .button:focus-within+.tooltip,
+        .tooltip:focus-within {
+            transform: translate(-50%, 85%) scale(1);
+            opacity: 1;
+        }
+
+        .button.friendship-request {
+            anchor-name: --friendship-request;
+        }
+
+        .friendship-request-tooltip {
+            position-anchor: --friendship-request;
+            position-area: bottom span-all;
+            background-color: var(--light-dark-background);
+            border-radius: var(--rounding-medium);
+            padding: var(--size-small);
+            border: 1px solid var(--light-dark-font-dimmed);
+            outline: none;
+            box-shadow: var(--shadow-1);
+            margin-top: 3px;
+
+            .content-wrapper {
+                display: grid;
+                grid-template-columns: max-content max-content;
+                grid-template-rows: max-content 1fr;
+                place-items: center;
+                gap: var(--size-very-small);
+
+                .title {
+                    grid-column: 1/-1;
+                    max-width: 150px;
+                    text-align: center;
+                }
+
+                .option {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--size-tiny);
+                    align-items: center;
+
+                    .button {
+                        span {
+                            font-size: var(--icon-size-default);
+                        }
+                    }
+
+                    p {
+                        font-weight: var(--font-thickness-thick);
+                    }
+                }
+            }
+        }
+    }
+
+    .message-button {
+        anchor-name: --message-form;
+    }
+
+    .message-form-wrapper {
+        position-anchor: --message-form;
+        position-area: left span-all;
+        margin-right: 3px;
+        background-color: var(--light-dark-background);
+        padding: var(--size-normal);
+        border-radius: var(--rounding-medium);
+        border: none;
+        outline: none;
+        box-shadow: var(--shadow-1);
+
+        .message-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--size-normal);
+
+            .button {
+                padding: var(--size-small);
+                border-radius: 50px;
+                font-weight: var(--font-thickness-thick);
+                background-color: var(--light-dark-background);
+                border: 2px solid var(--color-secondary-dimmed);
+                transition: var(--transition-normal);
+            }
+
+            .button:hover,
+            .button:focus-visible,
+            .button:focus-within {
+                background-color: var(--color-secondary);
+                color: white;
+            }
+        }
+    }
+
+    .name {
+        grid-area: name;
+        align-self: end;
+    }
+
+    .wrapper,
+    .wrapper>.padding,
+    .wrapper>.padding>.ppf {
+        border-radius: var(--rounding-total);
+        display: grid;
+        place-items: center;
+    }
+
+    .wrapper {
+        grid-area: ppf;
+        width: fit-content;
+        background-image: var(--gradient-main-colors);
+        padding: 3px;
+
+        .padding {
+            border: 4px solid var(--light-dark-background);
+
+            .ppf {
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                object-position: center;
+                width: 125px;
+                height: 125px;
+            }
+        }
+    }
+
+    .username,
+    .date {
+        opacity: .75;
+        font-style: italic;
+    }
+
+    .date {
+        grid-area: date;
+        align-self: start;
+    }
+
+    .username {
+        grid-area: username;
+        align-self: center;
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

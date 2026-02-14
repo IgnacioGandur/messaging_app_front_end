@@ -8,13 +8,17 @@ type Error = {
 type InputErrorsProps = {
     message: string;
     errors?: Error[];
+    className?: string;
 };
 
 const InputErrors = ({
     message,
-    errors
+    errors,
+    className
 }: InputErrorsProps) => {
-    return <section className={styles["input-errors"]}>
+    return <section
+        className={`${styles["input-errors"]} ${className}`}
+    >
         <h3 className={styles["message"]}>
             {message}
         </h3>

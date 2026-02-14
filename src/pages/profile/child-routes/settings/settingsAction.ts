@@ -1,78 +1,43 @@
+import apiRequest from "../../../../utils/apiRequest";
+import { redirect } from "react-router";
+import type User from "../../../../types/user";
 import type { ActionFunctionArgs } from "react-router";
 
+// TODO: handle actions and responses.
+
+interface ResponsesType {
+    success: boolean;
+    message: string;
+    user: User;
+}
+
 export default async function settingsAction({ request }: ActionFunctionArgs) {
-    try {
-        const formData = await request.formData();
-        const intent = formData.get("intent");
-        const userId = formData.get("userId");
+    const formData = await request.formData();
+    const intent = formData.get("intent");
+    const url = import.meta.env.VITE_API_BASE + "/me";
 
-        if (intent === "delete-account") {
-            try {
-                const url = import.meta.env.VITE_API_BASE + `/users/${userId}`;
-                const options: RequestInit = {
-                    method: "DELETE",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include"
-                };
-
-                const deleteAccountResponse = await fetch(url, options);
-                const deleteAccountResult = await deleteAccountResponse.json();
-                return {
-                    accountDeleted: true,
-                    message: deleteAccountResult?.message
-                };
-            } catch (error) {
-                return {
-                    error: true,
-                    message: "Server error. We were not able to delete your account."
-                };
-            };
+    await new Promise((r) => setTimeout(r, 2000));
+    if (intent === "delete-account") {
+        const options: RequestInit = {
+            method: "DELETE",
         };
 
-        const profilePictureUrl = formData.get("profilePictureUrl");
-        const firstName = formData.get("firstName");
-        const lastName = formData.get("lastName");
-        const password = formData.get("password");
-        const confirmPassword = formData.get("confirmPassword");
+        const result = await apiRequest<ResponsesType>(url, options);
 
-        const meOptions: RequestInit = {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            }
+        return result.success ? redirect("/") : {
+            accountDeleted: true,
+            message: result?.message
         };
+    };
 
-        const meUrl = import.meta.env.VITE_API_BASE + "/me";
-        const meResponse = await fetch(meUrl, meOptions);
-        const meResult = await meResponse.json();
+    if (intent === "update-profile") {
+        const data = Object.fromEntries(formData);
 
-        const updateOptions: RequestInit = {
+        const options: RequestInit = {
             method: "PATCH",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                profilePictureUrl,
-                password,
-                confirmPassword
-            }),
+            body: JSON.stringify(data),
         };
 
-        const updateUrl = import.meta.env.VITE_API_BASE + `/users/${meResult?.user?.id}`;
-
-        const updateResponse = await fetch(updateUrl, updateOptions);
-        const updateResult = await updateResponse.json();
-        return updateResult;
-    } catch (error) {
-        return {
-            error: true,
-            message: "Server error. We were not able to update your profile's info.",
-        }
+        return await apiRequest<ResponsesType>(url, options);
     }
 }

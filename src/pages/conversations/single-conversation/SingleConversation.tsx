@@ -53,11 +53,6 @@ const SingleConversation = ({
                                     ? title!.slice(0, 34) + "..."
                                     : title}
                             </h2>
-                            {(!conversation.isGroup && user) && (
-                                <p className={styles.username}>
-                                    @{user.user.username}
-                                </p>
-                            )}
                             {conversation.isGroup
                                 ? (
                                     <div className={styles["group-ppf-container"]}>
@@ -98,7 +93,7 @@ const SingleConversation = ({
                         ? null
                         : (
                             <p className={styles.date}>
-                                {formatDistanceToNow(conversation.messages[0].createdAt, { addSuffix: true, includeSeconds: true })}
+                                {formatDistanceToNow(conversation.messages[0].createdAt, { addSuffix: true })}
                             </p>
                         )}
                 </>

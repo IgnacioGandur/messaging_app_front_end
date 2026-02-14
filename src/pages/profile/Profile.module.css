@@ -1,4 +1,8 @@
 .profile {
     display: flex;
-    gap: var(--size-very-small);
+    flex: 1;
+    max-width: 1420px;
+    align-self: center;
+    border-left: 1px solid var(--light-dark-font-dimmed);
+    border-right: 1px solid var(--light-dark-font-dimmed);
 }

@@ -15,6 +15,7 @@ interface CustomInputProps {
     description?: string;
     pattern?: string;
     required?: boolean;
+    className?: string;
 };
 
 const CustomInput = ({
@@ -31,6 +32,7 @@ const CustomInput = ({
     description,
     pattern,
     required = true,
+    className
 }: CustomInputProps) => {
 
     const [showPassword, setShowPassword] = useState(type === "password" ? true : false);
@@ -39,7 +41,7 @@ const CustomInput = ({
         setShowPassword((prevState) => !prevState);
     };
 
-    return <div className={styles["custom-input"]}>
+    return <div className={`${styles["custom-input"]} ${className}`}>
         <label
             htmlFor={id}
             className={styles.label}

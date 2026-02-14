@@ -2,6 +2,20 @@
 .login {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 1600px;
+    position: relative;
+
+    .message {
+        position: absolute;
+        top: var(--size-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        border: 1px solid var(--color-warning);
+        background-color: var(--color-warning-dimmed);
+        padding: var(--size-small);
+        border-radius: var(--rounding-medium);
+    }
 
     .wrapper {
         flex: 1;
@@ -106,39 +120,93 @@
                     .title.login {
                         font-size: var(--font-size-normal);
                     }
+                }
+            }
 
-                    .names {
-                        display: flex;
-                        gap: var(--size-normal);
+            .submitting {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: var(--size-very-small);
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    font-size: var(--icon-size-giant);
+                    animation: spin 2s linear infinite;
+                    background-image: var(--gradient-main-colors);
+                    color: transparent;
+                    background-clip: text;
+                }
+
+                .submiting-message {
+                    font-size: var(--font-size-small);
+                    opacity: .75;
+                    font-style: italic;
+                }
+            }
+        }
+    }
+
+    .layer {
+        position: relative;
+    }
+
+    .layer::after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-image:
+            linear-gradient(to right,
+                var(--light-dark-background),
+                transparent 10% 90%,
+                var(--light-dark-background));
+        ;
+    }
+}
+
+.register {
+    .wrapper {
+        .container {
+            .form-wrapper {
+                .form {
+                    display: grid;
+                    grid-template-areas:
+                        "title title"
+                        "firstName lastName"
+                        "username username"
+                        "password confirmPassword"
+                        "button button"
+                    ;
+                    grid-template-columns: 1fr 1fr;
+                    grid-auto-rows: max-content;
+
+                    .firstName,
+                    .lastName,
+                    .password,
+                    .confirmPassword {
+                        grid-column: span 1;
                     }
 
-                    .passwords {
-                        display: flex;
-                        flex-direction: column;
-                        gap: var(--size-normal);
+                    .username,
+                    .title {
+                        grid-column: 1/-1;
+                    }
 
-                        .wrapper {
-                            display: flex;
-                            gap: inherit;
-                        }
-
-                        .message {
-                            font-style: italic;
-                            padding: var(--size-very-small);
-                            color: var(--light-dark-font);
-                            font-family: var(--font-secondary);
-                        }
-
-                        .message.match {
-                            color: var(--color-success);
-                        }
-
-                        .message.dont-match {
-                            color: var(--color-error);
-                        }
+                    .button {
+                        grid-column: 1/-1;
                     }
                 }
             }
         }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }

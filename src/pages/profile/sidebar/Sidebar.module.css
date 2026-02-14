@@ -1,5 +1,25 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    border: 2px solid purple;
+    border-right: 1px solid var(--light-dark-font-dimmed);
+    min-width: 275px;
+    padding: var(--size-small);
+
+    .link {
+        display: flex;
+        align-items: center;
+        padding: var(--size-very-small);
+        gap: var(--size-very-small);
+        text-decoration: none;
+        border-radius: var(--rounding-medium);
+
+        .icon {
+            font-size: var(--icon-size-default);
+        }
+    }
+
+    .link.active {
+        background-color: var(--light-dark-font-dimmed-2);
+        border: 1px solid var(--light-dark-font-dimmed);
+    }
 }

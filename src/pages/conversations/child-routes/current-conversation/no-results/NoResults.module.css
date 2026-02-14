@@ -1,0 +1,26 @@
+.no-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    gap: var(--size-tiny);
+
+    >:not(.children-wrapper) {
+        align-self: center;
+    }
+
+    .icon {
+        margin-top: auto;
+        font-size: 10rem;
+        background-image: var(--gradient-main-colors);
+        color: transparent;
+        background-clip: text;
+    }
+
+    .para {
+        margin-bottom: auto;
+        max-width: 80%;
+        text-align: center;
+        opacity: .75;
+    }
+}

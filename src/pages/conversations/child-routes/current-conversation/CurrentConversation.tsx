@@ -31,6 +31,7 @@ import type Group from "../../../../types/group";
 import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
 import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
 import { Helmet } from "react-helmet-async";
+import NoConversation from "./no-results/NoResults";
 
 const CurrentConversation = () => {
     const fetcher = useFetcher();
@@ -44,6 +45,15 @@ const CurrentConversation = () => {
         conversation: Conversation | Group;
         error?: boolean;
         errors?: InputErrorsType[];
+    }
+
+    if (!loaderData?.success) {
+        return <NoConversation>
+            <InputErrors
+                message={loaderData.message}
+                errors={loaderData.errors}
+            />
+        </NoConversation>
     }
 
     const rootData = useRouteLoaderData("root");
@@ -139,10 +149,6 @@ const CurrentConversation = () => {
             setCursor(loaderData.messageCursorId);
         };
     }, [loaderData]);
-
-    if (!loaderData?.success) {
-        return <p>no conversation</p>
-    }
 
     if (isPageLoading) {
         return <Loader />

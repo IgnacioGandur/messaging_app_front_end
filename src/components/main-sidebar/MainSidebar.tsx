@@ -61,6 +61,11 @@ const MainSidebar = ({
                     text: "Groups",
                     icon: "communities"
                 },
+                {
+                    path: "/profile",
+                    text: "Profile",
+                    icon: "settings"
+                },
             ] : [
                 {
                     path: "/register",

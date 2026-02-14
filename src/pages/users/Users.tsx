@@ -14,15 +14,25 @@ import PageLinks from "../../components/page-links/PageLinks";
 import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
 import PageLoader from "../../components/page-loader/PageLoader";
 import MessageDialog from "../../components/message-dialog/MessageDialog";
-
-// Types
-import type User from "../../types/user";
-import type Friendship from "../../types/friendship";
 import SearchForm from "../../components/search-form/SearchForm";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 import SingleUser from "./single-user/SingleUser";
+
+// Types
+import type User from "../../types/user";
+import type Friendship from "../../types/friendship";
+
+interface LoaderDataType {
+    users: User[];
+    meta: {
+        totalCount: number;
+        totalPages: number;
+        currentPage: number;
+    };
+    friendships: Friendship[];
+}
 
 const Users = () => {
     const fetcher = useFetcher();
@@ -30,13 +40,9 @@ const Users = () => {
     const [searchParams] = useSearchParams();
 
     // Data
-    const loaderData = useLoaderData();
-    const users: User[] = loaderData?.users;
-    const usersMetadata = loaderData?.meta as {
-        currentPage: number;
-        totalCount: number;
-        totalPages: number;
-    };
+    const loaderData = useLoaderData() as LoaderDataType;
+    const users = loaderData?.users;
+    const usersMetadata = loaderData?.meta;
     const friendships: Friendship[] = loaderData?.friendships;
     const currentSearch = searchParams.get("search") || "";
 

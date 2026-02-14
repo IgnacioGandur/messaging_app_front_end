@@ -14,6 +14,7 @@ import MainSidebar from "../../components/main-sidebar/MainSidebar";
 import { Helmet } from "react-helmet-async";
 import ManagePageTitles from "./ManagePageTitles";
 
+
 const App = () => {
     const loaderData = useRouteLoaderData("root");
     const [showSidebar, setShowSidebar] = useState(false);
@@ -39,7 +40,6 @@ const App = () => {
         </Helmet>
         <div className={styles["app"]}>
             {loaderData?.error ? <ServerError
-                title="Server Error"
                 message={loaderData?.message}
             /> : null}
             <MainSidebar

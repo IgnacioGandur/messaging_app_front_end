@@ -57,7 +57,7 @@ const CreateGroupDialog = ({
                 value={groupTitle}
                 onChange={handleGroupInfo}
                 placeholder="Group name..."
-                required={false}
+                required={true}
             />
             <CustomInput
                 id="group-description"
@@ -68,7 +68,7 @@ const CreateGroupDialog = ({
                 value={groupDescription}
                 onChange={handleGroupInfo}
                 placeholder="Group name..."
-                required={false}
+                required={true}
             />
             <button
                 type="submit"
