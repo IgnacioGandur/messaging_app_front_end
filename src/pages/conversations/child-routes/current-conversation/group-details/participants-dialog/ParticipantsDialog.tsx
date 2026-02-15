@@ -1,12 +1,10 @@
 import type ParticipantType from "../../../../../../types/participant";
-import Participant from "../participant/Participant";
+import Participant from "../single-participant/SingleParticipant";
 import styles from "./ParticipantsDialog.module.css";
 
 interface ParticipantsDialogProps {
     dialogRef: React.RefObject<HTMLDialogElement | null>;
     participants: ParticipantType[];
-    setOpenParticipantId: React.Dispatch<React.SetStateAction<number | null>>;
-    openParticipantId: number | null;
     loggedUserIsAdmin: boolean | undefined;
     loggedUserIsOwner: boolean;
     toggleParticipants: () => void;
@@ -15,8 +13,6 @@ interface ParticipantsDialogProps {
 const ParticipantsDialog = ({
     dialogRef,
     participants,
-    setOpenParticipantId,
-    openParticipantId,
     loggedUserIsAdmin,
     loggedUserIsOwner,
     toggleParticipants
@@ -29,20 +25,9 @@ const ParticipantsDialog = ({
             {participants.map((p) => {
                 return <Participant
                     key={p.userId}
-                    isOpen={openParticipantId === p.userId}
-                    onToggle={() =>
-                        setOpenParticipantId((prev) =>
-                            prev === p.userId ? null : p.userId
-                        )
-                    }
-                    onClose={() => setOpenParticipantId(null)}
                     loggedUserIsAdmin={Boolean(loggedUserIsAdmin)}
                     loggedUserIsOwner={Boolean(loggedUserIsOwner)}
-                    role={p.role}
-                    userId={p.userId}
-                    ppf={p.user.profilePictureUrl}
-                    name={p.user.firstName + " " + p.user.lastName}
-                    username={p.user.username}
+                    participant={p}
                 />
             })}
         </div>

@@ -6,7 +6,7 @@ import CustomInput from "../../../../../../components/custom-input/CustomInput";
 import SubmitionLoader from "../../../../../../components/submition-loader/SubmitionLoader";
 
 // Types
-import type { FetcherWithComponents } from "react-router";
+import { NavLink, type FetcherWithComponents } from "react-router";
 import type Group from "../../../../../../types/group";
 
 // Packages
@@ -134,8 +134,7 @@ const InfoDialog = ({
                                 name="intent"
                                 value="update-group-info"
                             />
-                            <h2
-                            >
+                            <h2>
                                 Updating group info
                             </h2>
                             <CustomInput
@@ -192,10 +191,12 @@ const InfoDialog = ({
                     ) : (
                         <>
                             <h2
+                                className={styles.title}
                             >
                                 {group.title}
                             </h2>
                             <p
+                                className={styles.description}
                             >
                                 {!group.description ? "This group doesn't have a description yet." : group.description}
                             </p>
@@ -239,7 +240,10 @@ const InfoDialog = ({
                             <p>
                                 Group owner
                             </p>
-                            <div
+                            <NavLink
+                                title="Go to group owner's profile"
+                                viewTransition
+                                to={`/users/${groupOwner.userId}`}
                                 className={styles["group-owner"]}
                             >
                                 <h3
@@ -257,7 +261,7 @@ const InfoDialog = ({
                                 >
                                     @{groupOwner.user.username}
                                 </p>
-                            </div>
+                            </NavLink>
                         </>
                     )}
                 </>

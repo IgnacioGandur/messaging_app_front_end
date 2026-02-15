@@ -20,6 +20,7 @@ const SingleConversation = ({
     const hasNoMessages = conversation.messages.length === 0;
 
     return <NavLink
+        viewTransition
         key={conversation.id}
         to={`/conversations/${conversation.id}`}
         className={({ isActive }) =>

@@ -21,7 +21,6 @@ const GroupDetails = ({
 
     // Control group participants section.
     const [showParticipants, setShowParticipants] = useState(false);
-    const [openParticipantId, setOpenParticipantId] = useState<number | null>(null);
 
     const toggleParticipants = () => {
         setShowParticipants((prevStatus) => !prevStatus);
@@ -63,10 +62,8 @@ const GroupDetails = ({
         <ParticipantsDialog
             dialogRef={dialogRef}
             participants={participants}
-            setOpenParticipantId={setOpenParticipantId}
             loggedUserIsAdmin={loggedUserIsAdmin}
             loggedUserIsOwner={loggedUserIsOwner}
-            openParticipantId={openParticipantId}
             toggleParticipants={toggleParticipants}
         />
         <InfoDialog

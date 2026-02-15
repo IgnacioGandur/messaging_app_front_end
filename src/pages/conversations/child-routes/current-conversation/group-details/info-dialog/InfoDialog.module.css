@@ -41,6 +41,13 @@
         flex-direction: column;
         gap: var(--size-normal);
         padding: var(--size-normal);
+        min-width: 500px;
+
+        .title,
+        .description::first-letter {
+            text-transform: capitalize;
+        }
+
 
         .success-update {
             border: 1px solid var(--color-success);
@@ -231,6 +238,8 @@
             border: 1px solid var(--light-dark-font-dimmed);
             gap: 0 var(--size-tiny);
             padding: calc(var(--size-tiny) * 2);
+            text-decoration: none;
+            color: var(--light-dark-font);
 
             .owner-ppf {
                 grid-area: ppf;
