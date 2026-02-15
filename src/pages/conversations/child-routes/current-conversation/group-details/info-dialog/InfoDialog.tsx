@@ -10,7 +10,8 @@ import { NavLink, type FetcherWithComponents } from "react-router";
 import type Group from "../../../../../../types/group";
 
 // Packages
-import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 
 interface InfoDialogProps {
@@ -32,7 +33,11 @@ const InfoDialog = ({
 }: InfoDialogProps) => {
     const groupOwner = group.participants.find((p) => p.role === "OWNER");
     const [isEditing, setIsEditing] = useState(false);
-    const [updatedGroup, setUpdatedGroup] = useState({
+    const [updatedGroup, setUpdatedGroup] = useState<{
+        ppf: string,
+        title: string,
+        description: string,
+    }>({
         ppf: group.profilePicture,
         title: group.title,
         description: group.description
@@ -49,40 +54,37 @@ const InfoDialog = ({
         setUpdatedGroup((prevFields) => ({
             ...prevFields,
             [field]: value
-        }))
+        }));
     };
+
 
     const isUpdatingGroup = fetcher.state === "submitting"
         && fetcher?.formData?.get("intent") === "update-group-info";
-    const updateWasSuccessfull = fetcher.data && fetcher.data.success;
     const updateFailed = fetcher.data && !fetcher.data.success && isEditing;
     const isUpdateButtonDisabled = updatedGroup.ppf === group.profilePicture && updatedGroup.title === group.title && updatedGroup.description === group.description;
 
-    return isUpdatingGroup ? (
-        <SubmitionLoader
-            message="blablabla"
-        />
-    ) : (<dialog
+    useEffect(() => {
+        if (isUpdatingGroup) {
+            toast.loading("Updating group, please wait...", { id: "group-update" });
+            return;
+        }
+
+        if (fetcher.state === "idle" && fetcher.data) {
+            toast.dismiss("group-update");
+
+            if (fetcher.data?.success) {
+                toast.success(fetcher.data.message) || "Success!";
+            } else {
+                toast.error("The group update failed.");
+            }
+        }
+    }, [fetcher.data, fetcher.state, isUpdatingGroup]);
+
+    return <dialog
         ref={infoDialogRef}
         className={styles["info-dialog"]}
     >
         <div className={styles["info-container"]}>
-            {updateWasSuccessfull && (
-                <div
-                    className={styles["success-update"]}
-                >
-                    <span
-                        className={`material-symbols-rounded ${styles.icon}`}
-                    >
-                        check_circle
-                    </span>
-                    <span
-                        className={styles.text}
-                    >
-                        Group info updated successfully!
-                    </span>
-                </div>
-            )}
             {loggedUserIsOwner && (
                 !isEditing && (
                     <button
@@ -135,39 +137,51 @@ const InfoDialog = ({
                     <h2>
                         Updating group info
                     </h2>
-                    <CustomInput
-                        id="edit-ppf"
-                        name="ppf"
-                        type="url"
-                        labelText="Update group's profile picture URL."
-                        googleIcon="media_link"
-                        value={String(updatedGroup.ppf)}
-                        onChange={handleGroupUpdatedFields}
-                        placeholder="Group profile picture URL here..."
-                        required={false}
-                    />
-                    <CustomInput
-                        id="edit-title"
-                        name="title"
-                        type="text"
-                        labelText="Update group's title"
-                        googleIcon="edit_square"
-                        value={String(updatedGroup.title)}
-                        onChange={handleGroupUpdatedFields}
-                        placeholder="Group title here..."
-                        required={false}
-                    />
-                    <CustomInput
-                        id="edit-description"
-                        name="description"
-                        type="text"
-                        labelText="Update group's description"
-                        googleIcon="edit_note"
-                        value={!updatedGroup.description ? "" : String(updatedGroup.description)}
-                        onChange={handleGroupUpdatedFields}
-                        placeholder="Group title here..."
-                        required={false}
-                    />
+                    {Object.entries(updatedGroup).map(([key, value]) => {
+                        let labelText: string = "";
+                        let googleIcon: string = "";
+                        let placeholder: string = "";
+                        let description: string = "";
+
+                        switch (key) {
+                            case "ppf": {
+                                labelText = "Profile Picture URL";
+                                googleIcon = "media_link";
+                                placeholder = "https://website.com/image.png";
+                                description = "Pick a nice profile picture for your group!";
+                                break;
+                            }
+                            case "title": {
+                                labelText = "Group's title"
+                                googleIcon = "edit_square"
+                                placeholder = "Programming group.";
+                                description = "Give your group an inviting title";
+                                break;
+                            }
+                            case "description": {
+                                labelText = "Group's description"
+                                googleIcon = "edit_note"
+                                placeholder = "We talk about programmin here!";
+                                description = "Tell user's what is you group about!";
+                                break;
+                            }
+                        }
+
+                        return <CustomInput
+                            key={key}
+                            name={key}
+                            id={key}
+                            type="text"
+                            labelText={labelText}
+                            googleIcon={googleIcon}
+                            value={value}
+                            onChange={handleGroupUpdatedFields}
+                            placeholder={placeholder}
+                            minLength={1}
+                            description={description}
+                            required={true}
+                        />
+                    })}
                     <div
                         className={styles.buttons}
                     >
@@ -264,7 +278,6 @@ const InfoDialog = ({
             )}
         </div>
     </dialog>
-    )
 };
 
 export default InfoDialog;

@@ -9,31 +9,6 @@
     box-shadow: var(--shadow-1);
     color: var(--light-dark-font);
 
-    .updating {
-        padding: var(--size-big);
-        gap: var(--size-normal);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .icon-container {
-            padding: var(--size-normal);
-
-            span {
-                font-size: var(--icon-size-big);
-                background-image: var(--gradient-main-colors);
-                background-clip: text;
-                color: transparent;
-                animation: updating 750ms linear infinite;
-            }
-        }
-
-        p {
-            color: var(--light-dark-font);
-            opacity: .75;
-        }
-    }
-
     .info-container {
         background-color: var(--light-dark-background);
         position: relative;
@@ -41,13 +16,13 @@
         flex-direction: column;
         gap: var(--size-normal);
         padding: var(--size-normal);
-        min-width: 500px;
+        width: clamp(425px, 500px, 530px);
 
         .title,
         .description::first-letter {
             text-transform: capitalize;
+            text-align: center;
         }
-
 
         .success-update {
             border: 1px solid var(--color-success);

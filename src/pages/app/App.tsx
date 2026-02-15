@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 // Packages
 import { useRouteLoaderData, Outlet } from "react-router";
 import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 // Components
 import Navbar from "../../components/navbar/Navbar";
@@ -31,6 +32,9 @@ const App = () => {
     }, []);
 
     return <>
+        <Toaster
+            position="top-center"
+        />
         <ManagePageTitles />
         <div className={styles["app"]}>
             {loaderData?.error ? <ServerError
