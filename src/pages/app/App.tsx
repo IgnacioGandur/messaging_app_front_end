@@ -11,7 +11,6 @@ import Footer from "../../components/footer/Footer";
 import ServerError from "../../components/server-error/ServerError";
 import FloatingChats from "../../components/floating-chats/FloatingChats";
 import MainSidebar from "../../components/main-sidebar/MainSidebar";
-import { Helmet } from "react-helmet-async";
 import ManagePageTitles from "./ManagePageTitles";
 
 
@@ -33,11 +32,6 @@ const App = () => {
 
     return <>
         <ManagePageTitles />
-        <Helmet>
-            <title>Chateá | Messaging App</title>
-            <meta name="description" content="A simple messaging app that allows you to chat in group or private conversations with users around the world, for free." />
-            <meta name="author" content="Ignacio Gandur" />
-        </Helmet>
         <div className={styles["app"]}>
             {loaderData?.error ? <ServerError
                 message={loaderData?.message}

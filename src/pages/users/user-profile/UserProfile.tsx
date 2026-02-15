@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import styles from "./UserProfile.module.css";
 import {
     useLoaderData,
@@ -51,9 +50,6 @@ const UserProfile = () => {
     const isYou = rootLoaderData?.user?.id === user.id;
 
     return <main className={styles["user-profile"]}>
-        <Helmet>
-            <title>{name} | Chateá!</title>
-        </Helmet>
         <header
             className={styles.header}
         >

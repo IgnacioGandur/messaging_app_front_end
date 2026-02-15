@@ -30,7 +30,6 @@ import type InputErrorsType from "../../../../types/InputErrors";
 import type Group from "../../../../types/group";
 import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
 import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
-import { Helmet } from "react-helmet-async";
 import NoConversation from "./no-results/NoResults";
 
 const CurrentConversation = () => {
@@ -155,52 +154,13 @@ const CurrentConversation = () => {
     }
 
     if (conversation?.isGroup) {
-        return <>
-            <Helmet>
-                <title>Group chat: {conversation.title} | Chateá!</title>
-            </Helmet>
-            <section className={styles["group-conversation"]}>
-                {isDeletingMessage && <SubmitionLoader
-                    message="Deleting message, please wait..."
-                />}
-                <GroupDetails
-                    group={conversation}
-                />
-                <Messages
-                    isLoadingOlderMessages={isLoadingMoreMessages}
-                    loadOlderMessages={loadOlderMessages}
-                    hasMoreMessages={hasMoreMessages}
-                    messages={messages}
-                    handleMessageDeletion={handleMessageDeletion}
-                />
-                <MessageForm
-                    message={message.message}
-                    handleMessage={handleMessage}
-                    setMessage={setMessage}
-                />
-            </section>
-        </>
-    }
-
-    // If is a private conversation between 2 users.
-    return <>
-        <Helmet>
-            <title>Private chat with {userB?.firstName} {userB?.lastName} | Chateá!</title>
-        </Helmet>
-        <section className={styles["private-conversation"]}>
-            {loaderData.error && <ServerError title="Server Error" message={loaderData.message} />}
-            {!loaderData.success && <InputErrors
-                message={loaderData?.message}
-                errors={loaderData?.errors}
-            />}
+        return <section className={styles["group-conversation"]}>
             {isDeletingMessage && <SubmitionLoader
                 message="Deleting message, please wait..."
             />}
-            {userB && (
-                <PrivateConversationDetails
-                    userB={userB}
-                />
-            )}
+            <GroupDetails
+                group={conversation}
+            />
             <Messages
                 isLoadingOlderMessages={isLoadingMoreMessages}
                 loadOlderMessages={loadOlderMessages}
@@ -214,7 +174,36 @@ const CurrentConversation = () => {
                 setMessage={setMessage}
             />
         </section>
-    </>
+    }
+
+    // If is a private conversation between 2 users.
+    return <section className={styles["private-conversation"]}>
+        {loaderData.error && <ServerError message={loaderData.message} />}
+        {!loaderData.success && <InputErrors
+            message={loaderData?.message}
+            errors={loaderData?.errors}
+        />}
+        {isDeletingMessage && <SubmitionLoader
+            message="Deleting message, please wait..."
+        />}
+        {userB && (
+            <PrivateConversationDetails
+                userB={userB}
+            />
+        )}
+        <Messages
+            isLoadingOlderMessages={isLoadingMoreMessages}
+            loadOlderMessages={loadOlderMessages}
+            hasMoreMessages={hasMoreMessages}
+            messages={messages}
+            handleMessageDeletion={handleMessageDeletion}
+        />
+        <MessageForm
+            message={message.message}
+            handleMessage={handleMessage}
+            setMessage={setMessage}
+        />
+    </section>
 }
 
 export default CurrentConversation;

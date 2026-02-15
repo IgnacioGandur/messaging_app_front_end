@@ -224,6 +224,11 @@
                 .button:focus-visible {
                     background-color: var(--color-secondary-dimmed);
                 }
+
+                .button:disabled {
+                    background-color: var(--light-dark-font-dimmed);
+                    cursor: not-allowed;
+                }
             }
         }
 
