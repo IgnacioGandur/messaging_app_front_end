@@ -1,0 +1,104 @@
+.friendship-button {
+    position: relative;
+
+    .button {
+        border: 1px solid var(--light-dark-font-dimmed);
+        border-radius: var(--rounding-total);
+        padding: var(--size-tiny);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        background-color: var(--color-secondary);
+        z-index: 10;
+
+        span {
+            font-size: var(--icon-size-normal);
+            color: white;
+        }
+    }
+
+    .loader {
+        animation: spin 500ms linear infinite;
+    }
+
+    .tooltip {
+        background-color: var(--light-dark-font);
+        color: white;
+        padding: var(--size-very-small);
+        border-radius: var(--rounding-medium);
+        font-size: var(--tooltip-font-size);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(.25);
+        white-space: nowrap;
+        transition: var(--transition-normal);
+        z-index: 20;
+        opacity: 0;
+    }
+
+    .button:hover+.tooltip,
+    .tooltip:hover,
+    .button:focus-within+.tooltip,
+    .tooltip:focus-within {
+        transform: translate(-50%, 85%) scale(1);
+        opacity: 1;
+    }
+
+    .button.friendship-request {
+        anchor-name: --friendship-request;
+    }
+
+    .friendship-request-tooltip {
+        position-anchor: --friendship-request;
+        position-area: bottom span-all;
+        background-color: var(--light-dark-background);
+        border-radius: var(--rounding-medium);
+        padding: var(--size-small);
+        border: 1px solid var(--light-dark-font-dimmed);
+        outline: none;
+        box-shadow: var(--shadow-1);
+        margin-top: 3px;
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: max-content max-content;
+            grid-template-rows: max-content 1fr;
+            place-items: center;
+            gap: var(--size-very-small);
+
+            .title {
+                grid-column: 1/-1;
+                max-width: 150px;
+                text-align: center;
+
+                .name {
+                    text-transform: capitalize;
+                }
+            }
+
+            .option {
+                display: flex;
+                flex-direction: column;
+                gap: var(--size-tiny);
+                align-items: center;
+
+                .button {
+                    span {
+                        font-size: var(--icon-size-default);
+                    }
+                }
+
+                p {
+                    font-weight: var(--font-thickness-thick);
+                }
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

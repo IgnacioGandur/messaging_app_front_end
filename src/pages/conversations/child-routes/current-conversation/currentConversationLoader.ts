@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
-import apiRequest from "../../../../utils/apiRequest";
+import apiRequestLoader from "../../../../utils/apiRequestLoader";
 import type Conversation from "../../../../types/conversation";
 
 export default async function currentConversationLoader({ params }: LoaderFunctionArgs) {
@@ -13,5 +13,5 @@ export default async function currentConversationLoader({ params }: LoaderFuncti
         credentials: "include"
     };
 
-    return await apiRequest<Conversation>(url, options);
+    return await apiRequestLoader<Conversation>(url, options);
 }

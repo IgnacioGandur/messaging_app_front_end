@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs } from "react-router";
-import apiRequest from "../../utils/apiRequest";
+import apiRequestLoader from "../../utils/apiRequestLoader";
 
 export default async function groupsLoader({ request }: LoaderFunctionArgs) {
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -20,5 +20,5 @@ export default async function groupsLoader({ request }: LoaderFunctionArgs) {
         method: "GET",
     };
 
-    return await apiRequest(groupsUrl.href, options);
+    return await apiRequestLoader(groupsUrl.href, options);
 }

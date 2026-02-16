@@ -2,6 +2,8 @@
     display: flex;
     justify-content: space-between;
     gap: var(--size-small);
+    border-bottom: 1px solid var(--light-dark-font-dimmed);
+    padding: var(--size-small);
 
     .user-info {
         display: grid;
@@ -56,51 +58,6 @@
         .text {
             opacity: .75;
             font-size: var(--font-size-small);
-        }
-
-        button {
-            border: 2px solid blue;
-            background-color: transparent;
-            border: 1px solid var(--light-dark-font-dimmed);
-            padding: var(--padding);
-            display: grid;
-            place-items: center;
-            border-radius: var(--rounding-total);
-            outline: none;
-            position: relative;
-            cursor: pointer;
-            transition: var(--transition-normal);
-
-            span:not(.text) {
-                font-size: var(--icon-size-default);
-                opacity: .75;
-            }
-
-            .text {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(.25);
-                white-space: nowrap;
-                background-color: var(--light-dark-font);
-                color: var(--light-dark-font-inverted);
-                padding: var(--padding) calc(var(--padding) * 2);
-                border-radius: var(--rounding-small);
-                opacity: 0;
-                transition: inherit;
-            }
-        }
-
-        button:hover,
-        button:focus-visible {
-            .text {
-                transform: translate(-50%, 80%) scale(1);
-                opacity: 1;
-            }
-        }
-
-        button:active {
-            background-color: var(--light-dark-font-dimmed);
         }
     }
 

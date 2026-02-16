@@ -1,3 +1,5 @@
+import InputErrors from "../../components/input-errors/InputErrors";
+import type InputError from "../../types/InputErrors";
 import styles from "./ServerErrorPage.module.css";
 import {
     useRouteError,
@@ -7,116 +9,122 @@ import {
     useNavigate,
 } from "react-router";
 
-const ServerErrorPage = () => {
-    let message: string = "Seems like an error happened in the app, please try again later...";
-    let status: string | number = 500;
-    let statusText: string = "Server Error";
-    const navigate = useNavigate();
-    const revalidator = useRevalidator();
-    const error = useRouteError();
-    const isBackendDown = error instanceof Error;
-    const isBackendThrowingError = isRouteErrorResponse(error);
-    const isTryingAgain = revalidator.state === "loading";
+type BackendErrors = {
+    success: boolean;
+    message: string;
+    errors: InputError[];
+}
 
-    if (isBackendThrowingError) {
-        message = error.data.message;
-        status = error.status;
-        statusText = error.statusText;
-    } else if (isBackendDown) {
-        message = "We can't reach our servers right now. Please try again in a few minutes.";
+const ServerErrorPage = () => {
+    const navigate = useNavigate();
+    const error = useRouteError();
+    const revalidator = useRevalidator();
+
+    if (isRouteErrorResponse(error)) {
+        const backendErrors: BackendErrors = JSON.parse(error.data);
+
+        return <div className={styles.error}>
+            {error.status < 500 ? (
+                <div className={styles["errors-wrapper"]}>
+                    {backendErrors.errors && (
+                        <InputErrors
+                            message="The server encountered an issue when processing your request."
+                            errors={backendErrors.errors}
+                        />
+                    )}
+                </div>
+            ) : (
+                <h2
+                    className={styles["sub-title"]}
+                >
+                    Network error. We were not able to connect to the server.
+                </h2>
+            )}
+            <header className={styles.oops}>
+                {revalidator.state === "loading" ? (
+                    <div className={styles["trying-again"]}>
+                        <span className={`material-symbols-rounded ${styles.icon}`}>
+                            sync
+                        </span>
+                        <span className={styles.text}>
+                            Trying again...
+                        </span>
+                    </div>
+                ) : (
+                    <>
+                        <h1
+                            className={styles.title}
+                        >
+                            {error.status}
+                        </h1>
+                        <p
+                            className={styles["status-text"]}
+                        >{error.statusText}</p>
+                        <span className={`material-symbols-rounded ${styles.icon}`}>
+                            no_accounts
+                        </span>
+                    </>
+                )}
+            </header>
+            <div className={styles.links}>
+                <h2
+                    className={styles.title}
+                >
+                    What would you like to do?
+                </h2>
+                <div className={styles["links-container"]}>
+                    <div className={styles.link}>
+                        <button
+                            onClick={() => navigate(-1)}
+                            className={styles.button}
+                        >
+                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                arrow_left_alt
+                            </span>
+                        </button>
+                        <span className={styles.text}>
+                            Go Back
+                        </span>
+                    </div>
+                    <div className={styles.link}>
+                        <NavLink
+                            className={styles.button}
+                            to="/"
+                        >
+                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                chair
+                            </span>
+                        </NavLink>
+                        <span className={styles.text}>
+                            Go Home
+                        </span>
+                    </div>
+                    <div className={styles.link}>
+                        <button
+                            onClick={() => revalidator.revalidate()}
+                            className={styles.button}
+                        >
+                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                refresh
+                            </span>
+                        </button>
+                        <span className={styles.text}>
+                            Try again
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 
-    return <section className={styles.error}>
-        <h1 className={styles.oops}>
-            Oops!
-            <span className={`material-symbols-rounded ${styles.icon}`}>
-                {isBackendThrowingError
-                    ? "error"
-                    : isBackendDown
-                        ? "cloud_off"
-                        : "bomb"}
-            </span>
-        </h1>
-        <div className={styles.container}>
-            <h2
-                className={styles.title}
-            >
-                The server encountered an issue while processing your request.
-            </h2>
-            <p className={styles.message}>
-                {message}
+    if (error instanceof Error) {
+        return <div className={styles.error}>
+            <h1>System error</h1>
+            <p>
+                {error.message}
             </p>
         </div>
-        {isTryingAgain ? (
-            <div className={styles["trying-again"]}>
-                <span className={`material-symbols-rounded ${styles.icon}`}>
-                    sync
-                </span>
-                <span className={styles.text}>
-                    Trying again...
-                </span>
-            </div>
-        ) : (
-            <div className={styles.status}>
-                <p className={styles.code}>
-                    {status}
-                </p>
-                {statusText && (
-                    <span className={styles.text}>
-                        {statusText}
-                    </span>
-                )}
-            </div>
-        )}
-        <div className={styles.links}>
-            <h2
-                className={styles.title}
-            >
-                What would you like to do?
-            </h2>
-            <div className={styles["links-container"]}>
-                <div className={styles.link}>
-                    <button
-                        onClick={() => navigate(-1)}
-                        className={styles.button}
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            arrow_left_alt
-                        </span>
-                    </button>
-                    <span className={styles.text}>
-                        Go Back
-                    </span>
-                </div>
-                <div className={styles.link}>
-                    <NavLink
-                        className={styles.button}
-                        to="/"
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            chair
-                        </span>
-                    </NavLink>
-                    <span className={styles.text}>
-                        Go Home
-                    </span>
-                </div>
-                <div className={styles.link}>
-                    <button
-                        onClick={() => revalidator.revalidate()}
-                        className={styles.button}
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            refresh
-                        </span>
-                    </button>
-                    <span className={styles.text}>
-                        Try again
-                    </span>
-                </div>
-            </div>
-        </div>
-    </section>
-}
+    }
+};
 
 export default ServerErrorPage;

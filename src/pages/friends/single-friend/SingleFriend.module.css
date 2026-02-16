@@ -1,0 +1,96 @@
+.friend {
+    display: grid;
+    grid-template-areas:
+        "ppf name date buttons"
+        "ppf username username buttons"
+    ;
+    align-content: center;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 0 var(--size-very-small);
+    padding: var(--size-very-small);
+    align-items: flex-start;
+    border-bottom: 1px solid var(--light-dark-font-dimmed);
+    text-decoration: none;
+
+    .ppf {
+        grid-area: ppf;
+        width: 50px;
+        height: 50px;
+        border-radius: var(--rounding-total);
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        object-position: center;
+        border: 1px solid var(--light-dark-font-dimmed);
+    }
+
+    .name-wrapper {
+        grid-area: name;
+        display: flex;
+        align-items: center;
+        gap: var(--size-tiny);
+        text-decoration: none;
+
+        .name {
+            text-transform: capitalize;
+            font-size: var(--font-size-normal);
+        }
+    }
+
+    .friends-since {
+        grid-area: date;
+        opacity: .75;
+        font-size: .85rem;
+    }
+
+    .username {
+        grid-area: username;
+        opacity: .75;
+        font-style: italic;
+    }
+
+    .buttons {
+        grid-area: buttons;
+        display: flex;
+        align-items: center;
+        gap: inherit;
+        align-self: center;
+
+        button {
+            position: relative;
+            display: grid;
+            place-items: center;
+            border-radius: var(--rounding-total);
+            padding: var(--size-very-small);
+            border: 1px solid var(--light-dark-font-dimmed);
+            background-color: transparent;
+            cursor: pointer;
+
+            .icon {
+                font-size: var(--icon-size-default);
+            }
+
+            .text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(.25);
+                opacity: 0;
+                white-space: nowrap;
+                background-color: var(--light-dark-font);
+                color: var(--light-dark-font-inverted);
+                border-radius: var(--rounding-small);
+                padding: var(--size-tiny) calc(var(--size-tiny) * 2);
+                transition: inherit;
+                transition: var(--transition-normal);
+            }
+        }
+
+        button:hover,
+        button:focus-visible {
+            .text {
+                transform: translate(-50%, 125%) scale(1);
+                opacity: 1;
+            }
+        }
+    }
+}

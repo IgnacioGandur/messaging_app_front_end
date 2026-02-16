@@ -118,7 +118,7 @@ const router = createBrowserRouter([
                 ]
             },
             {
-                path: "/groups", // TODO: Addapt loader/function to current back-end error structure.
+                path: "/groups",
                 element: <RedirectIfNotLogged>
                     <Groups />
                 </RedirectIfNotLogged>,

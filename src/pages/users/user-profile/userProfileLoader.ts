@@ -1,4 +1,4 @@
-import apiRequest from "../../../utils/apiRequest";
+import apiRequestLoader from "../../../utils/apiRequestLoader";
 import type { ActionFunctionArgs } from "react-router";
 import type User from "../../../types/user";
 import type Friendship from "../../../types/friendship";
@@ -19,5 +19,5 @@ export default async function userProfileLoader({ params }: ActionFunctionArgs) 
     const userId = params.id;
     const url = import.meta.env.VITE_API_BASE + "/users/" + userId;
 
-    return await apiRequest<CurrentUserResponseType>(url);
+    return await apiRequestLoader<CurrentUserResponseType>(url);
 }

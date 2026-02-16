@@ -7,30 +7,15 @@ import {
 
 import UserInfoSection from "./user-info-section/UserInfoSection";
 import FriendsSection from "./friends-section/FriendsSection";
-// import OwnedGroupsSection from "./owned-groups-section/OwnedGroupsSection";
 import GroupsSection from "./groups-section/GroupsSection";
 
 import type { CurrentUserResponseType } from "./userProfileLoader";
 import type RootLoaderDataProps from "../../../types/rootLoaderData";
 
-const UserNotFound = () => {
-    return <main className={styles["not-found"]}>
-        <h1>user not found</h1>
-        <span className={`material-symbols-rounded ${styles.icon}`}>
-            person_off
-        </span>
-        <p>The user you are looking for doesn't exist.</p>
-    </main>
-};
-
 const UserProfile = () => {
     const rootLoaderData = useRouteLoaderData("root") as RootLoaderDataProps;
     const loggedUser = rootLoaderData.user;
     const loaderData = useLoaderData() as CurrentUserResponseType;
-
-    if (!loaderData?.success) {
-        return <UserNotFound />
-    }
 
     const params = useParams();
     const user = loaderData?.data.user;

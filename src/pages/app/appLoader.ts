@@ -9,6 +9,13 @@ export default async function appLoader() {
         mode: "cors"
     };
 
-    const response = await fetch(url, options);
-    return await response.json();
+    try {
+        const response = await fetch(url, options);
+        return await response.json();
+    } catch (error) {
+        return {
+            error: true,
+            message: "We’re having trouble connecting, most of the application will not work. Please try again later..."
+        }
+    }
 }

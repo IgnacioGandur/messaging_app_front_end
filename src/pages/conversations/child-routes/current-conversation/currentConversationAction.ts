@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import supabase from "../../../../supabase/supabase";
 import type { ActionFunctionArgs } from "react-router"
 
@@ -92,7 +93,8 @@ export default async function currentConversationAction({ request, params }: Act
 
 
                 if (error) {
-                    console.log(error);
+                    toast.error("Messages with attachments are not available at the moment.");
+                    console.log(error.message);
                     return {
                         error: true,
                         message: "We were not able to send your attachment."

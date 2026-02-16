@@ -1,4 +1,4 @@
-import apiRequest from "../../utils/apiRequest";
+import apiRequestLoader from "../../utils/apiRequestLoader";
 
 // Types
 import type { LoaderFunctionArgs } from "react-router";
@@ -45,8 +45,8 @@ export default async function usersLoader({ request }: LoaderFunctionArgs) {
         }
     };
 
-    const usersResult = await apiRequest<UsersResponse>(usersUrl.href, options);
-    const friendshipsResult = await apiRequest<FriendshipsResponse>(friendshipsUrl, options);
+    const usersResult = await apiRequestLoader<UsersResponse>(usersUrl.href, options);
+    const friendshipsResult = await apiRequestLoader<FriendshipsResponse>(friendshipsUrl, options);
 
     return {
         users: usersResult?.data.users,

@@ -5,6 +5,8 @@ import { Form, useFetcher, useNavigation } from "react-router";
 import CustomInput from "../../../../components/custom-input/CustomInput";
 import { useState } from "react";
 import type Friendship from "../../../../types/friendship";
+import SendMessageButton from "../../../../mini-components/send-message-button/SendMessageButton";
+import FriendshipRequestButton from "../../../../mini-components/friendship-request-button/FriendshipRequestButton";
 
 interface UserInfoSectionProps {
     isYou: boolean;
@@ -82,168 +84,30 @@ const UserInfoSection = ({
     return <section className={styles["user-info"]}>
         {isYou
             ? <span className={styles.you}>
-                You
+                (You)
             </span>
             : <>
-                <div className={styles["message-button"]}>
-                    <button
-                        className={styles.button}
-                        popoverTarget="message-form-wrapper"
-                        aria-describedby="message-tooltip"
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            comic_bubble
-                        </span>
-                    </button>
-                    <p
-                        id="message-tooltip"
-                        role="tooltip"
-                        className={styles.tooltip}
-                    >
-                        Send Message
-                    </p>
-                    <div
-                        className={styles["message-form-wrapper"]}
-                        popover="auto"
-                        id="message-form-wrapper"
-                    >
-                        <Form
-                            method="post"
-                            className={styles["message-form"]}
-                        >
-                            <input
-                                type="hidden"
-                                name="intent"
-                                value="send-message"
-                            />
-                            <CustomInput
-                                name="message"
-                                id="message"
-                                type="text"
-                                labelText="Send your message!"
-                                googleIcon="send"
-                                value={message}
-                                onChange={handleMessage}
-                                placeholder="Hello! Nice to meet you!"
-                                minLength={1}
-                                maxLength={125}
-                                required={true}
-                            />
-                            <button
-                                className={styles.button}
-                            >
-                                Send message
-                            </button>
-                        </Form>
-                    </div>
-                </div>
-                {isHandlingRequest ? (
-                    <div className={styles["friendship-button"]}>
-                        <button
-                            className={`${styles.button} ${styles.loader}`}
-                        >
-                            <span className="material-symbols-rounded">
-                                progress_activity
-                            </span>
-                        </button>
-                    </div>
-                ) : (
-                    hasReceivedFriendshipRequest ? (
-                        <div className={styles["friendship-button"]}>
-                            <button
-                                className={`
-                                    ${styles.button}
-                                    ${styles["friendship-request"]}
-                                `}
-                                popoverTarget="handle-friendship-request"
-                            >
-                                <span className={`material-symbols-rounded ${styles.icon}`}>
-                                    handshake
-                                </span>
-                            </button>
-                            <p className={styles.tooltip}>
-                                Wants to be your friend
-                            </p>
-                            <div
-                                popover="auto"
-                                id="handle-friendship-request"
-                                className={styles["friendship-request-tooltip"]}
-                            >
-                                <div className={styles["content-wrapper"]}>
-                                    <h4
-                                        className={styles.title}
-                                    >
-                                        <span className={styles.name}>
-                                            {name}
-                                        </span> wants to be your friend!
-                                    </h4>
-                                    <div className={styles.option}>
-                                        <button
-                                            onClick={acceptFriendshipRequest}
-                                            className={styles.button}
-                                        >
-                                            <span className="material-symbols-rounded">
-                                                check
-                                            </span>
-                                        </button>
-                                        <p>Accept</p>
-                                    </div>
-                                    <div className={styles.option}>
-                                        <button
-                                            onClick={cancelFriendship}
-                                            className={styles.button}
-                                        >
-                                            <span className="material-symbols-rounded">
-                                                close
-                                            </span>
-                                        </button>
-                                        <p>Reject</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : friendship
-                        ? <div
-                            className={styles["friendship-button"]}
-                        >
-                            <button
-                                onClick={cancelFriendship}
-                                className={styles.button}
-                                aria-describedby="remove-friendship-tooltip"
-                            >
-                                <span className={`material-symbols-rounded ${styles.icon}`}>
-                                    {friendship.status === "PENDING" ? "person_cancel" : "person_remove"}
-                                </span>
-                            </button>
-                            <p
-                                id="remove-friendship-tooltip"
-                                role="tooltip"
-                                className={styles.tooltip}
-                            >
-                                {friendship.status === "PENDING" ? "Cancel friendship request" : "Remove from friends"}
-                            </p>
-                        </div>
-                        : <div
-                            className={styles["friendship-button"]}
-                        >
-                            <button
-                                onClick={sendFriendshipRequest}
-                                className={styles.button}
-                                aria-labelledby="send-friendship-request-tooltip"
-                            >
-                                <span className={`material-symbols-rounded ${styles.icon}`}>
-                                    person_add
-                                </span>
-                            </button>
-                            <p
-                                id="send-friendship-request-tooltip"
-                                role="tooltip"
-                                className={styles.tooltip}
-                            >
-                                Send friend request
-                            </p>
-                        </div>
-                )}
+                <SendMessageButton
+                    message={message}
+                    className={styles["message-button"]}
+                    handleMessage={handleMessage}
+                    style={{
+                        alignSelf: "end"
+                    }}
+                />
+                <FriendshipRequestButton
+                    isSubmitting={isHandlingRequest}
+                    hasFriendshipRequestFromThisUser={hasReceivedFriendshipRequest}
+                    name={name}
+                    acceptFriendshipRequest={acceptFriendshipRequest}
+                    cancelFriendship={cancelFriendship}
+                    friendship={friendship}
+                    sendFriendshipRequest={sendFriendshipRequest}
+                    style={{
+                        gridArea: "friendship-button",
+                        alignSelf: "end"
+                    }}
+                />
             </>}
         <h2 className={styles.name}>
             {user.firstName} {user.lastName}

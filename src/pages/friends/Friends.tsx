@@ -13,7 +13,8 @@ import {
     useRouteLoaderData,
     useSearchParams,
     useFetcher,
-    useLoaderData
+    useLoaderData,
+    NavLink
 } from "react-router";
 
 // Components
@@ -25,6 +26,7 @@ import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
+import SingleFriend from "./single-friend/SingleFriend";
 
 const Friends = () => {
     const fetcher = useFetcher();
@@ -121,56 +123,15 @@ const Friends = () => {
                         {friends.map((f) => {
                             const user = f.userAId === loggedUser.id ? f.userB : f.userA;
 
-                            return <Fragment
-                                key={f.id}
-                            >
-                                <li
-                                    className={styles.friend}
-                                >
-                                    <h2 className={styles.name}>
-                                        {user.firstName} {user.lastName}
-                                    </h2>
-                                    <p className={styles["friends-since"]}>
-                                        Friends since {format(f.createdAt, "MMMM do, yyyy")}
-                                    </p>
-                                    <span className={styles.username}>
-                                        @{user.username}
-                                    </span>
-                                    <img
-                                        src={user.profilePictureUrl}
-                                        alt={`${user.username}'s profile picture.`}
-                                        className={styles.ppf}
-                                    />
-                                    <div className={styles.buttons}>
-                                        <button
-                                            onClick={() => {
-                                                deleteFriendship(f.id);
-                                            }}
-                                        >
-                                            <span className={`material-symbols-rounded ${styles.icon}`}>
-                                                person_remove
-                                            </span>
-                                            <span className={styles.text}>
-                                                Remove friend
-                                            </span>
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                setCurrentTargetUser(user);
-                                                setShowMessageModal(true);
-                                            }}
-                                        >
-                                            <span className={`material-symbols-rounded ${styles.icon}`}>
-                                                conversation
-                                            </span>
-                                            <span className={styles.text}>
-                                                Send message
-                                            </span>
-                                        </button>
-                                    </div>
-                                </li>
-                                <div className={styles.separator}></div>
-                            </Fragment>
+                            return <SingleFriend
+                                user={user}
+                                friendship={f}
+                                deleteFriendship={deleteFriendship}
+                                onClick={() => {
+                                    setCurrentTargetUser(user);
+                                    setShowMessageModal(true);
+                                }}
+                            />
                         })}
                     </ul>
                 )}

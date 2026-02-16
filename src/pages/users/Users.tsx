@@ -7,13 +7,11 @@ import {
     useSearchParams,
     useFetcher,
 } from "react-router";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment } from "react";
 
 // Components
 import PageLinks from "../../components/page-links/PageLinks";
-import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
 import PageLoader from "../../components/page-loader/PageLoader";
-import MessageDialog from "../../components/message-dialog/MessageDialog";
 import SearchForm from "../../components/search-form/SearchForm";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
@@ -35,7 +33,7 @@ interface LoaderDataType {
 }
 
 const Users = () => {
-    const fetcher = useFetcher();
+    const fetcher = useFetcher({ key: "users-fetcher" });
     const navigation = useNavigation();
     const [searchParams] = useSearchParams();
 
@@ -46,16 +44,8 @@ const Users = () => {
     const friendships: Friendship[] = loaderData?.friendships;
     const currentSearch = searchParams.get("search") || "";
 
-    // Handle send message to user.
-    const [showMessageModal, setShowMessageModal] = useState(false);
-    const [currentTargetUser, setCurrentTargetUser] = useState<User | null>(null);
-    const messageDialogRef = useRef<HTMLDialogElement | null>(null);
-
-    const isSubmitting = fetcher.state === "submitting";
+    // const isSubmitting = fetcher.state === "submitting";
     const isPageLoading = navigation.state === "loading";
-    const isSendingRequest = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "send-friendship-request";
-    const isRespondingToRequest = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "handle-friendship-response";
-    const isRemovingFriend = fetcher.state === "submitting" && fetcher.formData!.get("intent") === "remove-friend";
 
     const sendFriendshipRequest = (
         userBId: number
@@ -101,33 +91,8 @@ const Users = () => {
         )
     };
 
-    useEffect(() => {
-        if (!messageDialogRef.current) return;
-
-        if (showMessageModal) {
-            messageDialogRef.current.showModal();
-        } else {
-            messageDialogRef.current.close();
-        }
-    }, [showMessageModal]);
 
     return <main className={styles.users}>
-        {isSubmitting
-            && (<SubmitionLoader
-                message={`${isSendingRequest
-                    ? "Sending request"
-                    : isRespondingToRequest
-                        ? "Responding to request"
-                        : isRemovingFriend
-                            ? "Removing friend"
-                            : null}, please wait...`}
-            />)}
-        <MessageDialog
-            showMessageModal={showMessageModal}
-            setShowMessageModal={setShowMessageModal}
-            currentTargetUser={currentTargetUser}
-            setCurrentTargetUser={setCurrentTargetUser}
-        />
         <CurrentPageHeader
             icon="group"
             text="Users"
@@ -172,8 +137,6 @@ const Users = () => {
                                     removeFriendship={removeFriendship}
                                     handleFriendshipResponse={handleFriendshipResponse}
                                     sendFriendshipRequest={sendFriendshipRequest}
-                                    setCurrentTargetUser={setCurrentTargetUser}
-                                    setShowMessageModal={setShowMessageModal}
                                 />
                                 {i !== 9 && (
                                     <div className={styles.separator}></div>

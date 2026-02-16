@@ -6,39 +6,42 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: var(--size-normal);
     align-items: center;
     font-family: var(--font-secondary);
     text-align: center;
-    padding: var(--size-big);
     gap: var(--size-big);
+    padding-bottom: var(--size-normal);
 
-    .oops {
-        font-size: var(--font-size-giant);
-        font-weight: var(--font-thickness-thin);
-        display: flex;
-        align-items: center;
-        flex-direction: row-reverse;
-
-        .icon {
-            font-size: inherit;
-        }
+    .sub-title {
+        margin-top: var(--size-normal);
     }
 
-    .container {
+    .errors-wrapper {
+        width: 100%;
+    }
+
+    .oops {
         display: flex;
         flex-direction: column;
-        gap: var(--size-tiny);
+        align-items: center;
 
+        .icon,
         .title {
-            font-size: var(--font-size-big);
+            font-size: inherit;
+            font-size: var(--font-size-giant);
             font-weight: var(--font-thickness-thin);
+            display: flex;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .status-text {
+            font-weight: var(--font-thickness-thick);
         }
     }
 
-    .icon,
-    .status>.code,
-    .oops {
+    .oops>*,
+    .trying-again>* {
         background-image: var(--gradient-main-colors);
         color: transparent;
         background-clip: text;
@@ -54,10 +57,13 @@
     .trying-again {
         display: flex;
         flex-direction: column;
+        align-items: center;
 
         .icon {
             font-size: var(--icon-size-giant);
             animation: spin 1s linear infinite;
+            transform-origin: center center;
+            box-sizing: border-box;
         }
 
         .code {
@@ -126,6 +132,6 @@
 
 @keyframes spin {
     to {
-        transform: rotate(360deg);
+        transform: rotate(-360deg);
     }
 }

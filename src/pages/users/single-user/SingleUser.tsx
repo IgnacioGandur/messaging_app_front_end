@@ -1,7 +1,20 @@
-import { NavLink, useRouteLoaderData } from "react-router";
 import styles from "./SingleUser.module.css";
+
+// Packages
+import { useState } from "react";
+import {
+    NavLink,
+    useRouteLoaderData,
+    useFetcher
+} from "react-router";
+
+// Types
 import type User from "../../../types/user";
 import type Friendship from "../../../types/friendship";
+
+// Components
+import SendMessageButton from "../../../mini-components/send-message-button/SendMessageButton";
+import FriendshipRequestButton from "../../../mini-components/friendship-request-button/FriendshipRequestButton";
 
 interface SingleUserProps {
     user: User;
@@ -11,9 +24,7 @@ interface SingleUserProps {
         friendshipId: number,
         status: "PENDING" | "ACCEPTED" | "REJECTED",
     ) => void;
-    setCurrentTargetUser: React.Dispatch<React.SetStateAction<User | null>>;
     sendFriendshipRequest: (userBId: number) => void;
-    setShowMessageModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SingleUser = ({
@@ -22,15 +33,42 @@ const SingleUser = ({
     removeFriendship,
     handleFriendshipResponse,
     sendFriendshipRequest,
-    setCurrentTargetUser,
-    setShowMessageModal
 }: SingleUserProps) => {
+    const fetcher = useFetcher({ key: "users-fetcher" });
     const loaderData = useRouteLoaderData("root") as {
         success: boolean;
         message: string;
         user: User;
     };
     const loggedUserId = loaderData.user.id;
+    const isLoggedUser = user.id === loggedUserId;
+
+    const [message, setMessage] = useState("");
+    const handleMessage = (
+        _: string,
+        value: string,
+    ) => {
+        setMessage(value);
+    };
+
+    // Check if there's a friendship between the logged user and the rendered user, the friendship can have any status.
+    const friendship = friendships.find((f) =>
+        f.userAId === loggedUserId
+        && f.userBId === user.id)
+        || friendships.find((f) =>
+            f.userBId === loggedUserId
+            && f.userAId === user.id);
+
+    // Check if the logged user has a friendship request from the rendered user.
+    const wantsToBeYourFriend = friendships.find((f) =>
+        f.userBId === loggedUserId
+        && f.userAId === user.id)?.status === "PENDING";
+
+    const isSubmitting = fetcher.state !== "idle";
+    const isThisUser = fetcher.formData?.get("userBId") === String(user.id)
+        || fetcher.formData?.get("friendshipId") === String(friendship?.id);
+
+    const isHandlingFriendship = isSubmitting && isThisUser;
 
     return <li
         key={user.username}
@@ -56,149 +94,33 @@ const SingleUser = ({
                 @{user.username}
             </p>
         </NavLink>
-        {user.id === loggedUserId
-            ? <p className={styles.you}>(You)</p>
-            : (
-                <div
-                    className={styles.buttons}
-                >
-                    {(() => {
-                        {/* These are the received friendship requests. */ }
-                        const friendship = friendships.find((f) =>
-                            f.userAId === loggedUserId && f.userBId === user.id
-                        );
-
-                        {/* These are the frienships requests sent by the logged user. */ }
-                        const friendshipReverse = friendships.find((f) =>
-                            f.userBId === loggedUserId && f.userAId === user.id
-                        );
-
-                        if (friendshipReverse) {
-                            return friendshipReverse.status === "ACCEPTED" ? (
-                                <>
-                                    <span
-                                        className={styles.text}
-                                    >
-                                        Already your friend
-                                    </span>
-                                    <button
-                                        onClick={() => {
-                                            removeFriendship(friendshipReverse.id);
-                                        }}
-                                    >
-                                        <span
-                                            className={styles.text}
-                                        >
-                                            Remove from friends
-                                        </span>
-                                        <span
-                                            className="material-symbols-rounded"
-                                        >
-                                            person_remove
-                                        </span>
-                                    </button>
-                                </>
-                                // If the user received a friendship request, let the user respond to it.
-                            ) : (<div className={styles["answer-friendship"]}>
-                                <p className={styles.message}>
-                                    Wants to be your friend
-                                </p>
-                                <div className={styles.buttons}>
-                                    <button
-                                        onClick={() => handleFriendshipResponse(
-                                            friendshipReverse.id,
-                                            "REJECTED"
-                                        )}
-                                    >
-                                        <span className={styles.text}>
-                                            Reject
-                                        </span>
-                                        <span className="material-symbols-rounded">
-                                            group_remove
-                                        </span>
-                                    </button>
-                                    <button
-                                        onClick={() => handleFriendshipResponse(
-                                            friendshipReverse.id,
-                                            "ACCEPTED"
-                                        )}
-                                    >
-                                        <span className={styles.text}>
-                                            Accept
-                                        </span>
-                                        <span className="material-symbols-rounded">
-                                            how_to_reg
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>)
-                        }
-
-                        // If the rendered user is not a friend to the logged user, let the logged user send a friendship request.
-                        return !friendship
-                            ? (
-                                <button
-                                    onClick={() => sendFriendshipRequest(
-                                        user.id,
-                                    )}
-                                >
-                                    <span
-                                        className={styles.text}
-                                    >
-                                        Send friendship request
-                                    </span>
-                                    <span className="material-symbols-rounded">
-                                        person_add
-                                    </span>
-                                </button>
-
-                            )
-                            : friendship.status === "ACCEPTED"
-                                ? (
-                                    <span
-                                        className={styles.text}
-                                    >
-                                        Already friends
-                                    </span>
-                                )
-                                : (
-                                    <>
-                                        <span className={styles.text}>
-                                            Waiting for response
-                                        </span>
-                                        <button
-                                            onClick={() => removeFriendship(
-                                                friendship.id
-                                            )}
-                                        >
-                                            <span className={styles.text}>
-                                                Cancel friendship request
-                                            </span>
-                                            <span className="material-symbols-rounded">
-                                                person_cancel
-                                            </span>
-                                        </button>
-                                    </>
-                                )
-                    })()}
-                    <button
-                        onClick={() => {
-                            setCurrentTargetUser(user);
-                            setShowMessageModal(true);
-                        }}
-                        className={styles["send-message"]}
-                    >
-                        <span
-                            className={styles.text}
-                        >
-                            Send message
-                        </span>
-                        <span className="material-symbols-rounded">
-                            chat_add_on
-                        </span>
-                    </button>
-                </div>
-            )}
+        {isLoggedUser ? (
+            <p className={styles.you}>(You)</p>
+        ) : (
+            <div
+                className={styles.buttons}
+            >
+                <FriendshipRequestButton
+                    isSubmitting={isHandlingFriendship}
+                    hasFriendshipRequestFromThisUser={wantsToBeYourFriend}
+                    name={`${user.firstName} ${user.lastName}`}
+                    acceptFriendshipRequest={() => handleFriendshipResponse(friendship!.id, "ACCEPTED")}
+                    cancelFriendship={() => removeFriendship(friendship!.id)}
+                    sendFriendshipRequest={() => sendFriendshipRequest(user.id)}
+                    friendship={friendship}
+                    popoverTargetId={`handle-friendship-request-${user.id}`}
+                    anchorName={`--handle-friendship-anchor-${user.id}`}
+                />
+                <SendMessageButton
+                    message={message}
+                    handleMessage={handleMessage}
+                    anchorName={`--message-anchor-${user.id}`}
+                    popoverTarget={`message-anchor-${user.id}`}
+                    incluceMessageRecipientId={true}
+                    messageRecipientId={user.id}
+                />
+            </div>
+        )}
     </li>
 };
 
