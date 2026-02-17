@@ -2,34 +2,27 @@ import styles from "./Friends.module.css";
 
 // Types
 import type Friendship from "../../types/friendship";
-import type User from "../../types/user";
 
 // Packages
-import { useState } from "react";
-import { format } from "date-fns";
-import { Fragment } from "react";
 import {
     useNavigation,
     useRouteLoaderData,
     useSearchParams,
     useFetcher,
     useLoaderData,
-    NavLink
 } from "react-router";
 
 // Components
 import PageLinks from "../../components/page-links/PageLinks";
 import SearchForm from "../../components/search-form/SearchForm";
 import PageLoader from "../../components/page-loader/PageLoader";
-import MessageDialog from "../../components/message-dialog/MessageDialog";
-import SubmitionLoader from "../../components/submition-loader/SubmitionLoader";
 import Filtering from "../../components/filtering/Filtering";
 import EmptyResults from "../../components/empty-results/EmptyResults";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 import SingleFriend from "./single-friend/SingleFriend";
 
 const Friends = () => {
-    const fetcher = useFetcher();
+    const fetcher = useFetcher({ key: "friends-fetcher" });
     const navigation = useNavigation();
     const rootData = useRouteLoaderData("root");
     const loggedUser = rootData?.user;
@@ -49,8 +42,6 @@ const Friends = () => {
     const friendsMetadata = loaderData?.data.meta;
 
     const isLoading = navigation.state === "loading";
-    const isSubmitting = fetcher.state === "submitting";
-    const isRemovingFriend = fetcher.state === "submitting" && fetcher.formData?.get("intent") === "remove-friend";
 
     const [searchParams] = useSearchParams();
 
@@ -70,22 +61,7 @@ const Friends = () => {
         );
     };
 
-    // Handle sending message to user.
-    const [currentTargetUser, setCurrentTargetUser] = useState<User | null>(null);
-    const [showMessageModal, setShowMessageModal] = useState(false);
-
     return <main className={styles.friends}>
-        {isSubmitting && (<SubmitionLoader
-            message={`${isRemovingFriend
-                ? "Removing friend"
-                : null}, please wait...`}
-        />)}
-        <MessageDialog
-            currentTargetUser={currentTargetUser}
-            setCurrentTargetUser={setCurrentTargetUser}
-            showMessageModal={showMessageModal}
-            setShowMessageModal={setShowMessageModal}
-        />
         <CurrentPageHeader
             icon="handshake"
             text="Friends"
@@ -127,10 +103,6 @@ const Friends = () => {
                                 user={user}
                                 friendship={f}
                                 deleteFriendship={deleteFriendship}
-                                onClick={() => {
-                                    setCurrentTargetUser(user);
-                                    setShowMessageModal(true);
-                                }}
                             />
                         })}
                     </ul>

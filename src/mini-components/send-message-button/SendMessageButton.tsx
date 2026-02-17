@@ -1,10 +1,11 @@
 import styles from "./SendMessageButton.module.css";
 import CustomInput from "../../components/custom-input/CustomInput";
+import { useState } from "react";
 import { Form } from "react-router";
 
 interface SendMessageButtonProps {
-    message: string,
-    handleMessage: (field: string, value: string) => void;
+    message?: string,
+    handleMessage?: (field: string, value: string) => void;
     className?: string;
     style?: React.CSSProperties;
     anchorName?: string;
@@ -14,8 +15,6 @@ interface SendMessageButtonProps {
 };
 
 const SendMessageButton = ({
-    message,
-    handleMessage,
     className,
     style,
     anchorName,
@@ -23,6 +22,12 @@ const SendMessageButton = ({
     incluceMessageRecipientId,
     messageRecipientId
 }: SendMessageButtonProps) => {
+    const [message, setMessage] = useState("");
+
+    const handleMessage = (_: string, value: string) => {
+        setMessage(value);
+    };
+
     return <div
         style={{ ...style, anchorName: anchorName }}
         className={`${className} ${styles["message-button"]}`}

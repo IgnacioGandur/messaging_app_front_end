@@ -1,9 +1,7 @@
 import styles from "./UserInfoSection.module.css";
 import { format } from "date-fns";
 import type User from "../../../../types/user";
-import { Form, useFetcher, useNavigation } from "react-router";
-import CustomInput from "../../../../components/custom-input/CustomInput";
-import { useState } from "react";
+import { useFetcher } from "react-router";
 import type Friendship from "../../../../types/friendship";
 import SendMessageButton from "../../../../mini-components/send-message-button/SendMessageButton";
 import FriendshipRequestButton from "../../../../mini-components/friendship-request-button/FriendshipRequestButton";
@@ -23,21 +21,14 @@ const UserInfoSection = ({
     name,
 }: UserInfoSectionProps) => {
     const fetcher = useFetcher();
-    const navigation = useNavigation();
+
     // If true means the logged user has a pending friendship request from this user.
     const hasReceivedFriendshipRequest = friendship
         && friendship.status === "PENDING"
         && friendship.userAId === user.id;
-    const isSendingMessage = navigation.state === "submitting";
     const isHandlingRequest = fetcher.state === "submitting"
         && fetcher
             .formData?.get("intent")?.toString().includes("friend");
-
-    const [message, setMessage] = useState("");
-
-    const handleMessage = (_: string, value: string) => {
-        setMessage(value);
-    };
 
     const sendFriendshipRequest = (
     ) => {
@@ -88,9 +79,9 @@ const UserInfoSection = ({
             </span>
             : <>
                 <SendMessageButton
-                    message={message}
+                    incluceMessageRecipientId={true}
+                    messageRecipientId={user.id}
                     className={styles["message-button"]}
-                    handleMessage={handleMessage}
                     style={{
                         alignSelf: "end"
                     }}

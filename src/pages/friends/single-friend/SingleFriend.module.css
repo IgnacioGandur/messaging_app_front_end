@@ -54,43 +54,5 @@
         align-items: center;
         gap: inherit;
         align-self: center;
-
-        button {
-            position: relative;
-            display: grid;
-            place-items: center;
-            border-radius: var(--rounding-total);
-            padding: var(--size-very-small);
-            border: 1px solid var(--light-dark-font-dimmed);
-            background-color: transparent;
-            cursor: pointer;
-
-            .icon {
-                font-size: var(--icon-size-default);
-            }
-
-            .text {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(.25);
-                opacity: 0;
-                white-space: nowrap;
-                background-color: var(--light-dark-font);
-                color: var(--light-dark-font-inverted);
-                border-radius: var(--rounding-small);
-                padding: var(--size-tiny) calc(var(--size-tiny) * 2);
-                transition: inherit;
-                transition: var(--transition-normal);
-            }
-        }
-
-        button:hover,
-        button:focus-visible {
-            .text {
-                transform: translate(-50%, 125%) scale(1);
-                opacity: 1;
-            }
-        }
     }
 }
