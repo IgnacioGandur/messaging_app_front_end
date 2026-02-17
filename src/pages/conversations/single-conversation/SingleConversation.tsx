@@ -1,10 +1,12 @@
 import styles from "./SingleConversation.module.css";
+import deletedUserImage from "../../../assets/images/deleted-user.png";
 
 // Packages
 import { NavLink } from "react-router";
 import { formatDistanceToNow } from "date-fns";
 
 // Types
+import type User from "../../../types/user";
 import type Conversation from "../../../types/conversation";
 
 interface SingleConversationProps {
@@ -41,7 +43,18 @@ const SingleConversation = ({
             ) : (
                 <>
                     {(() => {
-                        const user = conversation.participants.find((p) => p.userId !== loggedUserId);
+                        {/* If user deleted his account use a fake profile. */ }
+                        const user = conversation.participants.find((p) => p.userId !== loggedUserId) || {
+                            user: {
+                                firstName: "Deleted",
+                                lastName: "User",
+                                username: "deleted_user",
+                                profilePictureUrl: deletedUserImage,
+                                id: 0,
+                                joinedOn: new Date(),
+                            }
+                        } as { user: User };
+
                         const title = isGroup
                             ? conversation.title
                             : user?.user.firstName + " " + user?.user.lastName;

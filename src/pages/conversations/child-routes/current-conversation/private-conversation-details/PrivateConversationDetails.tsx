@@ -1,6 +1,7 @@
 import { NavLink } from "react-router";
 import type User from "../../../../../types/user";
 import styles from "./PrivateConversationDetails.module.css";
+import DeleteConversation from "./delete-conversation/DeleteConversation";
 
 interface PrivateConversationDetails {
     userB: User;
@@ -15,7 +16,7 @@ const PrivateConversationDetails = ({
         className={styles["user-b-info"]}
     >
         <NavLink
-            to={`/users/${userB?.id}`}
+            to={userB.id === 0 ? "/conversations" : `/users/${userB?.id}`}
             className={styles.user}
         >
             <img
@@ -32,6 +33,7 @@ const PrivateConversationDetails = ({
                 @{userB?.username}
             </p>
         </NavLink>
+        <DeleteConversation />
     </header>
 };
 

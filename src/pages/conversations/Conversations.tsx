@@ -17,6 +17,7 @@ import Filtering from "../../components/filtering/Filtering";
 import SingleConversation from "./single-conversation/SingleConversation";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 import SearchForm from "../../components/search-form/SearchForm";
+import ChatsSidebar from "./chats-sidebar/ChatsSidebar";
 
 const Conversations = () => {
     const rootData = useRouteLoaderData("root");
@@ -58,34 +59,38 @@ const Conversations = () => {
             />
         )}
         <div className={styles.wrapper}>
-            <section className={styles["chats-sidebar"]}>
-                {conversations && conversations.length === 0 ? (
-                    <div className={styles["no-conversations"]}>
-                        <span
-                            className={`material-symbols-rounded ${styles.icon}`}
-                        >
-                            chat_dashed
-                        </span>
-                        <p
-                            className={styles.text}
-                        >
-                            You don't have any conversations yet...
-                        </p>
-                    </div>
-                ) : (
-                    conversations.map((conversation) => {
-                        return <Fragment
-                            key={conversation.id}
-                        >
-                            <SingleConversation
-                                conversation={conversation}
-                                loggedUserId={loggedUser.id}
-                            />
-                            <div className={styles.separator}></div>
-                        </Fragment>
-                    })
-                )}
-            </section>
+            <ChatsSidebar
+                conversations={conversations}
+                loggedUserId={loggedUser.id}
+            />
+            {/* <section className={styles["chats-sidebar"]}> */}
+            {/*     {conversations && conversations.length === 0 ? ( */}
+            {/*         <div className={styles["no-conversations"]}> */}
+            {/*             <span */}
+            {/*                 className={`material-symbols-rounded ${styles.icon}`} */}
+            {/*             > */}
+            {/*                 chat_dashed */}
+            {/*             </span> */}
+            {/*             <p */}
+            {/*                 className={styles.text} */}
+            {/*             > */}
+            {/*                 You don't have any conversations yet... */}
+            {/*             </p> */}
+            {/*         </div> */}
+            {/*     ) : ( */}
+            {/*         conversations.map((conversation) => { */}
+            {/*             return <Fragment */}
+            {/*                 key={conversation.id} */}
+            {/*             > */}
+            {/*                 <SingleConversation */}
+            {/*                     conversation={conversation} */}
+            {/*                     loggedUserId={loggedUser.id} */}
+            {/*                 /> */}
+            {/*                 <div className={styles.separator}></div> */}
+            {/*             </Fragment> */}
+            {/*         }) */}
+            {/*     )} */}
+            {/* </section> */}
             <Outlet />
         </div>
     </main >

@@ -94,8 +94,10 @@
 
     .loader {
         animation: spin 500ms linear infinite;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-
 }
 
 .conversation.active,

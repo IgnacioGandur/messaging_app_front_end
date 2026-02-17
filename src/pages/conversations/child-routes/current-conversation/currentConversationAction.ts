@@ -1,9 +1,10 @@
 import { toast } from "react-hot-toast";
 import supabase from "../../../../supabase/supabase";
-import type { ActionFunctionArgs } from "react-router"
+import { redirect, type ActionFunctionArgs } from "react-router"
 
 export default async function currentConversationAction({ request, params }: ActionFunctionArgs) {
     try {
+        await new Promise(r => setTimeout(r, 1000));
         const formData = await request.formData();
         const intent = formData.get("intent");
         const baseOptions: RequestInit = {
@@ -15,7 +16,6 @@ export default async function currentConversationAction({ request, params }: Act
 
         // Handle messages deletion.
         if (intent === "delete-message") {
-            await new Promise((resolve) => setTimeout(resolve, 3000));
             const messageId = formData.get("messageId");
             const url = import.meta.env.VITE_API_BASE + `/conversations/${params.conversationId}/messages/${messageId}`;
 
@@ -64,7 +64,6 @@ export default async function currentConversationAction({ request, params }: Act
         }
 
         if (intent === "update-group-info") {
-            await new Promise((resolve) => setTimeout(resolve, 3000));
             const data = Object.fromEntries(formData);
             const url = `${import.meta.env.VITE_API_BASE}/groups/${params.conversationId}`;
             const options: RequestInit = {
@@ -133,6 +132,29 @@ export default async function currentConversationAction({ request, params }: Act
             const response = await fetch(url, options);
             const result = await response.json();
             return result;
+        }
+
+        if (intent === "leave-group") {
+            const { conversationId } = params;
+            const data = Object.fromEntries(formData);
+            const url = `${import.meta.env.VITE_API_BASE}/groups/${conversationId}/participants`;
+            const options: RequestInit = {
+                method: "delete",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
+
+            if (result.success) {
+                return redirect("/groups");
+            } else {
+                return result;
+            }
         }
     } catch (error) {
         return {

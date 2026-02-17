@@ -1,3 +1,4 @@
+import deletedUserImage from "../../../../assets/images/deleted-user.png";
 import styles from "./CurrentConversation.module.css";
 
 // Packages
@@ -31,20 +32,23 @@ import type Group from "../../../../types/group";
 import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
 import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
 import NoConversation from "./no-results/NoResults";
+import type RootLoaderDataProps from "../../../../types/rootLoaderData";
+
+interface CurrentConversationLoaderData {
+    success: boolean;
+    message: string;
+    messageCursorId: number;
+    hasMore: boolean;
+    conversation: Conversation | Group;
+    error?: boolean;
+    errors?: InputErrorsType[];
+};
 
 const CurrentConversation = () => {
     const fetcher = useFetcher();
-    const { conversationId } = useParams();
     const navigation = useNavigation();
-    const loaderData = useLoaderData() as {
-        success: boolean;
-        message: string;
-        messageCursorId: number;
-        hasMore: boolean;
-        conversation: Conversation | Group;
-        error?: boolean;
-        errors?: InputErrorsType[];
-    }
+    const loaderData = useLoaderData() as CurrentConversationLoaderData;
+    const { conversationId } = useParams();
 
     if (!loaderData?.success) {
         return <NoConversation>
@@ -55,11 +59,18 @@ const CurrentConversation = () => {
         </NoConversation>
     }
 
-    const rootData = useRouteLoaderData("root");
-    const loggedUser: User = rootData?.user;
+    const rootData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const loggedUser = rootData?.user;
 
     const conversation = loaderData?.conversation as Group;
-    const userB = conversation.participants.find((p) => p.user.id !== loggedUser.id)?.user;
+    const userB = conversation.participants.find((p) => p.user.id !== loggedUser!.id)?.user || {
+        firstName: "Deleted",
+        lastName: "User.",
+        username: "#deleted_user",
+        profilePictureUrl: deletedUserImage,
+        id: 0,
+        joinedOn: new Date()
+    } as User;
 
     // Conversation messages.
     const initialMessages = loaderData?.conversation?.messages;

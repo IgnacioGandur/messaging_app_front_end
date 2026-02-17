@@ -1,5 +1,9 @@
 .user-b-info {
     border-bottom: 1px solid var(--light-dark-font-dimmed);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--size-small);
 
     .user {
         width: fit-content;
@@ -15,11 +19,11 @@
         border: none;
         outline: none;
         cursor: pointer;
-        padding: var(--size-small);
         text-decoration: none;
         color: var(--light-dark-font);
 
         .profile-picture {
+            border: 1px solid var(--light-dark-font-dimmed);
             width: 50px;
             height: 50px;
             aspect-ratio: 1/1;

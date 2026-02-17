@@ -4,6 +4,7 @@ import { useRouteLoaderData, useFetcher } from "react-router";
 import ParticipantsDialog from "./participants-dialog/ParticipantsDialog";
 import InfoDialog from "./info-dialog/InfoDialog";
 import type Group from "../../../../../types/group";
+import LeaveGroupButton from "./leave-group-button/LeaveGroupButton";
 
 interface GroupDetailsProps {
     group: Group;
@@ -41,6 +42,22 @@ const GroupDetails = ({
     const toggleGroupEdit = () => {
         setIsEditing((prev) => !prev);
     };
+
+    const leaveGroup = () => {
+        fetcher.submit(
+            {
+                intent: "leave-group",
+                userId: rootLoaderData.user.id,
+                isLeavingGroup: true,
+            },
+            {
+                method: "delete"
+            }
+        )
+    };
+
+    const isLeavingGroup = fetcher.state !== "idle"
+        && fetcher.formData?.get("intent")?.toString() === "leave-group";
 
     useLayoutEffect(() => {
         if (dialogRef.current && showParticipants) {
@@ -118,6 +135,10 @@ const GroupDetails = ({
                     {participants.length} {participants.length === 1 ? "Participant" : "Participants"}
                 </p>
             </button>
+            <LeaveGroupButton
+                isLeavingGroup={Boolean(isLeavingGroup)}
+                leaveGroup={leaveGroup}
+            />
         </header>
     </>
 };

@@ -438,6 +438,7 @@
         background-color: transparent;
         border: none;
         outline: none;
+        margin-left: auto;
 
         .container {
             display: flex;

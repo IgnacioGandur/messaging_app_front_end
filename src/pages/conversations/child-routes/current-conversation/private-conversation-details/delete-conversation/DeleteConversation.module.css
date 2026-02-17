@@ -1,0 +1,112 @@
+.delete-conversation {
+    margin-left: var(--size-small);
+
+    .button {
+        anchor-name: --leave-button;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        border-radius: var(--rounding-total);
+        padding: var(--size-tiny);
+        background-color: var(--light-dark-background);
+        border: 1px solid var(--light-dark-font-dimmed);
+        transition: all 200ms ease-in-out;
+
+        span {
+            font-size: var(--icon-size-normal);
+            transition: all 200ms ease-in-out;
+        }
+    }
+
+    .button:hover,
+    .button:focus-visible,
+    .button:focus-within {
+        background-color: var(--color-error);
+
+        span {
+            color: white;
+        }
+    }
+
+    .tooltip {
+        opacity: 0;
+        scale: 0;
+        position: absolute;
+        position-anchor: --leave-button;
+        position-area: bottom span-left;
+        margin-top: 5px;
+        transition:
+            opacity .2s ease,
+            scale .2s ease-in-out,
+            display .2s allow-discrete,
+            overlay .2s allow-discrete;
+        transform-origin: top right;
+        border: 1px solid var(--light-dark-font-dimmed);
+        border-radius: var(--rounding-medium);
+        padding: var(--size-small);
+        background-color: var(--light-dark-font);
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: var(--size-small);
+
+            .loader {
+                display: flex;
+                flex-direction: column;
+                gap: var(--size-small);
+                align-items: center;
+                justify-content: center;
+                padding: var(--size-tiny);
+
+                .icon {
+                    font-size: var(--icon-size-big);
+                    color: white;
+                    animation: spin 750ms linear infinite;
+                    transform-origin: center center;
+                }
+            }
+
+            .text {
+                font-weight: var(--font-thickness-thick);
+                color: white;
+            }
+
+            .button {
+                flex: 1;
+                padding: var(--size-very-small);
+                border-radius: var(--rounding-small);
+                background-color: var(--color-secondary-dimmed);
+                color: white;
+                font-weight: var(--font-thickness-thick);
+                border: 2px solid var(--color-secondary);
+                transition: all 250ms ease-in-out;
+                cursor: pointer;
+            }
+
+            .button:hover,
+            .button:focus-visible,
+            .button:focus-within {
+                background-color: var(--color-secondary);
+            }
+        }
+    }
+
+    .tooltip:popover-open {
+        opacity: 1;
+        scale: 1;
+    }
+
+    @starting-style {
+        .tooltip:popover-open {
+            opacity: 0;
+            scale: 0;
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
+    }
+}
