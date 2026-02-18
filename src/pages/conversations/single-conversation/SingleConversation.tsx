@@ -19,9 +19,31 @@ const SingleConversation = ({
     loggedUserId
 }: SingleConversationProps) => {
     const isGroup = conversation.isGroup;
-    const hasNoMessages = conversation.messages.length === 0;
+    const hasMessages = conversation.messages.length > 0;
 
-    return <NavLink
+    const hasLeavedConversation = !conversation.participants.find((p) =>
+        p.userId === loggedUserId
+    )?.listVisible;
+
+    const user = conversation.participants.find((p) =>
+        p.userId !== loggedUserId)
+        //If user deleted his account use a fake profile.
+        || {
+            user: {
+                firstName: "Deleted",
+                lastName: "User",
+                username: "###",
+                profilePictureUrl: deletedUserImage,
+                id: 0,
+                joinedOn: new Date(),
+            }
+        } as { user: User };
+
+    const title = isGroup
+        ? conversation.title
+        : user?.user.firstName + " " + user?.user.lastName;
+
+    return hasLeavedConversation ? null : <NavLink
         viewTransition
         key={conversation.id}
         to={`/conversations/${conversation.id}`}
@@ -42,74 +64,52 @@ const SingleConversation = ({
                 </div>
             ) : (
                 <>
-                    {(() => {
-                        {/* If user deleted his account use a fake profile. */ }
-                        const user = conversation.participants.find((p) => p.userId !== loggedUserId) || {
-                            user: {
-                                firstName: "Deleted",
-                                lastName: "User",
-                                username: "deleted_user",
-                                profilePictureUrl: deletedUserImage,
-                                id: 0,
-                                joinedOn: new Date(),
-                            }
-                        } as { user: User };
-
-                        const title = isGroup
-                            ? conversation.title
-                            : user?.user.firstName + " " + user?.user.lastName;
-
-                        return <>
-                            <h2
-                                className={styles.name}
-                            >
-                                {title!.length > 35
-                                    ? title!.slice(0, 34) + "..."
-                                    : title}
-                            </h2>
-                            {conversation.isGroup
-                                ? (
-                                    <div className={styles["group-ppf-container"]}>
-                                        <img
-                                            className={styles.ppf}
-                                            src={conversation.profilePicture}
-                                            alt={`${conversation.title}'s group profile picture.`}
-                                        />
-                                        <span
-                                            title="Group conversation"
-                                            className={`material-symbols-rounded ${styles["group-icon"]}`}
-                                        >
-                                            group
-                                        </span>
-                                    </div>
-                                ) : (
-                                    <img
-                                        className={styles.ppf}
-                                        src={user?.user.profilePictureUrl}
-                                        alt={`${user?.user.firstName} ${user?.user.lastName}'s profile picture.`}
-                                    />
-                                )}
-                        </>
-                    })()}
+                    <h2
+                        className={styles.name}
+                    >
+                        {title!.length > 35
+                            ? title!.slice(0, 34) + "..."
+                            : title}
+                    </h2>
+                    {isGroup
+                        ? (
+                            <div className={styles["group-ppf-container"]}>
+                                <img
+                                    className={styles.ppf}
+                                    src={conversation.profilePicture}
+                                    alt={`${conversation.title}'s group profile picture.`}
+                                />
+                                <span
+                                    title="Group conversation"
+                                    className={`material-symbols-rounded ${styles["group-icon"]}`}
+                                >
+                                    group
+                                </span>
+                            </div>
+                        ) : (
+                            <img
+                                className={styles.ppf}
+                                src={user?.user.profilePictureUrl}
+                                alt={`${user?.user.firstName} ${user?.user.lastName}'s profile picture.`}
+                            />
+                        )}
                     <p className={styles["last-message"]}>
                         <span className={styles.you}>
                             {conversation.messages[0]?.senderId === loggedUserId && "You:"}
                         </span>
                         <span className={styles.content}>
-                            {hasNoMessages ? "No messages." : (
+                            {hasMessages ? (
                                 conversation.messages[0].content.length > 20
                                     ? conversation.messages[0].content.slice(0, 19) + "..."
                                     : conversation.messages[0].content
-                            )}
+                            ) : "No messages."}
                         </span>
                     </p>
-                    {hasNoMessages
-                        ? null
-                        : (
-                            <p className={styles.date}>
-                                {formatDistanceToNow(conversation.messages[0].createdAt, { addSuffix: true })}
-                            </p>
-                        )}
+                    {hasMessages && (
+                        <p className={styles.date}>
+                            {formatDistanceToNow(conversation.messages[0].createdAt, { addSuffix: true })}
+                        </p>
+                    )}
                 </>
             )
         )}

@@ -154,7 +154,28 @@ export default async function currentConversationAction({ request, params }: Act
                 return redirect("/groups");
             } else {
                 return result;
-            }
+            };
+        }
+
+        if (intent === "leave-private-conversation") {
+            const { conversationId } = params;
+            const url = `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/participants`;
+            const options: RequestInit = {
+                method: "PATCH",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            const response = await fetch(url, options);
+            const result = await response.json();
+            if (result.success) {
+                toast.success(result.message);
+                return redirect("/conversations");
+            } else {
+                return result;
+            };
         }
     } catch (error) {
         return {

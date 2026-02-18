@@ -7,4 +7,6 @@ export default interface Participant {
     userId: number;
     joinedAt: Date;
     conversation: Conversation;
+    listVisible: boolean;
+    lastDeletedAt: Date;
 };

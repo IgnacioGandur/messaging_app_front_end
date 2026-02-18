@@ -63,14 +63,16 @@ const CurrentConversation = () => {
     const loggedUser = rootData?.user;
 
     const conversation = loaderData?.conversation as Group;
-    const userB = conversation.participants.find((p) => p.user.id !== loggedUser!.id)?.user || {
-        firstName: "Deleted",
-        lastName: "User.",
-        username: "#deleted_user",
-        profilePictureUrl: deletedUserImage,
-        id: 0,
-        joinedOn: new Date()
-    } as User;
+    const userB = conversation.participants.find((p) =>
+        p.user.id !== loggedUser!.id)?.user
+        || {
+            firstName: "Deleted",
+            lastName: "User.",
+            username: "###",
+            profilePictureUrl: deletedUserImage,
+            id: 0,
+            joinedOn: new Date()
+        } as User;
 
     // Conversation messages.
     const initialMessages = loaderData?.conversation?.messages;

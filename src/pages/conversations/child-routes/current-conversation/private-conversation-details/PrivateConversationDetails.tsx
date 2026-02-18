@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
 import type User from "../../../../../types/user";
 import styles from "./PrivateConversationDetails.module.css";
-import DeleteConversation from "./delete-conversation/DeleteConversation";
+import LeavePrivateConversationButton from "./delete-conversation/LeavePrivateConversationButton";
 
 interface PrivateConversationDetails {
     userB: User;
@@ -33,7 +33,8 @@ const PrivateConversationDetails = ({
                 @{userB?.username}
             </p>
         </NavLink>
-        <DeleteConversation />
+        <LeavePrivateConversationButton
+        />
     </header>
 };
 
