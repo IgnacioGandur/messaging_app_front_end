@@ -22,17 +22,19 @@ import MessageForm from "./message-form/MessageForm";
 import Messages from "./messages/Messages";
 import GroupDetails from "./group-details/GroupDetails";
 import Loader from "./loader/Loader";
-
-// Types
-import type Conversation from "../../../../types/conversation";
-import type Message from "../../../../types/message";
-import type User from "../../../../types/user";
-import type InputErrorsType from "../../../../types/InputErrors";
-import type Group from "../../../../types/group";
 import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
 import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
 import NoConversation from "./no-results/NoResults";
+
+// Types
+import type Conversation from "../../../../types/conversation";
+import type User from "../../../../types/user";
+import type InputErrorsType from "../../../../types/InputErrors";
+import type Group from "../../../../types/group";
 import type RootLoaderDataProps from "../../../../types/rootLoaderData";
+
+// Hooks
+import { useConversationMessages } from "../../../../hooks/useConversationMessages";
 
 export interface CurrentConversationLoaderData {
     success: boolean;
@@ -74,58 +76,12 @@ const CurrentConversation = () => {
             joinedOn: new Date()
         } as User;
 
-    // Conversation messages.
-    const initialMessages = loaderData?.conversation?.messages;
-    const [messages, setMessages] = useState<Message[]>(
-        initialMessages.slice().reverse()
-    );
-    const [hasMoreMessages, setHasMoreMessages] = useState(
-        loaderData.hasMore
-    );
-    const [cursor, setCursor] = useState<number | null>(loaderData.messageCursorId);
-    const [isLoadingMoreMessages, setIsLoadingMoreMessages] = useState(false);
-
-    const isPageLoading = navigation.state === "loading";
-
-    const isDeletingMessage = fetcher.state === "submitting"
-        && fetcher?.formData?.get("intent") === "delete-message"
-
-    const loadOlderMessages = async () => {
-        if (!cursor || isLoadingMoreMessages || !hasMoreMessages) return;
-
-        try {
-            setIsLoadingMoreMessages(true);
-            const response = await fetch(
-                `${import.meta.env.VITE_API_BASE}/conversations/${conversationId}/messages?cursor=${cursor}`,
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    credentials: "include"
-                }
-            );
-
-            const { data } = await response.json() as {
-                success: boolean;
-                message: string;
-                data: {
-                    messages: Message[];
-                    nextCursor: number;
-                    hasMore: boolean;
-                }
-            };
-
-            const orderedMessages = data.messages.slice().reverse();
-
-            setMessages((prev) => [...orderedMessages, ...prev]);
-            setCursor(data.nextCursor);
-            setHasMoreMessages(data.hasMore);
-        } catch (error) {
-            console.error("Failed to load more messages:", error);
-        } finally {
-            setIsLoadingMoreMessages(false);
-        }
-    };
+    const {
+        messages,
+        hasMoreMessages,
+        isLoadingMoreMessages,
+        loadOlderMessages
+    } = useConversationMessages(loaderData, conversationId);
 
     const [message, setMessage] = useState<
         {
@@ -147,13 +103,11 @@ const CurrentConversation = () => {
         }));
     };
 
-    useEffect(() => {
-        if (loaderData?.conversation?.messages) {
-            setMessages(loaderData?.conversation?.messages.slice().reverse());
-            setHasMoreMessages(loaderData.hasMore);
-            setCursor(loaderData.messageCursorId);
-        };
-    }, [loaderData]);
+    const isDeletingMessage = fetcher.state === "submitting"
+        && fetcher?.formData?.get("intent") === "delete-message"
+
+    const isPageLoading = navigation.state === "loading";
+
 
     if (isPageLoading) {
         return <Loader />
