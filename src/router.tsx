@@ -109,6 +109,7 @@ const router = createBrowserRouter([
                         Component: NoConversationSelected
                     },
                     {
+                        id: "current-conversation",
                         path: ":conversationId",
                         Component: CurrentConversation, // FIX: When CurrentConversation receivess invalid data and then you change back to a valid converastion, the route crashes.
                         loader: currentConversationLoader,

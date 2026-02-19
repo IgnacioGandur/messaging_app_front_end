@@ -3,13 +3,12 @@ import { formatDistanceToNow } from "date-fns";
 import type Message from "../../../../../../types/message";
 import { useRouteLoaderData } from "react-router";
 import type User from "../../../../../../types/user";
+import DeleteMessageButton from "./delete-message-button/DeleteMessageButton";
 
 interface SingleMessageProps {
     message: Message;
     index: number;
     messages: Message[];
-    setTargetMessage: React.Dispatch<React.SetStateAction<number>>;
-    toggleDeleteDialog: () => void;
     setCurrentImage: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
@@ -17,8 +16,6 @@ const SingleMessage = ({
     message,
     index,
     messages,
-    setTargetMessage,
-    toggleDeleteDialog,
     setCurrentImage
 }: SingleMessageProps) => {
     const loggedUser = useRouteLoaderData("root") as {
@@ -67,19 +64,11 @@ const SingleMessage = ({
             >
                 {message.content}
             </p>
-            {message.deleted || !yourMessage ? null : (
-                <button
-                    onClick={() => {
-                        setTargetMessage(message.id);
-                        toggleDeleteDialog();
-                    }}
-                    className={styles.delete}
-                >
-                    <span className="material-symbols-rounded">
-                        delete
-                    </span>
-                </button>
-            )}
+            <DeleteMessageButton
+                className={styles.delete}
+                message={message}
+                messageId={message.id}
+            />
             {(message.attachments && !message.deleted) && (
                 message.attachments.map((a) => {
                     return a.fileType.includes("image") ? (

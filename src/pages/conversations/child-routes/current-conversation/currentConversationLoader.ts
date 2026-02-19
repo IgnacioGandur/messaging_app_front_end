@@ -20,7 +20,5 @@ export default async function currentConversationLoader({ params }: LoaderFuncti
     };
 
     const result = await apiRequestLoader<ConversationResponse>(url, options);
-    console.table(result);
-    console.log("messages length:", result?.conversation?.messages.length);
     return result;
 }

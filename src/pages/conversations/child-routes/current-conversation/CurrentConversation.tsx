@@ -34,7 +34,7 @@ import PrivateConversationDetails from "./private-conversation-details/PrivateCo
 import NoConversation from "./no-results/NoResults";
 import type RootLoaderDataProps from "../../../../types/rootLoaderData";
 
-interface CurrentConversationLoaderData {
+export interface CurrentConversationLoaderData {
     success: boolean;
     message: string;
     messageCursorId: number;
@@ -147,13 +147,6 @@ const CurrentConversation = () => {
         }));
     };
 
-    const handleMessageDeletion = (messageId: number) => {
-        fetcher.submit({
-            intent: "delete-message",
-            messageId,
-        }, { method: "DELETE" });
-    };
-
     useEffect(() => {
         if (loaderData?.conversation?.messages) {
             setMessages(loaderData?.conversation?.messages.slice().reverse());
@@ -179,7 +172,6 @@ const CurrentConversation = () => {
                 loadOlderMessages={loadOlderMessages}
                 hasMoreMessages={hasMoreMessages}
                 messages={messages}
-                handleMessageDeletion={handleMessageDeletion}
             />
             <MessageForm
                 message={message.message}
@@ -209,7 +201,6 @@ const CurrentConversation = () => {
             loadOlderMessages={loadOlderMessages}
             hasMoreMessages={hasMoreMessages}
             messages={messages}
-            handleMessageDeletion={handleMessageDeletion}
         />
         <MessageForm
             message={message.message}

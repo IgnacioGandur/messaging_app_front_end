@@ -1,0 +1,99 @@
+.delete-message.not-your-message {
+    left: initial;
+    right: -3rem;
+}
+
+.delete-message {
+    border-radius: var(--rounding-total);
+    border: 2px solid red;
+    width: fit-content;
+    position: absolute;
+    left: -3rem;
+    border: 1px solid var(--light-dark-font-dimmed);
+    padding: var(--size-tiny);
+    display: grid;
+    place-items: center;
+
+    .button {
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        background-color: transparent;
+        border: none;
+        outline: none;
+
+        span {
+            font-size: var(--icon-size-default);
+        }
+    }
+
+    .message-delete-tooltip {
+        margin-top: 10px;
+        position-area: bottom span-left;
+        background-color: var(--light-dark-background);
+        outline: none;
+        border-radius: var(--rounding-medium);
+        border: 1px solid var(--light-dark-font-dimmed);
+        opacity: 0;
+        transition:
+            opacity .3s ease-in,
+            display .3s allow-discrete;
+        position-try-fallbacks: flip-block, flip-inline;
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            padding: var(--size-small);
+            gap: var(--size-small);
+
+            .loader {
+                display: flex;
+                flex-direction: column;
+                gap: var(--size-very-small);
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    font-size: var(--icon-size-big);
+                    animation: spin 1s linear infinite;
+                }
+            }
+
+            .title {
+                max-width: 175px;
+                font-weight: var(--font-thickness-thick);
+                text-align: center;
+            }
+
+            .button {
+                border: 1px solid var(--light-dark-font-dimmed);
+                padding: var(--size-very-small);
+                border-radius: var(--rounding-medium);
+                font-weight: var(--font-thickness-thick);
+                transition: var(--transition-normal);
+            }
+
+            .button:hover,
+            .button:focus-visible {
+                background-color: var(--color-error-dimmed);
+                border: 1px solid var(--color-error);
+            }
+        }
+    }
+
+    .message-delete-tooltip:popover-open {
+        opacity: 1;
+    }
+
+    @starting-style {
+        .message-delete-tooltip:popover-open {
+            opacity: 0;
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
+    }
+}

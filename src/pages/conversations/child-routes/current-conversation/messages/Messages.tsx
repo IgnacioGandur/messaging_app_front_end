@@ -8,7 +8,6 @@ import {
 } from "react";
 import { PulseLoader } from "react-spinners";
 import ImageViewer from "./image-viewer/ImageViewer";
-import DeleteMessageDialog from "./delete-message-dialog/DeleteMessageDialog";
 import SingleMessage from "./single-message/SingleMessage";
 
 interface MessagesProps {
@@ -16,7 +15,6 @@ interface MessagesProps {
     isLoadingOlderMessages: boolean;
     hasMoreMessages: boolean;
     messages: MessageProps[];
-    handleMessageDeletion: (id: number) => void;
 };
 
 const Messages = ({
@@ -24,31 +22,13 @@ const Messages = ({
     isLoadingOlderMessages,
     hasMoreMessages,
     messages,
-    handleMessageDeletion,
 }: MessagesProps) => {
     const messagesContainerRef = useRef<HTMLDivElement | null>(null);
     const anchorRef = useRef<HTMLDivElement | null>(null);
 
-    // Confirm message deletion dialog ref.
-    const dialogRef = useRef<HTMLDialogElement>(null);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [targetMessage, setTargetMessage] = useState<number>(0);
-    const toggleDeleteDialog = () => {
-        setShowDeleteDialog((prevState) => !prevState);
-    };
-
     // Full screen image visualisation ref.
     const currentImageRef = useRef<HTMLDialogElement>(null);
     const [currentImage, setCurrentImage] = useState<string | undefined>(undefined);
-
-    // Handle message deletion confirmation modal/dialog.
-    useLayoutEffect(() => {
-        if (dialogRef.current && showDeleteDialog) {
-            dialogRef.current.showModal();
-        } else {
-            dialogRef.current?.close();
-        }
-    }, [showDeleteDialog]);
 
     // Handle images modal/dialog.
     useEffect(() => {
@@ -76,12 +56,6 @@ const Messages = ({
             currentImage={currentImage}
             currentImageDialogRef={currentImageRef}
             setCurrentImage={setCurrentImage}
-        />
-        <DeleteMessageDialog
-            dialogRef={dialogRef}
-            targetMessage={targetMessage}
-            toggleDeleteDialog={toggleDeleteDialog}
-            handleMessageDeletion={handleMessageDeletion}
         />
         {isLoadingOlderMessages ? (
             <div className={styles["more-messages-loader"]}>
@@ -129,8 +103,6 @@ const Messages = ({
                     message={m}
                     index={i}
                     messages={messages}
-                    setTargetMessage={setTargetMessage}
-                    toggleDeleteDialog={toggleDeleteDialog}
                     setCurrentImage={setCurrentImage}
                 />
             })

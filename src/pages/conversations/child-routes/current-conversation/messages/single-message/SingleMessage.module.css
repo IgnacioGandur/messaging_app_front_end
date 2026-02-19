@@ -28,13 +28,18 @@
         gap: var(--messages-gap);
         position: relative;
         max-width: 50%;
+        width: fit-content;
 
         .message-content,
         .file {
-            width: fit-content;
+            overflow-wrap: break-word;
+            word-break: break-all;
+            flex: 1;
+            width: 100%;
             background-color: var(--color-secondary-dimmed);
             padding: var(--size-very-small);
             border-radius: var(--rounding-medium);
+            color: var(--light-dark-font);
 
             .image {
                 display: grid;
@@ -70,9 +75,8 @@
 
         .delete {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: -3rem;
+            top: 0;
+            right: -3rem;
             border-radius: var(--rounding-total);
             display: grid;
             place-items: center;
@@ -195,6 +199,8 @@
 
         .message-content,
         .file {
+            text-align: right;
+
             .title {
                 text-align: end;
             }
@@ -240,5 +246,5 @@
 }
 
 .message.last-message {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }

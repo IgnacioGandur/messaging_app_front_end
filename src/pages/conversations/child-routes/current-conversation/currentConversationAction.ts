@@ -26,6 +26,7 @@ export default async function currentConversationAction({ request, params }: Act
 
             const response = await fetch(url, options);
             const result = await response.json();
+            console.log("The content of result is:", result);
             return {
                 deletedMessage: result.success,
                 message: result.message
@@ -171,7 +172,7 @@ export default async function currentConversationAction({ request, params }: Act
             const response = await fetch(url, options);
             const result = await response.json();
             if (result.success) {
-                toast.success(result.message);
+                toast.success("");
                 return redirect("/conversations");
             } else {
                 return result;
