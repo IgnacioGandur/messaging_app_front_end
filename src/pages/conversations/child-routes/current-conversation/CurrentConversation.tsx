@@ -1,12 +1,6 @@
 import deletedUserImage from "../../../../assets/images/deleted-user.png";
 import styles from "./CurrentConversation.module.css";
 
-// Packages
-import {
-    useEffect,
-    useState,
-} from "react";
-
 import {
     useLoaderData,
     useFetcher,
@@ -83,26 +77,6 @@ const CurrentConversation = () => {
         loadOlderMessages
     } = useConversationMessages(loaderData, conversationId);
 
-    const [message, setMessage] = useState<
-        {
-            message: string;
-            attachment: null | File;
-        }
-    >({
-        message: "",
-        attachment: null
-    });
-
-    const handleMessage = (
-        field: string,
-        value: string
-    ) => {
-        setMessage((prev) => ({
-            ...prev,
-            [field]: value
-        }));
-    };
-
     const isDeletingMessage = fetcher.state === "submitting"
         && fetcher?.formData?.get("intent") === "delete-message"
 
@@ -127,11 +101,7 @@ const CurrentConversation = () => {
                 hasMoreMessages={hasMoreMessages}
                 messages={messages}
             />
-            <MessageForm
-                message={message.message}
-                handleMessage={handleMessage}
-                setMessage={setMessage}
-            />
+            <MessageForm />
         </section>
     }
 
@@ -156,11 +126,7 @@ const CurrentConversation = () => {
             hasMoreMessages={hasMoreMessages}
             messages={messages}
         />
-        <MessageForm
-            message={message.message}
-            handleMessage={handleMessage}
-            setMessage={setMessage}
-        />
+        <MessageForm />
     </section>
 }
 

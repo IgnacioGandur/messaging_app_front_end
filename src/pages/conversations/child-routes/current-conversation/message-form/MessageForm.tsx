@@ -1,25 +1,26 @@
 import styles from "./MessageForm.module.css";
+import { useState } from "react";
 import { useFetcher } from "react-router";
 import CustomInput from "../../../../../components/custom-input/CustomInput";
 import { SyncLoader } from "react-spinners";
 
-type MessageFormProps = {
-    setMessage: React.Dispatch<
-        React.SetStateAction<{
-            message: string;
-            attachment: File | null
-        }>
-    >;
-    handleMessage: (field: string, value: string) => void;
+interface MessageType {
     message: string;
+    attachment: null | File;
 };
 
-const MessageForm = ({
-    handleMessage,
-    setMessage,
-    message,
-}: MessageFormProps) => {
+const MessageForm = () => {
     const fetcher = useFetcher();
+    const [message, setMessage] = useState<MessageType>({ message: "", attachment: null });
+    const handleMessage = (
+        _: string,
+        value: string
+    ) => {
+        setMessage((prev) => ({
+            ...prev,
+            message: value
+        }));
+    };
 
     return fetcher.state === "submitting" ? (
         <div className={styles.loader}>
@@ -74,7 +75,7 @@ const MessageForm = ({
                 id="message"
                 name="message"
                 type="text"
-                value={message}
+                value={message.message}
                 onChange={handleMessage}
                 placeholder="Send a message..."
                 minLength={1}
