@@ -11,7 +11,6 @@ interface MessageResponseType {
 };
 
 const userProfileAction = async ({ request, params }: ActionFunctionArgs) => {
-    await new Promise(r => setTimeout(r, 1000));
     const formData = await request.formData();
     const intent = formData.get("intent");
 

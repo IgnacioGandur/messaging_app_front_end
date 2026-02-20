@@ -2,7 +2,6 @@ import type { LoaderFunctionArgs } from "react-router";
 import apiRequestLoader from "../../utils/apiRequestLoader";
 
 export default async function groupsLoader({ request }: LoaderFunctionArgs) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
     const url = new URL(request.url);
     const page = url.searchParams.get("page") || 1;
     const search = url.searchParams.get("search") || "";

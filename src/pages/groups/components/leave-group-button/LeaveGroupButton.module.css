@@ -1,0 +1,82 @@
+.leave-group-button {
+    position: absolute;
+    top: var(--size-normal);
+    right: var(--size-normal);
+    display: grid;
+    place-items: center;
+    padding: var(--size-tiny);
+    border-radius: var(--rounding-total);
+    cursor: pointer;
+    background-color: transparent !important;
+    padding: 0 !important;
+
+    .button {
+        display: grid;
+        place-items: center;
+        padding: var(--size-tiny);
+        border-radius: var(--rounding-total);
+        border: 1px solid var(--light-dark-font-dimmed);
+        background-color: var(--light-dark-background);
+        cursor: pointer;
+        transition: var(--transition-normal);
+
+        .icon {
+            font-size: var(--icon-size-default);
+        }
+    }
+
+    .button:hover,
+    .button:focus-visible {
+        background-color: var(--color-error-dimmed);
+        border: 1px solid var(--color-error);
+    }
+
+    .tooltip {
+        margin-top: .5rem;
+        position-area: bottom span-all;
+        outline: none;
+        border-radius: var(--rounding-medium);
+        box-shadow: var(--shadow-1);
+        border: 1px solid var(--light-dark-font-dimmed);
+        background-color: var(--light-dark-background);
+        opacity: 0;
+        transition:
+            opacity .2s ease-in,
+            display .2s allow-discrete;
+
+        .wrapper {
+            padding: var(--size-small);
+            display: flex;
+            flex-direction: column;
+            gap: var(--size-small);
+
+            .text {
+                font-weight: var(--font-thickness-thick);
+            }
+
+            .leave {
+                padding: var(--size-tiny);
+                border-radius: var(--rounding-small);
+                background-color: var(--light-dark-background);
+                border: 1px solid var(--light-dark-font-dimmed);
+                transition: var(--transition-normal);
+                cursor: pointer;
+            }
+
+            .leave:hover,
+            .leave:focus-visible {
+                background-color: var(--color-error-dimmed);
+                border: 1px solid var(--color-error);
+            }
+        }
+    }
+
+    .tooltip:popover-open {
+        opacity: 1;
+
+        @starting-style {
+            opacity: 0;
+        }
+    }
+
+}

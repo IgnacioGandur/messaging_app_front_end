@@ -67,7 +67,7 @@ const Groups = () => {
     };
     const groups: Group[] = loaderData?.data.groups;
     const groupsMetadata = loaderData?.data.meta;
-    const fetcher = useFetcher();
+    const fetcher = useFetcher({ key: "groups" });
     const [groupInfo, setGroupInfo] = useState({
         title: "",
         description: ""
@@ -146,9 +146,9 @@ const Groups = () => {
     }, [createGroupDialogRef, showCreateGroupDialog]);
 
     return <main className={styles.groups}>
-        {isCreatingGroup && <SubmitionLoader message="Creating group, please wait..." />}
-        {isJoiningGroup && <SubmitionLoader message="Joining group, please wait..." />}
-        {isLeavingGroup && <SubmitionLoader message="Leaving group, please wait..." />}
+        {/* {isCreatingGroup && <SubmitionLoader message="Creating group, please wait..." />} */}
+        {/* {isJoiningGroup && <SubmitionLoader message="Joining group, please wait..." />} */}
+        {/* {isLeavingGroup && <SubmitionLoader message="Leaving group, please wait..." />} */}
         <CreateGroupDialog
             createGroupDialogRef={createGroupDialogRef}
             fetcher={fetcher}

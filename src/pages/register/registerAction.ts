@@ -13,7 +13,6 @@ export interface RegisterActionResponseType {
 };
 
 export default async function registerAction({ request }: ActionFunctionArgs) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
     const formData = await request.formData();
     const data = Object.fromEntries(formData);
     const url = import.meta.env.VITE_API_BASE + "/auth/register";

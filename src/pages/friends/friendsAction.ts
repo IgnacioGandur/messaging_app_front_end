@@ -3,7 +3,6 @@ import type { ActionFunctionArgs } from "react-router";
 
 export default async function friendsAction({ request }: ActionFunctionArgs) {
     try {
-        await new Promise(r => setTimeout(r, 1000));
         const formData = await request.formData();
         const intent = formData.get("intent");
         const friendshipId = formData.get("friendshipId");

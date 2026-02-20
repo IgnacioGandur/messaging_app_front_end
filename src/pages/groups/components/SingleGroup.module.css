@@ -9,7 +9,8 @@
     background-color: var(--light-dark-background);
     align-items: center;
 
-    >:not(.group-ppf) {
+    >:not(.group-ppf),
+    .wrapper>:not(.group-ppf) {
         background-color: var(--light-dark-font-dimmed-2);
         padding: var(--size-very-small);
         border-radius: var(--rounding-medium);
@@ -27,85 +28,106 @@
         object-position: center;
     }
 
-    .group-owner,
-    .participants,
-    .description {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: start;
-        gap: var(--size-tiny);
+    .loader {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
 
-        .title {
-            opacity: .75;
-            font-size: var(--font-size-small);
-            font-weight: var(--font-thickness-normal);
-            font-style: italic;
+        .icon {
+            font-size: var(--icon-size-big);
+            animation: spin 1s linear infinite;
         }
     }
 
-    .group-owner {
-        grid-area: group-owner;
+    .wrapper {
+        display: contents;
 
-        .user-info {
-            display: grid;
-            grid-template-areas:
-                "creator-ppf creator-name"
-            ;
-            grid-template-columns: auto 1fr;
-            align-items: center;
-            gap: var(--size-very-small);
-        }
-
-        .ppf {
-            grid-area: creator-ppf;
-            width: 20px;
-            height: 20px;
-            border-radius: var(--rounding-total);
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            object-position: center;
-        }
-
-        .creator-name {
-            grid-area: creator-name;
-            text-transform: capitalize;
-            font-size: var(--font-size-small);
-            font-weight: var(--font-thickness-thick);
-        }
-    }
-
-    .participants {
-
-        .container {
+        .group-owner,
+        .participants,
+        .description {
+            flex: 1;
+            width: 100%;
             display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: start;
+            gap: var(--size-tiny);
 
-            .p-ppf,
-            .more {
+            .title {
+                opacity: .75;
+                font-size: var(--font-size-small);
+                font-weight: var(--font-thickness-normal);
+                font-style: italic;
+            }
+        }
+
+        .group-owner {
+            grid-area: group-owner;
+
+            .user-info {
+                display: grid;
+                grid-template-areas:
+                    "creator-ppf creator-name"
+                ;
+                grid-template-columns: auto 1fr;
+                align-items: center;
+                gap: var(--size-very-small);
+            }
+
+            .ppf {
+                grid-area: creator-ppf;
                 width: 20px;
                 height: 20px;
                 border-radius: var(--rounding-total);
-                border: 1px solid var(--light-dark-font-dimmed);
-            }
-
-            .p-ppf {
                 aspect-ratio: 1/1;
                 object-fit: cover;
                 object-position: center;
             }
 
-            .more {
-                display: grid;
-                place-items: center;
-                background-color: var(--light-dark-background);
+            .creator-name {
+                grid-area: creator-name;
+                text-transform: capitalize;
+                font-size: var(--font-size-small);
+                font-weight: var(--font-thickness-thick);
+            }
+        }
 
-                span {
-                    font-size: var(--icon-size-small);
+        .participants {
+
+            .container {
+                display: flex;
+
+                .p-ppf,
+                .more {
+                    width: 20px;
+                    height: 20px;
+                    border-radius: var(--rounding-total);
+                    border: 1px solid var(--light-dark-font-dimmed);
+                }
+
+                .p-ppf {
+                    aspect-ratio: 1/1;
+                    object-fit: cover;
+                    object-position: center;
+                }
+
+                .more {
+                    display: grid;
+                    place-items: center;
+                    background-color: var(--light-dark-background);
+
+                    span {
+                        font-size: var(--icon-size-small);
+                    }
                 }
             }
         }
-    }
 
+        .description {
+            height: 100%;
+        }
+    }
 
     .button {
         position: absolute;
@@ -155,10 +177,6 @@
         text-align: center;
     }
 
-    .description {
-        height: 100%;
-    }
-
     .tag {
         position: absolute;
         top: var(--size-normal);
@@ -202,5 +220,11 @@
             transform: translate(-50%, 75%) scale(1);
             opacity: 1;
         }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
     }
 }

@@ -16,7 +16,6 @@ export default async function settingsAction({ request }: ActionFunctionArgs) {
     const intent = formData.get("intent");
     const url = import.meta.env.VITE_API_BASE + "/me";
 
-    await new Promise((r) => setTimeout(r, 2000));
     if (intent === "delete-account") {
         const options: RequestInit = {
             method: "DELETE",

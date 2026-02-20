@@ -1,4 +1,5 @@
 .footer {
+    background-color: var(--light-dark-background);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,6 +9,7 @@
     position: relative;
     font-weight: var(--font-thickness-thin);
     flex-shrink: 0;
+    display: none;
 
     >* {
         transition: all 225ms ease-in-out;

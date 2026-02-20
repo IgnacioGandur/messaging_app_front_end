@@ -1,12 +1,21 @@
 import type { ActionFunctionArgs } from "react-router"
 import apiRequest from "../../utils/apiRequest";
+import { toast } from "react-hot-toast";
+import type Group from "../../types/group";
+import type Participant from "../../types/participant";
+
+interface ApiResponse<Type> {
+    success: boolean;
+    message: string;
+    group?: Type;
+    participant?: Type;
+};
 
 export default async function groupsAction({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const intent = formData.get("intent");
     const url = import.meta.env.VITE_API_BASE + `/groups`;
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     if (intent === "create-group") {
         const data = Object.fromEntries(formData);
         const options: RequestInit = {
@@ -14,7 +23,11 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
             body: JSON.stringify(data),
         };
 
-        return await apiRequest(url, options);
+        const result = await apiRequest(url, options) as ApiResponse<Group>;
+
+        if (result.success) toast.success("Group created!");
+
+        return result;
     }
 
     if (intent === "join-group") {
@@ -24,7 +37,11 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
             method: "POST",
         };
 
-        return await apiRequest(joinGroupUrl, options);
+        const result = await apiRequest(joinGroupUrl, options) as ApiResponse<Participant>;
+
+        if (result.success) toast.success("Joined group!");
+
+        return result;
     }
 
     if (intent === "leave-group") {
@@ -38,6 +55,10 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
             }),
         };
 
-        return await apiRequest(leaveGroupUrl, options);
+        const result = await apiRequest(leaveGroupUrl, options) as ApiResponse<Group>;
+
+        if (result.success) toast.success("Abandoned group!");
+
+        return result;
     }
 }

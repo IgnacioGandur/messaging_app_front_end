@@ -1,6 +1,7 @@
 .users {
+    flex: 1;
     width: 100%;
-    max-width: 1450px;
+    max-width: 1420px;
     align-self: center;
     border-left: 1px solid var(--light-dark-font-dimmed);
     border-right: 1px solid var(--light-dark-font-dimmed);

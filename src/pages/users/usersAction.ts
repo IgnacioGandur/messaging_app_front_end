@@ -11,7 +11,6 @@ interface ResponseType {
 export default async function usersAction({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
     const intent = formData.get("intent");
-    await new Promise(resolve => setTimeout(resolve, 1000));
 
     if (intent === "send-friendship-request") {
         const userBId = formData.get("userBId");
