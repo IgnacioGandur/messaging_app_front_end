@@ -98,6 +98,7 @@
             border: none;
             outline: none;
             background-color: transparent;
+            box-shadow: var(--shadow-1);
 
             .options {
                 display: flex;

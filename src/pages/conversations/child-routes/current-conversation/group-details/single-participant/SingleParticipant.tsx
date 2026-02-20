@@ -1,6 +1,7 @@
 import { useRouteLoaderData, useFetcher } from "react-router";
 import styles from "./SingleParticipant.module.css";
 import type Participant from "../../../../../../types/participant";
+import TooltipLoader from "../../../../../../mini-components/tooltip-loader/TooltipLoader";
 
 interface SingleParticipantProps {
     loggedUserIsOwner: boolean;
@@ -31,6 +32,7 @@ const SinglParticipant = ({
         : role === "ADMIN"
             ? "shield_person"
             : "person";
+
     const showRole = role !== "USER" && !isYou;
 
     const toggleAdminStatus = (
@@ -69,6 +71,12 @@ const SinglParticipant = ({
     const showDeleteOption = loggedUserIsOwner
         || (loggedUserIsAdmin
             && isUser);
+
+    const isUpdatingParticipantRole = fetcher.state !== "idle"
+        && fetcher.formData?.get("intent") === "toggle-admin-status";
+
+    const isRemovingParticipantFromGroup = fetcher.state !== "idle"
+        && fetcher.formData?.get("intent") === "remove-from-group";
 
     return <li
         key={userId}
@@ -131,47 +139,54 @@ const SinglParticipant = ({
                         positionAnchor: `--anchor-${userId}`
                     }}
                 >
-                    <div className={styles.options}>
-
-                        {loggedUserIsOwner && isUser ? (
-                            <button
-                                onClick={() => toggleAdminStatus(userId, "ADMIN")}
-                                className={styles.option}
-                            >
-                                <span className="material-symbols-rounded">
-                                    add_moderator
-                                </span>
-                                <span className={styles.text}>
-                                    Make admin
-                                </span>
-                            </button>
-                        ) : isAdmin && (
-                            <button
-                                onClick={() => toggleAdminStatus(userId, "USER")}
-                                className={styles.option}
-                            >
-                                <span className="material-symbols-rounded">
-                                    remove_moderator
-                                </span>
-                                <span className={styles.text}>
-                                    Remove adminship
-                                </span>
-                            </button>
-                        )}
-                        {showDeleteOption && (
-                            <button
-                                onClick={() => removeFromGroup(userId)}
-                                className={styles.option}
-                            >
-                                <span className="material-symbols-rounded">
-                                    group_remove
-                                </span>
-                                <span className={styles.text}>
-                                    Remove from group
-                                </span>
-                            </button>
-                        )}
-                    </div>
+                    {isUpdatingParticipantRole || isRemovingParticipantFromGroup ? (
+                        <TooltipLoader
+                            message={(isUpdatingParticipantRole
+                                ? "Updating user role"
+                                : "Removing from group") + ", please wait..."}
+                        />
+                    ) : (
+                        <div className={styles.options}>
+                            {loggedUserIsOwner && isUser ? (
+                                <button
+                                    onClick={() => toggleAdminStatus(userId, "ADMIN")}
+                                    className={styles.option}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        add_moderator
+                                    </span>
+                                    <span className={styles.text}>
+                                        Make admin
+                                    </span>
+                                </button>
+                            ) : isAdmin && (
+                                <button
+                                    onClick={() => toggleAdminStatus(userId, "USER")}
+                                    className={styles.option}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        remove_moderator
+                                    </span>
+                                    <span className={styles.text}>
+                                        Remove adminship
+                                    </span>
+                                </button>
+                            )}
+                            {showDeleteOption && (
+                                <button
+                                    onClick={() => removeFromGroup(userId)}
+                                    className={styles.option}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        group_remove
+                                    </span>
+                                    <span className={styles.text}>
+                                        Remove from group
+                                    </span>
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         )}

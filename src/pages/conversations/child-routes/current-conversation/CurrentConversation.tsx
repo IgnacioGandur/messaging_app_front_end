@@ -3,14 +3,12 @@ import styles from "./CurrentConversation.module.css";
 
 import {
     useLoaderData,
-    useFetcher,
     useRouteLoaderData,
     useNavigation,
     useParams
 } from "react-router";
 
 // Components
-import ServerError from "../../../../components/server-error/ServerError";
 import InputErrors from "../../../../components/input-errors/InputErrors";
 import MessageForm from "./message-form/MessageForm";
 import Messages from "./messages/Messages";
@@ -41,7 +39,6 @@ export interface CurrentConversationLoaderData {
 };
 
 const CurrentConversation = () => {
-    const fetcher = useFetcher();
     const navigation = useNavigation();
     const loaderData = useLoaderData() as CurrentConversationLoaderData;
     const { conversationId } = useParams();
@@ -77,45 +74,20 @@ const CurrentConversation = () => {
         loadOlderMessages
     } = useConversationMessages(loaderData, conversationId);
 
-    const isDeletingMessage = fetcher.state === "submitting"
-        && fetcher?.formData?.get("intent") === "delete-message"
-
     const isPageLoading = navigation.state === "loading";
-
 
     if (isPageLoading) {
         return <Loader />
     }
 
-    if (conversation?.isGroup) {
-        return <section className={styles["group-conversation"]}>
-            {isDeletingMessage && <SubmitionLoader
-                message="Deleting message, please wait..."
-            />}
+    return <section
+        className={conversation.isGroup ? styles["group-conversation"] : styles["private-conversation"]}
+    >
+        {conversation.isGroup ? (
             <GroupDetails
                 group={conversation}
             />
-            <Messages
-                isLoadingOlderMessages={isLoadingMoreMessages}
-                loadOlderMessages={loadOlderMessages}
-                hasMoreMessages={hasMoreMessages}
-                messages={messages}
-            />
-            <MessageForm />
-        </section>
-    }
-
-    // If is a private conversation between 2 users.
-    return <section className={styles["private-conversation"]}>
-        {loaderData.error && <ServerError message={loaderData.message} />}
-        {!loaderData.success && <InputErrors
-            message={loaderData?.message}
-            errors={loaderData?.errors}
-        />}
-        {isDeletingMessage && <SubmitionLoader
-            message="Deleting message, please wait..."
-        />}
-        {userB && (
+        ) : (
             <PrivateConversationDetails
                 userB={userB}
             />

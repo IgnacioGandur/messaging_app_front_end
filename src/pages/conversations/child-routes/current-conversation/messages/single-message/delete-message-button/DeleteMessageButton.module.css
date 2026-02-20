@@ -52,6 +52,7 @@
                 gap: var(--size-very-small);
                 align-items: center;
                 justify-content: center;
+                overflow: hidden;
 
                 .icon {
                     font-size: var(--icon-size-big);

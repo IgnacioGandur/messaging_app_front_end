@@ -1,0 +1,27 @@
+.loader {
+    background-color: var(--light-dark-background);
+    border-radius: var(--rounding-medium);
+    border: 1px solid var(--light-dark-font-dimmed);
+    padding: var(--size-normal);
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-small);
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    .message {
+        font-weight: var(--font-thickness-thick);
+    }
+
+    .icon {
+        font-size: var(--icon-size-big);
+        animation: spin 750ms linear infinite;
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
+    }
+}

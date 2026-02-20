@@ -1,5 +1,5 @@
 import type ParticipantType from "../../../../../../types/participant";
-import Participant from "../single-participant/SingleParticipant";
+import SingleParticipant from "../single-participant/SingleParticipant";
 import styles from "./ParticipantsDialog.module.css";
 
 interface ParticipantsDialogProps {
@@ -23,7 +23,7 @@ const ParticipantsDialog = ({
     >
         <div className={styles.container}>
             {participants.map((p) => {
-                return <Participant
+                return <SingleParticipant
                     key={p.userId}
                     loggedUserIsAdmin={Boolean(loggedUserIsAdmin)}
                     loggedUserIsOwner={Boolean(loggedUserIsOwner)}
