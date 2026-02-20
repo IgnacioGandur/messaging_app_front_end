@@ -1,14 +1,27 @@
 import styles from "./LeaveGroupButton.module.css";
+import { useFetcher } from "react-router";
 
 interface LeaveGroupButtonProps {
-    leaveGroup: () => void;
     groupId: number;
+    loggedUserId: number;
 };
 
 const LeaveGroupButton = ({
-    leaveGroup,
-    groupId
+    groupId,
+    loggedUserId
 }: LeaveGroupButtonProps) => {
+    const fetcher = useFetcher({ key: "groups" });
+
+    const leaveGroup = () => {
+        fetcher.submit({
+            intent: "leave-group",
+            groupId: groupId,
+            userId: loggedUserId
+        }, {
+            method: "DELETE"
+        });
+    };
+
     const popoverTarget = `leave-group-tooltip-${groupId}`;
     const anchorName = `--leave-group-anchor-${groupId}`;
 
@@ -40,8 +53,8 @@ const LeaveGroupButton = ({
                     Leave group?
                 </p>
                 <button
-                    className={styles.leave}
                     onClick={leaveGroup}
+                    className={styles.leave}
                 >
                     Yes
                 </button>

@@ -1,6 +1,8 @@
-import type { ActionFunctionArgs } from "react-router"
 import apiRequest from "../../utils/apiRequest";
+import { redirect } from "react-router";
 import { toast } from "react-hot-toast";
+
+import type { ActionFunctionArgs } from "react-router"
 import type Group from "../../types/group";
 import type Participant from "../../types/participant";
 
@@ -16,49 +18,54 @@ export default async function groupsAction({ request }: ActionFunctionArgs) {
     const intent = formData.get("intent");
     const url = import.meta.env.VITE_API_BASE + `/groups`;
 
-    if (intent === "create-group") {
-        const data = Object.fromEntries(formData);
-        const options: RequestInit = {
-            method: "POST",
-            body: JSON.stringify(data),
+    switch (intent) {
+        case "create-group": {
+            const data = Object.fromEntries(formData);
+            const options: RequestInit = {
+                method: "POST",
+                body: JSON.stringify(data),
+            };
+
+            const result = await apiRequest(url, options) as ApiResponse<Group>;
+
+            if (result.success) {
+                toast.success("Group created!");
+                return redirect(`/conversations/${result.group!.id}`);
+            }
+
+            return result;
         };
 
-        const result = await apiRequest(url, options) as ApiResponse<Group>;
+        case "join-group": {
+            const groupId = formData.get("groupId");
+            const joinGroupUrl = url + `/${groupId}`;
+            const options: RequestInit = {
+                method: "POST",
+            };
 
-        if (result.success) toast.success("Group created!");
+            const result = await apiRequest(joinGroupUrl, options) as ApiResponse<Participant>;
 
-        return result;
-    }
+            if (result.success) toast.success("Joined group!");
 
-    if (intent === "join-group") {
-        const groupId = formData.get("groupId");
-        const joinGroupUrl = url + `/${groupId}`;
-        const options: RequestInit = {
-            method: "POST",
+            return result;
         };
 
-        const result = await apiRequest(joinGroupUrl, options) as ApiResponse<Participant>;
+        case "leave-group": {
+            const groupId = formData.get("groupId");
+            const userId = formData.get("userId");
+            const leaveGroupUrl = `${url}/${groupId}/participants`;
+            const options: RequestInit = {
+                method: "DELETE",
+                body: JSON.stringify({
+                    userId,
+                }),
+            };
 
-        if (result.success) toast.success("Joined group!");
+            const result = await apiRequest(leaveGroupUrl, options) as ApiResponse<Group>;
 
-        return result;
-    }
+            if (result.success) toast.success("Abandoned group!");
 
-    if (intent === "leave-group") {
-        const groupId = formData.get("groupId");
-        const userId = formData.get("userId");
-        const leaveGroupUrl = `${url}/${groupId}/participants`;
-        const options: RequestInit = {
-            method: "DELETE",
-            body: JSON.stringify({
-                userId,
-            }),
-        };
-
-        const result = await apiRequest(leaveGroupUrl, options) as ApiResponse<Group>;
-
-        if (result.success) toast.success("Abandoned group!");
-
-        return result;
+            return result;
+        }
     }
 }

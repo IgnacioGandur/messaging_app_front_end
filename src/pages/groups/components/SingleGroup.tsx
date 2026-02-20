@@ -2,24 +2,20 @@ import styles from "./SingleGroup.module.css";
 import { useFetcher } from "react-router";
 import type Group from "../../../types/group";
 import LeaveGroupButton from "./leave-group-button/LeaveGroupButton";
+import JoinGroupButton from "./join-group-button/JoinGroupButton";
+import { useRouteLoaderData } from "react-router";
+import type RootLoaderDataProps from "../../../types/rootLoaderData";
 
 interface SingleGroupProps {
     group: Group;
-    loggedUserId: number;
-    joinGroup: (groupId: number) => void;
-    leaveGroup: (
-        userId: number,
-        groupId: number
-    ) => void;
 }
 
 const SingleGroup = ({
     group,
-    loggedUserId,
-    joinGroup,
-    leaveGroup
 }: SingleGroupProps) => {
     const fetcher = useFetcher({ key: "groups" });
+    const rootLoaderData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const loggedUserId = rootLoaderData.user!.id;
     const owner = group.participants.find((c) => c.role === "OWNER");
     const isOwner = owner!.user.id === loggedUserId;
     const isParticipant = group.participants.some((p) => p.user.id === loggedUserId);
@@ -135,20 +131,12 @@ const SingleGroup = ({
             isOwner ?
                 null
                 : !isParticipant
-                    ? <button
-                        onClick={() => joinGroup(group.id)}
-                        className={styles.button}
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            add
-                        </span>
-                        <span className={styles.text}>
-                            Join group
-                        </span>
-                    </button>
-                    : <LeaveGroupButton
-                        leaveGroup={() => leaveGroup(loggedUserId, group.id)}
+                    ? <JoinGroupButton
                         groupId={group.id}
+                    />
+                    : <LeaveGroupButton
+                        groupId={group.id}
+                        loggedUserId={loggedUserId}
                     />
         )}
         {(isOwner || isParticipant) && <p

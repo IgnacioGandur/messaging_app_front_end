@@ -129,45 +129,6 @@
         }
     }
 
-    .button {
-        position: absolute;
-        top: var(--size-normal);
-        right: var(--size-normal);
-        display: grid;
-        place-items: center;
-        padding: var(--size-tiny);
-        border-radius: var(--rounding-total);
-        cursor: pointer;
-        border: 1px solid var(--light-dark-font-dimmed);
-        background-color: var(--light-dark-background);
-
-        .icon {
-            font-size: var(--icon-size-default);
-        }
-
-        .text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(.25);
-            background-color: var(--light-dark-font);
-            border-radius: var(--rounding-small);
-            color: white;
-            white-space: nowrap;
-            padding: var(--size-very-small);
-            opacity: 0;
-            transition: var(--transition-normal);
-        }
-    }
-
-    .button:hover,
-    .button:focus-visible {
-        .text {
-            transform: translate(-50%, 75%) scale(1);
-            opacity: 1;
-        }
-    }
-
     .title {
         text-transform: capitalize;
         font-size: var(--font-size-normal);
