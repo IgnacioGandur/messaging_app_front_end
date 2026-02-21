@@ -1,7 +1,7 @@
 import { useRouteLoaderData, NavLink } from "react-router";
 import styles from "./Navbar.module.css";
 import { BarLoader } from "react-spinners";
-import LoggedUser from "./LoggedUser";
+import LoggedUser from "./logged-user/LoggedUser";
 import Notifications from "./Notifications";
 import logo from "../../assets/images/icon.svg";
 
