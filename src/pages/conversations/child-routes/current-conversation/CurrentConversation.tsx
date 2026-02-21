@@ -76,9 +76,7 @@ const CurrentConversation = () => {
 
     const isPageLoading = navigation.state === "loading";
 
-    if (isPageLoading) {
-        return <Loader />
-    }
+    if (isPageLoading) return <Loader />
 
     return <section
         className={conversation.isGroup ? styles["group-conversation"] : styles["private-conversation"]}
@@ -93,6 +91,7 @@ const CurrentConversation = () => {
             />
         )}
         <Messages
+            key={conversation.id}
             isLoadingOlderMessages={isLoadingMoreMessages}
             loadOlderMessages={loadOlderMessages}
             hasMoreMessages={hasMoreMessages}

@@ -1,14 +1,16 @@
 import styles from "./Messages.module.css";
-import type MessageProps from "../../../../../types/message";
 import {
     useRef,
-    useLayoutEffect,
     useState,
     useEffect,
 } from "react";
+import { useFetcher } from "react-router";
+
 import { PulseLoader } from "react-spinners";
 import ImageViewer from "./image-viewer/ImageViewer";
 import SingleMessage from "./single-message/SingleMessage";
+
+import type MessageProps from "../../../../../types/message";
 
 interface MessagesProps {
     loadOlderMessages: () => void;
@@ -23,8 +25,7 @@ const Messages = ({
     hasMoreMessages,
     messages,
 }: MessagesProps) => {
-    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
-    const anchorRef = useRef<HTMLDivElement | null>(null);
+    const fetcher = useFetcher({ key: "message-form" });
 
     // Full screen image visualisation ref.
     const currentImageRef = useRef<HTMLDialogElement>(null);
@@ -39,17 +40,32 @@ const Messages = ({
         }
     }, [currentImage]);
 
-    // Scroll to the bottom of the messages container when page loads.
-    useLayoutEffect(() => {
-        if (!anchorRef.current) return;
-        anchorRef.current.scrollIntoView({ behavior: "instant" });
-    }, []);
+    // Scroll to the anchor when the component loads.
+    const anchorRef = useRef<HTMLDivElement | null>(null);
+
+    const scrollAgain = fetcher.formData?.get("intent")?.toString() === "send-message"
+        && fetcher.data?.success
+        && fetcher.state === "idle";
+
+    // Use the first messages in the conversation for the dependency array.
+    const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
+
+    useEffect(() => {
+        if (!lastMessageId || !anchorRef.current) return;
+
+        // Delay the scroll a little bit.
+        const timer = setTimeout(() => {
+            anchorRef.current?.scrollIntoView({ behavior: "smooth", block: 'end' });
+        }, 50);
+
+        return () => clearTimeout(timer);
+
+    }, [lastMessageId, scrollAgain]);
 
     useEffect(() => {
     }, [messages]);
 
     return <section
-        ref={messagesContainerRef}
         className={styles.messages}
     >
         <ImageViewer
@@ -73,7 +89,7 @@ const Messages = ({
                     onClick={loadOlderMessages}
                 >
                     <span className="material-symbols-rounded">
-                        arrow_circle_down
+                        enable
                     </span>
                 </button>
                 <p className={styles.text}>
@@ -107,7 +123,10 @@ const Messages = ({
                 />
             })
         )}
-        <div ref={anchorRef}></div>
+        <div
+            ref={anchorRef}
+            className={styles.anchor}
+        ></div>
     </section>
 };
 

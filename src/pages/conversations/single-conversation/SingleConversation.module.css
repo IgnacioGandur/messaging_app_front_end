@@ -13,6 +13,7 @@
     color: var(--light-dark-font);
     transition: var(--transition-normal);
     border: 1px solid transparent;
+    border-bottom: 1px solid var(--light-dark-font-dimmed);
 
     .group-ppf-container {
         grid-area: ppf;
@@ -100,10 +101,14 @@
     }
 }
 
-.conversation.active,
 .conversation:hover,
 .conversation:focus-visible {
     background-color: var(--light-dark-font-dimmed-2);
+}
+
+.conversation.active {
+    border: 1px solid var(--color-secondary);
+    background-color: var(--color-secondary-dimmed);
 }
 
 @keyframes spin {

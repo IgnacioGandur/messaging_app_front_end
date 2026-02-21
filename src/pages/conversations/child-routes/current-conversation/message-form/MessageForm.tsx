@@ -10,7 +10,7 @@ interface MessageType {
 };
 
 const MessageForm = () => {
-    const fetcher = useFetcher();
+    const fetcher = useFetcher({ key: "message-form" });
     const [message, setMessage] = useState<MessageType>({ message: "", attachment: null });
     const handleMessage = (
         _: string,

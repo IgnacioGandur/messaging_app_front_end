@@ -35,7 +35,8 @@
             overflow-wrap: break-word;
             word-break: break-all;
             flex: 1;
-            width: 100%;
+            max-width: 100%;
+            width: fit-content;
             background-color: var(--color-secondary-dimmed);
             padding: var(--size-very-small);
             border-radius: var(--rounding-medium);

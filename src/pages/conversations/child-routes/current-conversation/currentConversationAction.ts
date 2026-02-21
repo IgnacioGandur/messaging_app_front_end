@@ -92,7 +92,7 @@ export default async function currentConversationAction({ request, params }: Act
 
 
                 if (error) {
-                    toast.error("Messages with attachments are not available at the moment.");
+                    toast.error("We can't send your attachments at this moment, sorry!");
                     console.log(error.message);
                     return {
                         error: true,

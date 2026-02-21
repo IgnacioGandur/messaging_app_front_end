@@ -35,7 +35,6 @@ const ChatsSidebar = ({
                         conversation={conversation}
                         loggedUserId={loggedUserId}
                     />
-                    <div className={styles.separator}></div>
                 </Fragment>
             })
         )}
