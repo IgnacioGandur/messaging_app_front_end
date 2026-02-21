@@ -1,0 +1,26 @@
+.tooltip-container {
+
+    .button {
+        display: grid;
+        place-items: center;
+        border-radius: var(--rounding-total);
+        padding: var(--size-tiny);
+        border: 1px solid var(--light-dark-font-dimmed);
+        background-color: var(--light-dark-background);
+        anchor-name: --update-ppf-anchor;
+
+        span {
+            font-size: var(--icon-size-normal);
+        }
+    }
+
+    .tooltip {
+        border: 1px solid var(--light-dark-font-dimmed);
+        border-radius: var(--rounding-medium);
+        box-shadow: var(--shadow-1);
+        margin-top: .5rem;
+        position-anchor: --update-ppf-anchor;
+        position-area: bottom center;
+        background-color: var(--light-dark-background);
+    }
+}

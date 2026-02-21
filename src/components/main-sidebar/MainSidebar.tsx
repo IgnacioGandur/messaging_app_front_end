@@ -23,10 +23,15 @@ const MainSidebar = ({
     toggleSidebar
 }: MainSidebarProps) => {
     const loaderData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const { user } = loaderData;
     const sidebarRef = useRef<HTMLDivElement | null>(null);
 
     const commonLinks = [
-        {
+        user ? {
+            path: "/dashboard",
+            text: "Dashboard",
+            icon: "dashboard"
+        } : {
             path: "/",
             text: "Home",
             icon: "home"

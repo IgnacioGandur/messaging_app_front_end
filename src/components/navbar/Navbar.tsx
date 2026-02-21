@@ -17,7 +17,7 @@ const Navbar = () => {
     const links = [
         {
             path: "/",
-            text: "Home",
+            text: "Home"
         },
         {
             path: "/register",

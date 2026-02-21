@@ -27,6 +27,7 @@ import conversationsLoader from "./pages/conversations/conversationsLoader";
 import currentConversationLoader from "./pages/conversations/child-routes/current-conversation/currentConversationLoader";
 import groupsLoader from "./pages/groups/groupsLoader";
 import friendsLoader from "./pages/friends/friendsLoader";
+import dashboardLoader from "./pages/dashboard/dashboardLoader";
 
 // Component Loaders
 import AppLoader from "./pages/app/app-loader/AppLoader";
@@ -40,6 +41,7 @@ import usersAction from "./pages/users/usersAction";
 import groupsAction from "./pages/groups/groupsAction";
 import friendsAction from "./pages/friends/friendsAction";
 import userProfileAction from "./pages/users/user-profile/userProfileAction";
+import dashboardAction from "./pages/dashboard/dashboardAction";
 
 // Components
 import CurrentConversation from "./pages/conversations/child-routes/current-conversation/CurrentConversation";
@@ -49,6 +51,7 @@ import RedirectIfNotLogged from "./components/redirects/RedirectIfNotLogged";
 // Error pages
 import NotFoundPage from "./pages/not-found-page/NotFoundPage";
 import ServerErrorPage from "./pages/server-error-page/ServerErrorPage";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -60,7 +63,18 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                Component: Home,
+                element: <RedirectIfLogged>
+                    <Home />
+                </RedirectIfLogged>,
+            },
+            {
+                id: "dashboard",
+                path: "/dashboard",
+                element: <RedirectIfNotLogged>
+                    <Dashboard />
+                </RedirectIfNotLogged>,
+                loader: dashboardLoader,
+                action: dashboardAction
             },
             {
                 path: "/register",

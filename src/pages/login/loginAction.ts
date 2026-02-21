@@ -23,7 +23,7 @@ export default async function loginAction({ request }: ActionFunctionArgs) {
     const result = await apiRequest<LoginResponseType>(url, options);
 
     if (result?.success) {
-        return redirect("/");
+        return redirect("/dashboard");
     } else {
         return result;
     }

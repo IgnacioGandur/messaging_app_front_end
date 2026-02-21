@@ -9,7 +9,7 @@ const RedirectIfLogged = ({ children }: React.PropsWithChildren<{}>) => {
     const isLogged = loaderData.success;
 
     if (isLogged) {
-        return <Navigate to="/" />
+        return <Navigate to="/dashboard" />
     } else {
         return <>
             {children}
