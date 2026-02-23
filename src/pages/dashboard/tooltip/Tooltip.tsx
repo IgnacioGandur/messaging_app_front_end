@@ -1,7 +1,7 @@
 import styles from "./Tooltip.module.css";
 
 interface Tooltip {
-    className: string;
+    className?: string;
     icon: string;
     ariaText: string;
 };
@@ -19,6 +19,7 @@ const Tooltip = ({
         `}
     >
         <button
+            title={ariaText}
             className={styles.button}
             popoverTarget="update-ppf-tooltip"
             aria-label={ariaText}

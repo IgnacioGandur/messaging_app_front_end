@@ -9,6 +9,5 @@ interface ResponseType {
 
 export default async function dashboardLoader() {
     const url = `${import.meta.env.VITE_API_BASE}/me?includeStats=true`;
-
     return await apiRequestLoader<ResponseType>(url);
 };

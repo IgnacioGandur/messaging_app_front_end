@@ -1,6 +1,7 @@
 import { toast } from "react-hot-toast";
 import supabase from "../../../../supabase/supabase";
 import { redirect, type ActionFunctionArgs } from "react-router"
+import updateProfilePictureAction from "../../../../utils/updateProfilePictureAction";
 
 export default async function currentConversationAction({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -13,6 +14,11 @@ export default async function currentConversationAction({ request, params }: Act
     }
 
     switch (intent) {
+        case "update-profile-picture": {
+            return await updateProfilePictureAction(
+                formData, "group_avatars", `groups/${params.conversationId}`
+            );
+        };
         case "delete-message": {
             const messageId = formData.get("messageId");
             const url = import.meta.env.VITE_API_BASE + `/conversations/${params.conversationId}/messages/${messageId}`;
@@ -179,5 +185,7 @@ export default async function currentConversationAction({ request, params }: Act
                 return result;
             };
         }
+
+        default: console.error("No intent provided.");
     };
 }

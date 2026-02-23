@@ -74,7 +74,8 @@ const router = createBrowserRouter([
                     <Dashboard />
                 </RedirectIfNotLogged>,
                 loader: dashboardLoader,
-                action: dashboardAction
+                action: dashboardAction,
+                errorElement: <ServerErrorPage />
             },
             {
                 path: "/register",

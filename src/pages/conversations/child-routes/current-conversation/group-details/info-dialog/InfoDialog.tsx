@@ -3,7 +3,6 @@ import styles from "./InfoDialog.module.css";
 // Components
 import InputErrors from "../../../../../../components/input-errors/InputErrors";
 import CustomInput from "../../../../../../components/custom-input/CustomInput";
-import SubmitionLoader from "../../../../../../components/submition-loader/SubmitionLoader";
 
 // Types
 import { NavLink, type FetcherWithComponents } from "react-router";
@@ -13,6 +12,9 @@ import type Group from "../../../../../../types/group";
 import { toast } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import Tooltip from "../../../../../dashboard/tooltip/Tooltip";
+import UpdateProfilePictureForm from "../../../../../../mini-components/update-profile-picture-form/UpdateProfilePictureForm";
+import updateProfilePictureAction from "../../../../../../utils/updateProfilePictureAction";
 
 interface InfoDialogProps {
     infoDialogRef: React.RefObject<HTMLDialogElement | null>;
@@ -34,11 +36,9 @@ const InfoDialog = ({
     const groupOwner = group.participants.find((p) => p.role === "OWNER");
     const [isEditing, setIsEditing] = useState(false);
     const [updatedGroup, setUpdatedGroup] = useState<{
-        ppf: string,
         title: string,
         description: string,
     }>({
-        ppf: group.profilePicture,
         title: group.title,
         description: group.description
     });
@@ -57,11 +57,23 @@ const InfoDialog = ({
         }));
     };
 
+    const isUpdatingProfilePicture = fetcher.state !== "idle"
+        && fetcher.formData?.get("intent")?.toString() === "update-profile-picture";
 
     const isUpdatingGroup = fetcher.state === "submitting"
         && fetcher?.formData?.get("intent") === "update-group-info";
-    const updateFailed = fetcher.data && !fetcher.data.success && isEditing;
-    const isUpdateButtonDisabled = updatedGroup.ppf === group.profilePicture && updatedGroup.title === group.title && updatedGroup.description === group.description;
+
+    const profilePictureUpdateFailed = fetcher.data
+        && fetcher.data.error;
+
+    const groupInfoUpdateFailed = fetcher.data
+        && !fetcher.data.success
+        && isEditing
+        && !profilePictureUpdateFailed
+        ;
+
+    const isUpdateButtonDisabled = updatedGroup.title === group.title
+        && updatedGroup.description === group.description;
 
     useEffect(() => {
         if (isUpdatingGroup) {
@@ -85,6 +97,12 @@ const InfoDialog = ({
         className={styles["info-dialog"]}
     >
         <div className={styles["info-container"]}>
+            {profilePictureUpdateFailed && (
+                <InputErrors
+                    className={styles["input-errors"]}
+                    message={fetcher.data.message}
+                />
+            )}
             {loggedUserIsOwner && (
                 !isEditing && (
                     <button
@@ -107,18 +125,46 @@ const InfoDialog = ({
                     close
                 </span>
             </button>
-            <div className={styles["group-ppf"]}>
-                <div className={styles["outer-wrapper"]}>
-                    <div className={styles["inner-wrapper"]}>
-                        <img
-                            src={group.profilePicture}
-                            alt={`${group.title}'s profile picture.`}
-                            className={styles.ppf}
-                        />
+            {isUpdatingProfilePicture ? (
+                <div className={styles["group-ppf"]}>
+                    <div className={styles["outer-wrapper"]}>
+                        <div className={styles["inner-wrapper"]}>
+                            <span className={`
+                                material-symbols-rounded
+                                ${styles.icon} 
+                                ${styles.ppf}
+                            `}>
+                                progress_activity
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {updateFailed && (
+            ) : (
+                <div className={styles["group-ppf"]}>
+                    <div className={styles["outer-wrapper"]}>
+                        <div className={styles["inner-wrapper"]}>
+                            <img
+                                src={group.profilePicture}
+                                alt={`${group.title}'s profile picture.`}
+                                className={styles.ppf}
+                            />
+                            {loggedUserIsOwner && (
+                                <Tooltip
+                                    className={styles.tooltip}
+                                    icon="edit"
+                                    ariaText="Update group's profile picture"
+                                >
+                                    <UpdateProfilePictureForm
+                                        title="Update group's profile picture"
+                                        altFetcher={fetcher}
+                                    />
+                                </Tooltip>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {groupInfoUpdateFailed && (
                 <InputErrors
                     message={fetcher.data.message}
                     errors={fetcher.data.errors}
@@ -144,13 +190,6 @@ const InfoDialog = ({
                         let description: string = "";
 
                         switch (key) {
-                            case "ppf": {
-                                labelText = "Profile Picture URL";
-                                googleIcon = "media_link";
-                                placeholder = "https://website.com/image.png";
-                                description = "Pick a nice profile picture for your group!";
-                                break;
-                            }
                             case "title": {
                                 labelText = "Group's title"
                                 googleIcon = "edit_square"

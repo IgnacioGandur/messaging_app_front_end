@@ -452,6 +452,8 @@
             border-radius: var(--rounding-total);
             border: 2px solid var(--light-dark-background);
             transition: var(--transition-normal);
+            object-fit: cover;
+            object-position: center;
         }
 
         .participants-n {

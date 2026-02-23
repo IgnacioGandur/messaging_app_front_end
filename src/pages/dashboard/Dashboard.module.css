@@ -5,12 +5,17 @@
     border-right: 1px solid var(--light-dark-font-dimmed);
     display: grid;
     grid-template-areas:
+        "input-errors input-errors"
         "header header"
         "current-profile update-profile"
         "profile-stats update-profile"
     ;
-    grid-auto-rows: min-content auto auto;
+    grid-auto-rows: min-content min-content auto auto;
     grid-template-columns: 2fr 1fr;
+
+    .input-errors {
+        grid-area: input-errors;
+    }
 
     .header {
         grid-area: header;
@@ -53,24 +58,22 @@
                     border-radius: var(--rounding-total);
                 }
 
+                .profile-picture-loader {
+                    display: grid;
+                    place-items: center;
+
+                    .icon {
+                        display: grid;
+                        place-items: center;
+                        font-size: var(--icon-size-giant);
+                        animation: 750ms spin linear infinite;
+                    }
+                }
+
                 .tooltip {
                     position: absolute;
                     bottom: 0;
                     right: 0;
-
-                    .form {
-                        display: flex;
-                        flex-direction: column;
-                        padding: var(--size-small);
-                        gap: var(--size-small);
-
-                        .label {
-                            display: flex;
-                            flex-direction: column;
-                            gap: var(--size-tiny);
-                            font-weight: var(--font-thickness-thick);
-                        }
-                    }
                 }
             }
         }
@@ -95,6 +98,18 @@
             justify-content: flex-start;
             padding: var(--size-small);
 
+            .update-profile-loader {
+                flex: 1;
+                height: 100%;
+                display: grid;
+                place-items: center;
+
+                .icon {
+                    font-size: var(--icon-size-giant);
+                    animation: spin 750ms linear infinite;
+                }
+            }
+
             .form {
                 height: 100%;
                 flex: 1;
@@ -107,10 +122,10 @@
                     width: 100%;
                 }
 
-                .separator {
-                    width: 100%;
-                    height: 1px;
-                    background-color: var(--light-dark-font-dimmed);
+                .password-message {
+                    text-align: center;
+                    font-size: .85rem;
+                    opacity: .9;
                 }
 
                 .update {
@@ -141,44 +156,50 @@
 
         .stats-container {
             width: 100%;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-template-rows: 1;
+            padding: var(--size-big);
+            gap: var(--size-big);
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            align-items: flex-start;
+            flex-wrap: wrap;
 
             .stat {
-                display: grid;
-                gap: var(--size-small);
-                align-items: center;
+                font-family: var(--font-secondary);
+                font-weight: var(--font-thickness-thin);
+                display: flex;
+                flex-direction: column;
 
                 .number,
-                .icon {
+                .header>.icon {
                     background-image: var(--gradient-main-colors);
                     color: transparent;
                     background-clip: text;
-                    grid-column: span 1;
-                }
-
-                .number,
-                .text {
-                    font-family: var(--font-secondary);
-                }
-
-                .number {
-                    font-size: var(--font-size-big);
-                    justify-self: end;
-                }
-
-                .icon {
                     font-size: var(--icon-size-big);
-                    justify-self: start;
+                }
+
+                .header {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--size-very-small);
+                    justify-content: flex-end;
+
+                    .number {
+                        align-self: flex-end;
+                    }
                 }
 
                 .text {
-                    grid-column: span 2;
                     text-transform: capitalize;
-                    font-weight: var(--font-thickness-normal);
+                    font-weight: 300;
                 }
             }
         }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
     }
 }

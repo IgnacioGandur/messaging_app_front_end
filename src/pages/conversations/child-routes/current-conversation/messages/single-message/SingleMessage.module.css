@@ -12,6 +12,9 @@
     .ppf {
         grid-area: ppf;
         border: 1px solid var(--light-dark-font-dimmed);
+        object-fit: cover;
+        object-position: center;
+        aspect-ratio: 1/1;
     }
 
     .name {

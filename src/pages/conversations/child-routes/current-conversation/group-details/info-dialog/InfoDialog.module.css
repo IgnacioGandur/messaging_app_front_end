@@ -1,8 +1,7 @@
 .info-dialog {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    inset: 0;
+    margin: auto;
     border-radius: var(--rounding-medium);
     border: none;
     outline: none;
@@ -17,6 +16,11 @@
         gap: var(--size-normal);
         padding: var(--size-normal);
         width: clamp(425px, 500px, 530px);
+
+        .input-errors {
+            margin-top: 2.5rem;
+            border-radius: var(--rounding-medium);
+        }
 
         .title,
         .description::first-letter {
@@ -122,13 +126,27 @@
                     display: inherit;
                     place-items: inherit;
                     background-color: var(--light-dark-background);
+                    position: relative;
+
+                    .icon {
+                        display: grid;
+                        place-items: center;
+                        font-size: var(--icon-size-big);
+                        animation: spin 750ms linear infinite;
+                    }
 
                     .ppf {
                         border-radius: inherit;
                         aspect-ratio: 1/1;
                         object-fit: cover;
-                        width: 75px;
-                        height: 75px;
+                        width: 125px;
+                        height: 125px;
+                    }
+
+                    .tooltip {
+                        position: absolute;
+                        bottom: -.5rem;
+                        right: -.5rem;
                     }
                 }
             }
@@ -243,5 +261,11 @@
                 grid-area: username;
             }
         }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
     }
 }
