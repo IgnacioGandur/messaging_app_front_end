@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
 
 // Pages
 import Home from "./pages/home/Home";
@@ -7,16 +7,12 @@ import Register from "./pages/register/Register";
 import Logout from "./pages/logout/Logout";
 import Login from "./pages/login/Login";
 import Users from "./pages/users/Users";
-import Profile from "./pages/profile/Profile";
 import UserProfile from "./pages/users/user-profile/UserProfile";
 import Conversations from "./pages/conversations/Conversations";
 import NoConversationSelected from "./pages/conversations/child-routes/no-conversation-selected/NoConversationSelected";
 import Groups from "./pages/groups/Groups";
 import Friends from "./pages/friends/Friends";
 import About from "./pages/about/About";
-
-// Child Routes
-import Settings from "./pages/profile/child-routes/settings/Settings";
 
 // Loaders
 import appLoader from "./pages/app/appLoader";
@@ -35,7 +31,6 @@ import AppLoader from "./pages/app/app-loader/AppLoader";
 // Actions
 import registerAction from "./pages/register/registerAction";
 import loginAction from "./pages/login/loginAction";
-import settingsAction from "./pages/profile/child-routes/settings/settingsAction";
 import currentConversationAction from "./pages/conversations/child-routes/current-conversation/currentConversationAction";
 import usersAction from "./pages/users/usersAction";
 import groupsAction from "./pages/groups/groupsAction";
@@ -141,23 +136,6 @@ const router = createBrowserRouter([
                 loader: groupsLoader,
                 action: groupsAction,
                 errorElement: <ServerErrorPage />,
-            },
-            {
-                path: "/profile",
-                element: <RedirectIfNotLogged>
-                    <Profile />
-                </RedirectIfNotLogged>,
-                children: [
-                    {
-                        index: true,
-                        element: <Navigate to="settings" replace />
-                    },
-                    {
-                        path: "settings",
-                        Component: Settings,
-                        action: settingsAction
-                    }
-                ]
             },
             {
                 path: "/friends",

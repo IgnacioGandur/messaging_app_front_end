@@ -1,0 +1,93 @@
+.not-found {
+    flex: 1;
+    max-width: 1420px;
+    align-self: center;
+    border-left: 1px solid var(--light-dark-font-dimmed);
+    border-right: 1px solid var(--light-dark-font-dimmed);
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    padding: var(--size-big);
+
+    >* {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--size-big);
+    }
+
+    .blob {
+        position: absolute;
+        top: -20%;
+        left: -20%;
+        width: 800px;
+        opacity: .2;
+        z-index: -1;
+    }
+
+    .left {
+        gap: var(--size-big);
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            font-family: var(--font-secondary);
+            font-weight: 200;
+
+            .code {
+                font-size: var(--font-size-giant);
+            }
+
+            .oops,
+            .title {
+                font-size: 1.5rem;
+                font-weight: var(--font-thickness-thick);
+            }
+        }
+
+        .button {
+            display: flex;
+            align-items: center;
+            gap: var(--size-small);
+            padding: var(--size-small) var(--size-big);
+            align-self: flex-start;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid var(--light-dark-font);
+            position: relative;
+            z-index: 1;
+            background-color: transparent;
+            text-transform: capitalize;
+            font-weight: var(--font-thickness-thick);
+            transition: var(--transition-normal);
+        }
+
+        .button:hover,
+        .button:focus-visible {
+            background-color: var(--color-main-dimmed);
+        }
+
+        .button::before {
+            position: absolute;
+            top: -.275rem;
+            left: -.275rem;
+            margin: auto;
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-main);
+            border-radius: 50px;
+            z-index: -1;
+            opacity: .2;
+        }
+    }
+
+    .right {
+        align-items: center;
+
+        .robot {
+            width: clamp(200px, 100%, 400px);
+        }
+    }
+}
