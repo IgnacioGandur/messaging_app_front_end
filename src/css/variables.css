@@ -19,7 +19,8 @@
     --color-font-light-dimmed: #49505744;
     --color-font-light-dimmed-2: #49505711;
     --color-font-dark: #EEEEEEDD;
-    --color-font-dark-dimmed: #EEEEEE44;
+    /* --color-font-dark-dimmed: #EEEEEE44; */
+    --color-font-dark-dimmed: #EEEEEEAA;
     --color-font-dark-dimmed-2: #EEEEEE11;
     --color-success: #06d6a0;
     --color-success-dimmed: #06d6a044;

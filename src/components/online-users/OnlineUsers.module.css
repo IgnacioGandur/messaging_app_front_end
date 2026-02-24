@@ -1,0 +1,41 @@
+.online-users {
+    position: relative;
+
+    .users-n {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    .users-container {
+        padding: var(--size-small);
+        display: flex;
+        align-items: center;
+        gap: var(--size-small);
+
+        .user {
+            position: relative;
+
+            .indicator {
+                width: 17px;
+                height: 17px;
+                background-color: var(--color-success);
+                border-radius: var(--rounding-total);
+                position: absolute;
+                bottom: -.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                color: var(--color-success);
+            }
+
+            .ppf {
+                width: 65px;
+                height: 65px;
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                object-position: center;
+                border-radius: var(--rounding-total);
+            }
+        }
+    }
+}

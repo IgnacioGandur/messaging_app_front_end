@@ -1,5 +1,5 @@
 import styles from "./Dashboard.module.css";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useFetcher, useLoaderData } from "react-router";
 import CurrentPageHeader from "../../components/current-page-header/CurrentPageHeader";
 import Section from "./section/Section";
@@ -10,8 +10,6 @@ import { format } from "date-fns";
 import InputErrors from "../../components/input-errors/InputErrors";
 import type InputError from "../../types/InputErrors";
 import UpdateProfilePictureForm from "../../mini-components/update-profile-picture-form/UpdateProfilePictureForm";
-import { Await } from "react-router";
-import { Suspense } from "react";
 
 interface ActionData {
     success: boolean;
@@ -119,6 +117,8 @@ const Dashboard = () => {
                             alt={name}
                         />
                         <Tooltip
+                            popoverTarget="update-profile-picture"
+                            anchorName="--update-ppf-anchor"
                             className={styles.tooltip}
                             icon="edit"
                             ariaText="Update your profile picture"

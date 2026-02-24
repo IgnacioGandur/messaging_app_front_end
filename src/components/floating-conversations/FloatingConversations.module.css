@@ -1,0 +1,88 @@
+.current-floating-conversation,
+.conversations-hidden,
+.conversations {
+    max-width: 375px;
+    width: 100%;
+    border: 2px solid darkcyan;
+    position: absolute;
+    bottom: var(--size-small);
+    right: var(--size-small);
+    display: flex;
+    border-radius: 50px;
+    background-color: var(--light-dark-background);
+    border: 2px solid var(--light-dark-font-dimmed);
+    transition: var(--transition-normal);
+}
+
+.conversations-hidden:hover,
+.conversations-hidden:focus-visible {
+    border: 2px solid var(--color-secondary);
+}
+
+.conversations-hidden {
+    display: flex;
+    align-items: center;
+    gap: var(--size-small);
+    max-width: 275px;
+    padding: var(--size-normal);
+
+    .icon {
+        font-size: var(--icon-size-normal);
+    }
+
+    .separator {
+        min-width: 5px;
+        min-height: 5px;
+        border-radius: var(--rounding-total);
+        background-color: var(--light-dark-font-dimmed);
+    }
+}
+
+.current-floating-conversation,
+.conversations {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-small);
+    border-radius: 25px;
+    padding: 0;
+
+    >* {
+        padding: var(--size-small);
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid var(--light-dark-font-dimmed);
+
+        .buttons {
+            display: flex;
+            align-items: center;
+            gap: var(--size-very-small);
+
+            .close,
+            .expand {
+                padding: var(--size-tiny);
+                display: grid;
+                place-items: center;
+                border: 1px solid var(--light-dark-font-dimmed);
+                border-radius: var(--rounding-total);
+                background-color: var(--light-dark-background);
+                text-decoration: none;
+
+                .icon {
+                    font-size: var(--icon-size-small);
+                }
+            }
+        }
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: var(--size-small);
+        padding-top: 0;
+    }
+}

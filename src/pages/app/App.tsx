@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "../../components/navbar/Navbar";
 import Footer from "../../components/footer/Footer";
 import ServerError from "../../components/server-error/ServerError";
-import FloatingChats from "../../components/floating-chats/FloatingChats";
+import FloatingConversations from "../../components/floating-conversations/FloatingConversations";
 import MainSidebar from "../../components/main-sidebar/MainSidebar";
 import ManagePageTitles from "./ManagePageTitles";
 
@@ -24,12 +24,25 @@ const App = () => {
     };
 
     useEffect(() => {
-        socket.connect();
+        if (loaderData.user) {
+            const {
+                id: userId,
+                username,
+                profilePictureUrl
+            } = loaderData.user;
 
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+            socket.auth = {
+                userId,
+                username,
+                profilePictureUrl
+            };
+
+            socket.connect();
+            return () => {
+                socket.disconnect();
+            };
+        }
+    }, [loaderData]);
 
     return <>
         <Toaster
@@ -49,7 +62,7 @@ const App = () => {
                 <Outlet />
             </div>
             <Footer />
-            <FloatingChats />
+            <FloatingConversations />
         </div>
     </>
 }

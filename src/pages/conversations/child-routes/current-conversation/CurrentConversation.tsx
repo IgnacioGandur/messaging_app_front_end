@@ -14,7 +14,6 @@ import MessageForm from "./message-form/MessageForm";
 import Messages from "./messages/Messages";
 import GroupDetails from "./group-details/GroupDetails";
 import Loader from "./loader/Loader";
-import SubmitionLoader from "../../../../components/submition-loader/SubmitionLoader";
 import PrivateConversationDetails from "./private-conversation-details/PrivateConversationDetails";
 import NoConversation from "./no-results/NoResults";
 

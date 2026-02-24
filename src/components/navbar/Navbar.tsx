@@ -4,6 +4,7 @@ import { BarLoader } from "react-spinners";
 import LoggedUser from "./logged-user/LoggedUser";
 import Notifications from "./Notifications";
 import logo from "../../assets/images/icon.svg";
+import OnlineUsers from "../online-users/OnlineUsers";
 
 type Link = {
     path: string;
@@ -46,6 +47,9 @@ const Navbar = () => {
                 Chateá
             </h2>
         </div>
+        {loggedUser && (
+            <OnlineUsers />
+        )}
         {!loaderData?.user && (
             <div className={styles.links}>
                 {links.map((link: Link) => {

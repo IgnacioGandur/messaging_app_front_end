@@ -1,0 +1,23 @@
+.loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon-wrapper {
+        flex: 1;
+        padding: calc(var(--size-big) * 2) var(--size-big);
+        display: grid;
+        place-items: center;
+
+        .icon {
+            font-size: var(--icon-size-giant);
+            animation: spin 750ms linear infinite;
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        rotate: 360deg;
+    }
+}

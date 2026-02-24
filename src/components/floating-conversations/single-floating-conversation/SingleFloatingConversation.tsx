@@ -1,0 +1,63 @@
+import styles from "./SingleFloatingConversation.module.css";
+import type Conversation from "../../../types/conversation";
+import type { Status } from "../useConversations";
+import { formatDistanceToNow } from "date-fns";
+
+
+interface SingleFloatingConversationProps {
+    setStatus: React.Dispatch<React.SetStateAction<Status>>;
+    setCurrentConversationId: React.Dispatch<React.SetStateAction<number | null>>;
+    loggedUserId: number;
+    conversation: Conversation;
+};
+
+const SingleFloatingConversation = ({
+    setStatus,
+    setCurrentConversationId,
+    loggedUserId,
+    conversation
+}: SingleFloatingConversationProps) => {
+    const isGroup = conversation.isGroup;
+    const userB = conversation.participants.find(p => p.userId !== loggedUserId)?.user;
+    const lastMesage = conversation.messages[0];
+
+    return <button
+        onClick={() => {
+            setStatus("conversation");
+            setCurrentConversationId(conversation.id);
+        }}
+        className={styles.conversation}
+    >
+        <h2
+            className={styles.title}
+        >
+            {isGroup
+                ? conversation.title
+                : `${userB?.firstName} ${userB?.lastName}`}
+        </h2>
+        <img
+            className={styles.ppf}
+            src={isGroup
+                ? conversation.profilePicture
+                : userB?.profilePictureUrl}
+            alt={conversation.title || `${userB?.firstName} ${userB?.lastName}`}
+        />
+        <div
+            className={styles["last-message"]}
+        >
+            {lastMesage.senderId === loggedUserId && (
+                <span className={styles.you}>
+                    You:
+                </span>
+            )}
+            <p className={styles.content}>
+                {lastMesage.content}
+            </p>
+            <span className={styles.date}>
+                · {formatDistanceToNow(lastMesage.createdAt, { addSuffix: true })}
+            </span>
+        </div>
+    </button>
+};
+
+export default SingleFloatingConversation;

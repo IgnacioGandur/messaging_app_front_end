@@ -4,7 +4,6 @@ import styles from "../register/Register.module.css";
 import { useState } from "react";
 import {
     useActionData,
-    useFetcher,
     useSearchParams,
     useNavigation,
     Form

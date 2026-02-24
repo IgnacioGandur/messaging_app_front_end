@@ -24,6 +24,7 @@ import currentConversationLoader from "./pages/conversations/child-routes/curren
 import groupsLoader from "./pages/groups/groupsLoader";
 import friendsLoader from "./pages/friends/friendsLoader";
 import dashboardLoader from "./pages/dashboard/dashboardLoader";
+import floatingConversationsLoader from "./components/floating-conversations/floatingConversationsLoader";
 
 // Component Loaders
 import AppLoader from "./pages/app/app-loader/AppLoader";
@@ -37,6 +38,7 @@ import groupsAction from "./pages/groups/groupsAction";
 import friendsAction from "./pages/friends/friendsAction";
 import userProfileAction from "./pages/users/user-profile/userProfileAction";
 import dashboardAction from "./pages/dashboard/dashboardAction";
+import floatingConversationsAction from "./components/floating-conversations/floatingConversationsAction";
 
 // Components
 import CurrentConversation from "./pages/conversations/child-routes/current-conversation/CurrentConversation";
@@ -107,6 +109,7 @@ const router = createBrowserRouter([
                 errorElement: <ServerErrorPage />
             },
             {
+                id: "conversations",
                 path: "/conversations",
                 element: <RedirectIfNotLogged>
                     <Conversations />
@@ -161,6 +164,11 @@ const router = createBrowserRouter([
         Component: Logout,
         loader: logoutLoader
     },
+    {
+        path: "/send-message",
+        action: floatingConversationsAction,
+        loader: floatingConversationsLoader
+    }
 ]);
 
 export default router;

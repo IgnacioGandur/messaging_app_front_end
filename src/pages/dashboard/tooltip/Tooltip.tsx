@@ -1,12 +1,18 @@
 import styles from "./Tooltip.module.css";
 
 interface Tooltip {
+    indicator?: string | number;
+    popoverTarget?: string;
+    anchorName?: string;
     className?: string;
     icon: string;
     ariaText: string;
 };
 
 const Tooltip = ({
+    indicator,
+    popoverTarget = "default",
+    anchorName = "--anchor",
     className,
     icon,
     ariaText,
@@ -18,10 +24,18 @@ const Tooltip = ({
             ${styles["tooltip-container"]}
         `}
     >
+        {indicator && (
+            <span className={styles.indicator}>
+                {indicator}
+            </span>
+        )}
         <button
+            style={{
+                anchorName: anchorName,
+            }}
             title={ariaText}
             className={styles.button}
-            popoverTarget="update-ppf-tooltip"
+            popoverTarget={popoverTarget}
             aria-label={ariaText}
         >
             <span className="material-symbols-rounded">
@@ -29,8 +43,11 @@ const Tooltip = ({
             </span>
         </button>
         <div
+            style={{
+                positionAnchor: anchorName
+            }}
             popover="auto"
-            id="update-ppf-tooltip"
+            id={popoverTarget}
             className={styles.tooltip}
         >
             {children}

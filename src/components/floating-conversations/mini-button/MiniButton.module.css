@@ -1,0 +1,19 @@
+.button {
+    padding: var(--size-tiny);
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--light-dark-font-dimmed);
+    border-radius: var(--rounding-total);
+    background-color: var(--light-dark-background);
+    text-decoration: none;
+    transition: var(--transition-normal);
+
+    .icon {
+        font-size: var(--icon-size-small);
+    }
+}
+
+.button:hover,
+.button:focus-visible {
+    background-color: var(--light-dark-font-dimmed);
+}

@@ -1,0 +1,50 @@
+.messages {
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+    max-height: 360px;
+    flex: 1;
+    overflow: auto;
+    gap: 3px;
+
+    .date {
+        font-size: var(--font-size-small);
+        align-self: center;
+        margin: 1.5rem;
+    }
+
+    .message {
+        display: flex;
+        gap: var(--size-very-small);
+
+        .ppf,
+        .pad {
+            width: 40px;
+            height: 40px;
+            aspect-ratio: 1/1;
+            border-radius: var(--rounding-total);
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .pad {}
+
+        .content {
+            padding: calc(var(--size-very-small) + 2px) var(--size-small);
+            border-radius: var(--rounding-medium);
+            align-self: flex-start;
+            text-align: left;
+            background-color: var(--color-main-dimmed);
+        }
+    }
+
+    .message.you {
+        flex-direction: row-reverse;
+
+        .content {
+            background-color: var(--color-secondary-dimmed);
+            text-align: right;
+            align-self: flex-end;
+        }
+    }
+}
