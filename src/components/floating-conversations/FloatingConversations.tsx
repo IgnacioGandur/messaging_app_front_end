@@ -1,6 +1,6 @@
 import styles from "./FloatingConversations.module.css";
 
-import { useLocation, useRouteLoaderData } from "react-router";
+import { useRouteLoaderData } from "react-router";
 import useConversations from "./useConversations";
 
 import FloatingConversationsError from "./floating-conversations-error/FloatingConversationsError";
@@ -21,13 +21,9 @@ const FloatingConversations = () => {
         setCurrentConversationId
     } = useConversations();
 
-    const location = useLocation();
     const rootData = useRouteLoaderData("root") as RootLoaderDataProps;
 
-    const show = rootData.success && !location.pathname.match(/conversations/);
-
     // Hide the button if the user is not logged or if the user is in the "/conversations"  path.
-    if (!show) return;
     if (error) return <FloatingConversationsError message={error} />;
 
     return status === "hide" ? (

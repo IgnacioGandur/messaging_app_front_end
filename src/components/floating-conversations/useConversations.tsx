@@ -1,6 +1,8 @@
 import { useFetcher } from "react-router";
 import { useState, useEffect } from "react";
 import type Conversation from "../../types/conversation";
+import type RootLoaderDataProps from "../../types/rootLoaderData";
+import { useRouteLoaderData } from "react-router";
 
 interface ApiResponse {
     success: boolean;
@@ -18,15 +20,20 @@ const useConversations = () => {
     const [currentConversationId, setCurrentConversationId] = useState<number | null>(null);
     const [status, setStatus] = useState<Status>("hide");
 
+    const rootData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const isAuthenticated = !!(rootData.success && rootData.user);
+
     useEffect(() => {
-        if (fetcher.state === "idle" && !fetcher.data) {
+        if (isAuthenticated && fetcher.state === "idle" && !fetcher.data) {
             fetcher.load("/get-floating-conversations");
         }
-    }, [fetcher]);
+    }, [fetcher, isAuthenticated]);
 
     const conversations = fetcher.data?.data?.conversations ?? [];
     const isLoading = fetcher.state === "loading";
-    const error = fetcher.data?.success === false ? fetcher.data.message : null;
+    const error = (isAuthenticated && fetcher.data?.success === false)
+        ? fetcher.data.message
+        : null;
 
     return {
         isLoading,

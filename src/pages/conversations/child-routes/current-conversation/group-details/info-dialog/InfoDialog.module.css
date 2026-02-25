@@ -20,6 +20,7 @@
         .input-errors {
             margin-top: 2.5rem;
             border-radius: var(--rounding-medium);
+            text-align: center;
         }
 
         .title,

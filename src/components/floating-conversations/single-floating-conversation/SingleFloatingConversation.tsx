@@ -48,6 +48,17 @@ const SingleFloatingConversation = ({
                     }}
                 />
             )}
+            {isGroup && (
+                <span
+                    title="Group conversation"
+                    className={`
+                        ${styles["group-indicator"]} 
+                        material-symbols-rounded
+                    `}
+                >
+                    group
+                </span>
+            )}
             <img
                 className={styles.ppf}
                 src={isGroup

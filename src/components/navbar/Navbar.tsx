@@ -54,7 +54,6 @@ const Navbar = () => {
             <div className={styles.links}>
                 {links.map((link: Link) => {
                     return <NavLink
-                        prefetch="intent"
                         key={link.path}
                         to={link.path}
                         className={({ isActive }) => isActive

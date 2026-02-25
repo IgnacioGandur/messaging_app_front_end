@@ -23,15 +23,28 @@
         display: grid;
         place-items: center;
 
+        .group-indicator,
         .indicator {
-            background-color: var(--color-success);
             position: absolute;
             bottom: .1rem;
             left: .1rem;
-            width: 1rem;
-            height: 1rem;
             border-radius: var(--rounding-total);
             border: 3px solid var(--light-dark-background);
+        }
+
+        .indicator {
+            background-color: var(--color-success);
+            width: 1rem;
+            height: 1rem;
+        }
+
+        .group-indicator {
+            left: -.1rem;
+            bottom: -.1rem;
+            font-size: 1.25rem;
+            font-variation-settings: 'FILL' 1;
+            color: var(--color-secondary);
+            background-color: var(--light-dark-background);
         }
 
         .ppf {

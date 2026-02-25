@@ -1,6 +1,6 @@
 import styles from "./LoggedUser.module.css";
 import { Fragment } from "react";
-import { NavLink } from "react-router";
+import { Form, NavLink } from "react-router";
 
 type Link = {
     to: string;
@@ -9,11 +9,6 @@ type Link = {
 };
 
 const links: Link[] = [
-    {
-        to: "/profile",
-        text: "Profile",
-        icon: "account_circle"
-    },
     {
         to: "/logout",
         text: "Logout",
@@ -70,24 +65,42 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
             popover="auto"
             className={styles.options}
         >
-            {links.map((link: Link, index) => {
-                return <Fragment
-                    key={link.text}
+            <Form
+                method="POST"
+                action="/logout"
+            >
+                <button
+                    className={styles.option}
                 >
-                    <NavLink
-                        to={link.to}
-                        className={styles.option}
-                    >
-                        <span className={`material-symbols-rounded ${styles.icon}`}>
-                            {link.icon}
-                        </span>
-                        <span className={styles.text}>
-                            {link.text}
-                        </span>
-                    </NavLink>
-                    {links.length - 2 === index && <div className={styles.separator}></div>}
-                </Fragment>
-            })}
+                    <span className={`
+                        material-symbols-rounded
+                        ${styles.icon}
+                    `}>
+                        logout
+                    </span>
+                    <span className={styles.text}>
+                        Logout
+                    </span>
+                </button>
+            </Form>
+            {/* {links.map((link: Link, index) => { */}
+            {/*     return <Fragment */}
+            {/*         key={link.text} */}
+            {/*     > */}
+            {/*         <NavLink */}
+            {/*             to={link.to} */}
+            {/*             className={styles.option} */}
+            {/*         > */}
+            {/*             <span className={`material-symbols-rounded ${styles.icon}`}> */}
+            {/*                 {link.icon} */}
+            {/*             </span> */}
+            {/*             <span className={styles.text}> */}
+            {/*                 {link.text} */}
+            {/*             </span> */}
+            {/*         </NavLink> */}
+            {/*         {links.length - 2 === index && <div className={styles.separator}></div>} */}
+            {/*     </Fragment> */}
+            {/* })} */}
         </div>
     </div>
 }

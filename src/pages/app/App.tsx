@@ -17,11 +17,14 @@ import ManagePageTitles from "./ManagePageTitles";
 // Contexts
 import OnlineUsersContext from "../../contexts/OnlineUsersContext";
 import useOnlineUsers from "../../hooks/useOnlineUsers";
+import { useLocation } from "react-router";
 
 const App = () => {
+    const location = useLocation();
     const loaderData = useRouteLoaderData("root");
     const [showSidebar, setShowSidebar] = useState(false);
     const { onlineUsers, lastSeenUpdated } = useOnlineUsers();
+    const showFloatingConversations = loaderData?.success && !location.pathname.includes("conversations");
 
     const toggleSidebar = () => {
         setShowSidebar((prev) => !prev);
@@ -68,7 +71,9 @@ const App = () => {
                 <Outlet />
             </div>
             <Footer />
-            <FloatingConversations />
+            {showFloatingConversations && (
+                <FloatingConversations />
+            )}
         </div>
     </OnlineUsersContext.Provider>
 }

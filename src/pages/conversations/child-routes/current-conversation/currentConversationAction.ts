@@ -92,10 +92,15 @@ export default async function currentConversationAction({ request, params }: Act
             // This means empty input file.
             // if (attachment?.type !== "application/octet-stream") {
             if (attachment instanceof File && attachment.size > 0) {
+                const maxFileSize = 3 * 1024 * 1024 // 3MB.
+                if (attachment.size > maxFileSize) {
+                    toast.error("File too big. File should be less than 3 Megabytes.");
+                    return;
+                }
+
                 const { data, error } = await supabase.storage
                     .from("attachments")
                     .upload(`conversations/${conversationId}/${Date.now()}-${attachment?.name}`, attachment);
-
 
                 if (error) {
                     toast.error("We can't send your attachments at this moment, sorry!");

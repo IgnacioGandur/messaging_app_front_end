@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import type Group from "../types/group";
 import type User from "../types/user";
 import apiRequest from "./apiRequest";
@@ -27,6 +28,15 @@ export default async function updateProfilePictureAction(
     let profilePictureUrl = "";
 
     if (image && image.size > 0) {
+        const fileSizeLimit = 3 * 1024 * 1024;
+
+        if (image.size > fileSizeLimit) {
+            return {
+                error: true,
+                message: "File too big. The profile picture should be less than 3 Megabytes."
+            }
+        };
+
         profilePictureUrl = await uploadFileToSupabase(
             image,
             bucketName,

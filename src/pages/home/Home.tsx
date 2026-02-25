@@ -2,25 +2,11 @@ import styles from "./Home.module.css";
 
 // Assets
 import logo from "../../assets/images/icon.svg";
-
-// Packages
-import { useRouteLoaderData } from "react-router";
-
 // Components
 import Blob from "../../components/blob/Blob";
-import Dashboard from "../dashboard/Dashboard";
-
-// Types
-import type RootLoaderDataProps from "../../types/rootLoaderData";
 
 
 const Home = () => {
-    const loaderData = useRouteLoaderData("root") as RootLoaderDataProps;
-    const user = loaderData?.user;
-
-    if (user) {
-        return <Dashboard />
-    }
 
     return <main className={styles["home-logged"]}>
         <div className={styles["title-section"]}>

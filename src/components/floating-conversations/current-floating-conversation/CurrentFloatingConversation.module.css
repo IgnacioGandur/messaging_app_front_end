@@ -39,6 +39,7 @@
                 overflow: hidden;
             }
 
+            .participants,
             .last-active {
                 align-self: start;
                 grid-area: last-active;

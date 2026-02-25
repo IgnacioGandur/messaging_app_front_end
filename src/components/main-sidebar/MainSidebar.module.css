@@ -145,8 +145,8 @@
             }
         }
 
-        .link.about {
-            order: 10;
+        .link.about,
+        .link.about.active {
             margin-top: auto;
         }
     }
@@ -185,7 +185,7 @@
     cursor: pointer;
     border: 2px solid white;
     padding: var(--size-very-small);
-    background-color: var(--color-secondary);
+    background-image: var(--gradient-main-colors);
     box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, .25);
 
     span {

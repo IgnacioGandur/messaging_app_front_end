@@ -6,6 +6,8 @@ import { useFetcher } from "react-router";
 
 // Components
 import MiniButton from "../mini-button/MiniButton";
+import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
+import LastActive from "../../../mini-components/last-active/LastActive";
 
 // Hooks
 import useCurrentFloatingConversation from "./useCurrentFloatingConversation";
@@ -18,8 +20,6 @@ import { NavLink } from "react-router";
 
 // Contexts
 import { useOnlineUsersContext } from "../../../contexts/OnlineUsersContext";
-import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
-import LastActive from "../../../mini-components/last-active/LastActive";
 
 interface CurrentFloatingConversationProps {
     loggedUserId: number;
@@ -141,7 +141,13 @@ const CurrentFloatingConversation = ({
                         text="Active"
                     />
                 ) : (
-                    (userB && !isGroup) && (
+                    isGroup ? (
+                        <span
+                            className={styles.participants}
+                        >
+                            {conversation.participants.length} Participants
+                        </span>
+                    ) : (userB && !isGroup) && (
                         <LastActive
                             lastActive={lastSeenUpdated[userB.id]
                                 ? lastSeenUpdated[userB.id]

@@ -16,7 +16,7 @@ import About from "./pages/about/About";
 
 // Loaders
 import appLoader from "./pages/app/appLoader";
-import logoutLoader from "./pages/logout/logoutLoader";
+import logoutAction from "./pages/logout/logoutAction";
 import usersLoader from "./pages/users/usersLoader";
 import userProfileLoader from "./pages/users/user-profile/userProfileLoader";
 import conversationsLoader from "./pages/conversations/conversationsLoader";
@@ -162,8 +162,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/logout",
-        Component: Logout,
-        loader: logoutLoader
+        action: logoutAction
     },
     {
         path: "/get-floating-conversations",

@@ -24,66 +24,32 @@ const MainSidebar = ({
 }: MainSidebarProps) => {
     const loaderData = useRouteLoaderData("root") as RootLoaderDataProps;
     const { user } = loaderData;
+    const isAuthenticated = !!(loaderData.success && user);
     const sidebarRef = useRef<HTMLDivElement | null>(null);
 
-    const commonLinks = [
-        user ? {
-            path: "/dashboard",
-            text: "Dashboard",
-            icon: "dashboard"
-        } : {
-            path: "/",
-            text: "Home",
-            icon: "home"
-        },
+    const links: Link[] = [
         {
-            path: "/about",
-            text: "About",
-            icon: "info"
+            path: isAuthenticated ? "/dashboard" : "/",
+            text: isAuthenticated ? "Dashboard" : "Home",
+            icon: isAuthenticated ? "dashboard" : "home",
         },
-    ]
+    ];
 
-    const links: Link[] = commonLinks.concat(
-        loaderData?.success ?
-            [
-                {
-                    path: "/users",
-                    text: "Users",
-                    icon: "groups"
-                },
-                {
-                    path: "/conversations",
-                    text: "Conversations",
-                    icon: "conversation"
-                },
-                {
-                    path: "/friends",
-                    text: "Friends",
-                    icon: "handshake"
-                },
-                {
-                    path: "/groups",
-                    text: "Groups",
-                    icon: "communities"
-                },
-                {
-                    path: "/profile",
-                    text: "Profile",
-                    icon: "settings"
-                },
-            ] : [
-                {
-                    path: "/register",
-                    text: "Register",
-                    icon: "signature"
-                },
-                {
-                    path: "/login",
-                    text: "Login",
-                    icon: "login"
-                },
-            ]
-    );
+    if (isAuthenticated) {
+        links.push(
+            { path: "/users", text: "Users", icon: "groups" },
+            { path: "/conversations", text: "Conversations", icon: "conversation" },
+            { path: "/friends", text: "Friends", icon: "handshake" },
+            { path: "/groups", text: "Groups", icon: "communities" },
+        );
+    } else {
+        links.push(
+            { path: "/register", text: "Register", icon: "signature" },
+            { path: "/login", text: "Login", icon: "login" }
+        );
+    }
+
+    links.push({ path: "/about", text: "About", icon: "info" });
 
     useEffect(() => {
         const handleClick = (e: MouseEvent) => {
@@ -129,7 +95,7 @@ const MainSidebar = ({
         <ul className={styles.links}>
             {links.map((link: Link) => {
                 return <NavLink
-                    prefetch="intent"
+                    prefetch="none"
                     key={link.path}
                     to={link.path}
                     className={({ isActive }) => isActive
