@@ -1,7 +1,7 @@
 import styles from "./CurrentFloatingConversation.module.css";
 
 // Packages
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useFetcher } from "react-router";
 
 // Components
@@ -17,8 +17,9 @@ import FloatingMessages from "./floating-messages/FloatingMessages";
 import { NavLink } from "react-router";
 
 // Contexts
-import OnlineUsersContext from "../../../contexts/OnlineUsersContext";
+import { useOnlineUsersContext } from "../../../contexts/OnlineUsersContext";
 import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
+import LastActive from "../../../mini-components/last-active/LastActive";
 
 interface CurrentFloatingConversationProps {
     loggedUserId: number;
@@ -38,8 +39,7 @@ const CurrentFloatingConversation = ({
         conversation
     } = useCurrentFloatingConversation(conversationId);
 
-    const onlineUsers = useContext(OnlineUsersContext);
-    console.log("the content of onlineUsers is:", onlineUsers);
+    const { onlineUsers, lastSeenUpdated } = useOnlineUsersContext();
 
     const fetcher = useFetcher();
     const [message, setMessage] = useState("");
@@ -141,9 +141,13 @@ const CurrentFloatingConversation = ({
                         text="Active"
                     />
                 ) : (
-                    <span className={styles["last-active"]}>
-                        01/01/2001
-                    </span>
+                    (userB && !isGroup) && (
+                        <LastActive
+                            lastActive={lastSeenUpdated[userB.id]
+                                ? lastSeenUpdated[userB.id]
+                                : userB.lastActive}
+                        />
+                    )
                 )}
             </NavLink>
             <div className={styles.buttons}>

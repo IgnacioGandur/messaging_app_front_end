@@ -3,7 +3,7 @@ import styles from "./App.module.css";
 
 // Packages
 import { useRouteLoaderData, Outlet } from "react-router";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 // Components
@@ -21,7 +21,7 @@ import useOnlineUsers from "../../hooks/useOnlineUsers";
 const App = () => {
     const loaderData = useRouteLoaderData("root");
     const [showSidebar, setShowSidebar] = useState(false);
-    const { onlineUsers } = useOnlineUsers();
+    const { onlineUsers, lastSeenUpdated } = useOnlineUsers();
 
     const toggleSidebar = () => {
         setShowSidebar((prev) => !prev);
@@ -32,13 +32,15 @@ const App = () => {
             const {
                 id: userId,
                 username,
-                profilePictureUrl
+                profilePictureUrl,
+                lastActive,
             } = loaderData.user;
 
             socket.auth = {
                 userId,
                 username,
-                profilePictureUrl
+                profilePictureUrl,
+                lastActive
             };
 
             socket.connect();
@@ -48,7 +50,7 @@ const App = () => {
         }
     }, [loaderData]);
 
-    return <OnlineUsersContext.Provider value={onlineUsers} >
+    return <OnlineUsersContext.Provider value={{ onlineUsers, lastSeenUpdated }} >
         <Toaster
             position="top-center"
         />

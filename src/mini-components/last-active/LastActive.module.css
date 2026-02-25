@@ -1,0 +1,15 @@
+.last-active {
+    font-size: var(--font-size-small);
+    display: flex;
+    align-items: center;
+    gap: var(--size-tiny);
+    opacity: .8;
+
+    .text {
+        font-weight: var(--font-thickness-thick);
+    }
+
+    .date::first-letter {
+        text-transform: capitalize;
+    }
+}

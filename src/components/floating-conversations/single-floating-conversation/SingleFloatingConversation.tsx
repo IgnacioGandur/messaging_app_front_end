@@ -2,9 +2,7 @@ import styles from "./SingleFloatingConversation.module.css";
 import type Conversation from "../../../types/conversation";
 import type { Status } from "../useConversations";
 import { formatDistanceToNow } from "date-fns";
-import OnlineUsersContext from "../../../contexts/OnlineUsersContext";
-import { useContext } from "react";
-import { spawn } from "node:child_process";
+import { useOnlineUsersContext } from "../../../contexts/OnlineUsersContext";
 import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
 
 interface SingleFloatingConversationProps {
@@ -23,7 +21,7 @@ const SingleFloatingConversation = ({
     const isGroup = conversation.isGroup;
     const userB = conversation.participants.find(p => p.userId !== loggedUserId)?.user;
     const lastMesage = conversation.messages[0];
-    const onlineUsers = useContext(OnlineUsersContext);
+    const { onlineUsers } = useOnlineUsersContext();
     const isuserBOnline = onlineUsers.find(u => u.userId === userB?.id);
 
     return <button

@@ -17,7 +17,7 @@
                 "ppf title"
                 "ppf last-active"
             ;
-            gap: 3px var(--size-very-small);
+            gap: 0 var(--size-very-small);
             text-decoration: none;
 
             .ppf {
