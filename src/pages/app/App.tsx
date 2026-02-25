@@ -49,6 +49,7 @@ const App = () => {
             socket.connect();
             return () => {
                 socket.disconnect();
+                socket.emit("user_disconnected", { userId: loaderData.user.id, lastActive: new Date() })
             };
         }
     }, [loaderData]);
