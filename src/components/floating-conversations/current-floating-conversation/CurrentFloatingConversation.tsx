@@ -1,21 +1,24 @@
 import styles from "./CurrentFloatingConversation.module.css";
 
 // Packages
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useFetcher } from "react-router";
 
 // Components
 import MiniButton from "../mini-button/MiniButton";
-import Header from "../header/Header";
 
 // Hooks
-import useFetchCurrentConversation from "./useFetchCurrentConversation";
+import useCurrentFloatingConversation from "./useCurrentFloatingConversation";
 
 // Types
 import type { Status } from "../useConversations";
 import FloatingConversationsLoader from "../floating-conversations-loader/FloatingConversationsLoader";
 import FloatingMessages from "./floating-messages/FloatingMessages";
 import { NavLink } from "react-router";
+
+// Contexts
+import OnlineUsersContext from "../../../contexts/OnlineUsersContext";
+import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
 
 interface CurrentFloatingConversationProps {
     loggedUserId: number;
@@ -30,17 +33,20 @@ const CurrentFloatingConversation = ({
     conversationId,
     setStatus,
 }: CurrentFloatingConversationProps) => {
+    const {
+        error,
+        conversation
+    } = useCurrentFloatingConversation(conversationId);
+
+    const onlineUsers = useContext(OnlineUsersContext);
+    console.log("the content of onlineUsers is:", onlineUsers);
+
     const fetcher = useFetcher();
     const [message, setMessage] = useState("");
 
-    const {
-        isLoading,
-        fetchError,
-        conversation
-    } = useFetchCurrentConversation(conversationId);
-
     const isGroup = conversation?.isGroup;
     const userB = conversation?.participants.find(p => p.userId !== loggedUserId)?.user;
+    const isUserBOnline = onlineUsers.find(u => u.userId === userB?.id);
 
     const title = isGroup
         ? conversation.title
@@ -61,82 +67,130 @@ const CurrentFloatingConversation = ({
         setMessage("");
     };
 
+    const isSendingMessage = fetcher.state === "idle";
+
+    if (error) return <div
+        className={`
+            ${className}
+            ${styles["current-conversation"]}
+            ${styles["fetch-error"]}
+        `}
+    >
+        <header className={styles.header}>
+            <h2>No conversation</h2>
+            <div className={styles.buttons}>
+                <MiniButton
+                    title="Back to conversations"
+                    icon="keyboard_return"
+                    onClick={() => setStatus("list")}
+                />
+                <MiniButton
+                    title="Back to conversations"
+                    icon="close"
+                    onClick={() => setStatus("hide")}
+                />
+            </div>
+        </header>
+        <p className={styles.details}>
+            We were not able to get this conversation.
+        </p>
+        <div className={styles.container}>
+            <span className={`material-symbols-rounded ${styles.icon}`}>
+                voice_selection_off
+            </span>
+        </div>
+        <p className={styles.error}>
+            {error}
+        </p>
+    </div>
+
+    if (!conversation) return <div
+        className={`
+            ${className}
+            ${styles["current-conversation"]}
+        `}
+    >
+        <FloatingConversationsLoader
+            message="Loading conversation..."
+        />
+    </div>
+
     return <div
         className={`
             ${className}
             ${styles["current-conversation"]}
         `}
     >
-        {isLoading ? (
-            <FloatingConversationsLoader
-                message="Loading conversation..."
-            />
-        ) : (<>
-            <header
-                className={styles.header}
+        <header
+            className={styles.header}
+        >
+            <NavLink
+                to={`/conversations/${conversation.id}`}
+                className={styles.user}
             >
-                <NavLink
-                    to={`/conversations/${conversation!.id}`}
-                    className={styles.user}
-                >
-                    <img
-                        className={styles.ppf}
-                        src={isGroup ? conversation.profilePicture : userB?.profilePictureUrl}
-                        alt={title}
+                <img
+                    className={styles.ppf}
+                    src={isGroup ? conversation.profilePicture : userB?.profilePictureUrl}
+                    alt={title}
+                />
+                <span className={styles.title}>
+                    {title}
+                </span>
+                {isUserBOnline ? (
+                    <ActiveIndicator
+                        text="Active"
                     />
-                    <span className={styles.title}>
-                        {title}
-                    </span>
+                ) : (
                     <span className={styles["last-active"]}>
                         01/01/2001
                     </span>
-                </NavLink>
-                <div className={styles.buttons}>
-                    <MiniButton
-                        title="Back to conversations"
-                        icon="keyboard_return"
-                        onClick={() => setStatus("list")}
-                    />
-                    <MiniButton
-                        title="Back to conversations"
-                        icon="close"
-                        onClick={() => setStatus("hide")}
-                    />
-                </div>
-            </header>
-            <FloatingMessages
-                loggedUserId={loggedUserId}
-                messages={conversation!.messages}
-            />
-            <fetcher.Form
-                method="POST"
-                className={styles["message-form"]}
-                onSubmit={(e) => {
-                    sendMessage(e);
-                }}
-            >
-                <input
-                    className={styles.input}
-                    id="message"
-                    name="message"
-                    type="text"
-                    value={message}
-                    placeholder="Hello dude!"
-                    onChange={(e) => setMessage(e.target.value)}
-                    required={true}
+                )}
+            </NavLink>
+            <div className={styles.buttons}>
+                <MiniButton
+                    title="Back to conversations"
+                    icon="keyboard_return"
+                    onClick={() => setStatus("list")}
                 />
-                <button
-                    title="Send message"
-                    aria-label="Send message"
-                    className={styles["submit-button"]}
-                >
-                    <span className="material-symbols-rounded">
-                        arrow_upward_alt
-                    </span>
-                </button>
-            </fetcher.Form>
-
-        </>)}
+                <MiniButton
+                    title="Back to conversations"
+                    icon="close"
+                    onClick={() => setStatus("hide")}
+                />
+            </div>
+        </header>
+        <FloatingMessages
+            isSendingMessage={isSendingMessage}
+            loggedUserId={loggedUserId}
+            messages={conversation.messages}
+        />
+        <fetcher.Form
+            method="POST"
+            className={styles["message-form"]}
+            onSubmit={(e) => {
+                sendMessage(e);
+            }}
+        >
+            <input
+                className={styles.input}
+                id="message"
+                name="message"
+                type="text"
+                value={message}
+                placeholder="Hello dude!"
+                onChange={(e) => setMessage(e.target.value)}
+                required={true}
+            />
+            <button
+                title="Send message"
+                aria-label="Send message"
+                className={styles["submit-button"]}
+            >
+                <span className="material-symbols-rounded">
+                    arrow_upward_alt
+                </span>
+            </button>
+        </fetcher.Form>
     </div>
 }
 

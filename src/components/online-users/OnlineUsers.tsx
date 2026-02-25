@@ -1,25 +1,13 @@
 import { NavLink } from "react-router";
 import Tooltip from "../../pages/dashboard/tooltip/Tooltip";
 import styles from "./OnlineUsers.module.css";
-import socket from "../../socket";
-import { useEffect, useState } from "react";
-
-interface OnlineUser {
-    userId: number;
-    username: string;
-    profilePictureUrl: string;
-};
+import useOnlineUsers from "../../hooks/useOnlineUsers";
+import ActiveIndicator from "../../mini-components/active-indicator/ActiveIndicator";
 
 const OnlineUsers = () => {
-    const [users, setUsers] = useState<OnlineUser[]>([]);
-
-    useEffect(() => {
-        socket.on("update_user_list", (usersArray) => {
-            setUsers(usersArray);
-        });
-
-        return () => { socket.off("update_user_list") };
-    }, []);
+    const {
+        onlineUsers: users
+    } = useOnlineUsers();
 
     return <div className={styles["online-users"]}>
         <Tooltip
@@ -37,7 +25,13 @@ const OnlineUsers = () => {
                         to={`/users/${user.userId}`}
                         className={styles.user}
                     >
-                        <div className={styles.indicator}></div>
+                        <ActiveIndicator
+                            style={{
+                                position: "absolute",
+                                bottom: ".1rem",
+                                left: ".1rem",
+                            }}
+                        />
                         <img
                             title={`${user.username} is online.`}
                             className={styles.ppf}

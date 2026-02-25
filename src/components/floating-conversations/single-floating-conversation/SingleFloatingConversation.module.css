@@ -16,14 +16,32 @@
     background-color: transparent;
     transition: var(--transition-normal);
 
-    .ppf {
-        border: 1px solid var(--light-dark-font-dimmed);
-        width: 60px;
-        height: 60px;
+    .ppf-wrapper {
         grid-area: ppf;
+        position: relative;
         border-radius: var(--rounding-total);
-        object-fit: cover;
-        object-position: center;
+        display: grid;
+        place-items: center;
+
+        .indicator {
+            background-color: var(--color-success);
+            position: absolute;
+            bottom: .1rem;
+            left: .1rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: var(--rounding-total);
+            border: 3px solid var(--light-dark-background);
+        }
+
+        .ppf {
+            border: 1px solid var(--light-dark-font-dimmed);
+            width: 60px;
+            height: 60px;
+            border-radius: var(--rounding-total);
+            object-fit: cover;
+            object-position: center;
+        }
     }
 
     .title,

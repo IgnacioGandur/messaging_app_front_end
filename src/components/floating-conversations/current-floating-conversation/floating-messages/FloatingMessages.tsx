@@ -1,18 +1,29 @@
+import { useEffect, useRef } from "react";
 import { differenceInHours, format } from "date-fns";
 import type Message from "../../../../types/message";
 import styles from "./FloatingMessages.module.css";
 import { Fragment } from "react/jsx-runtime";
 
 interface FloatingMessagesProps {
+    isSendingMessage: boolean;
     loggedUserId: number;
     messages: Message[];
 };
 
 const FloatingMessages = ({
+    isSendingMessage,
     loggedUserId,
     messages
 }: FloatingMessagesProps) => {
+    const anchorRef = useRef<HTMLDivElement | null>(null);
     const reversedArray = messages.slice().reverse();
+
+    useEffect(() => {
+        if (anchorRef?.current) {
+            anchorRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [isSendingMessage]);
+
     return <div className={styles.messages}>
         {reversedArray.map((m, i) => {
             const previousMessage = reversedArray[i - 1];
@@ -67,6 +78,7 @@ const FloatingMessages = ({
                 </div>
             </Fragment>
         })}
+        <div className={styles.anchor} ref={anchorRef}></div>
     </div>
 
 };

@@ -27,9 +27,9 @@
             object-position: center;
         }
 
-        .pad {}
-
         .content {
+            text-wrap: wrap;
+            word-break: break-all;
             padding: calc(var(--size-very-small) + 2px) var(--size-small);
             border-radius: var(--rounding-medium);
             align-self: flex-start;
@@ -46,5 +46,10 @@
             text-align: right;
             align-self: flex-end;
         }
+    }
+
+    .anchor {
+        min-height: 25px;
+        width: 100%;
     }
 }

@@ -15,18 +15,7 @@
 
         .user {
             position: relative;
-
-            .indicator {
-                width: 17px;
-                height: 17px;
-                background-color: var(--color-success);
-                border-radius: var(--rounding-total);
-                position: absolute;
-                bottom: -.5rem;
-                left: 50%;
-                transform: translateX(-50%);
-                color: var(--color-success);
-            }
+            border-radius: var(--rounding-total);
 
             .ppf {
                 width: 65px;

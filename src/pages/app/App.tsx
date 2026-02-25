@@ -3,7 +3,7 @@ import styles from "./App.module.css";
 
 // Packages
 import { useRouteLoaderData, Outlet } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Toaster } from "react-hot-toast";
 
 // Components
@@ -14,10 +14,14 @@ import FloatingConversations from "../../components/floating-conversations/Float
 import MainSidebar from "../../components/main-sidebar/MainSidebar";
 import ManagePageTitles from "./ManagePageTitles";
 
+// Contexts
+import OnlineUsersContext from "../../contexts/OnlineUsersContext";
+import useOnlineUsers from "../../hooks/useOnlineUsers";
 
 const App = () => {
     const loaderData = useRouteLoaderData("root");
     const [showSidebar, setShowSidebar] = useState(false);
+    const { onlineUsers } = useOnlineUsers();
 
     const toggleSidebar = () => {
         setShowSidebar((prev) => !prev);
@@ -44,7 +48,7 @@ const App = () => {
         }
     }, [loaderData]);
 
-    return <>
+    return <OnlineUsersContext.Provider value={onlineUsers} >
         <Toaster
             position="top-center"
         />
@@ -64,7 +68,7 @@ const App = () => {
             <Footer />
             <FloatingConversations />
         </div>
-    </>
+    </OnlineUsersContext.Provider>
 }
 
 export default App;

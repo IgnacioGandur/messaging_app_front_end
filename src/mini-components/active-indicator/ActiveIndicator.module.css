@@ -1,0 +1,17 @@
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+
+    .dot {
+        width: 1rem;
+        height: 1rem;
+        border-radius: var(--rounding-total);
+        background-color: var(--color-success);
+        border: 3px solid var(--light-dark-background);
+    }
+
+    .text {
+        font-size: var(--font-size-small);
+    }
+}

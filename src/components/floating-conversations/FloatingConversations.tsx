@@ -12,11 +12,11 @@ import MiniButton from "./mini-button/MiniButton";
 
 const FloatingConversations = () => {
     const {
+        isLoading,
         status,
         setStatus,
         conversations,
         error,
-        isLoading,
         currentConversationId,
         setCurrentConversationId
     } = useConversations();

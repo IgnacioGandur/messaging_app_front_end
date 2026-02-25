@@ -25,6 +25,7 @@ import groupsLoader from "./pages/groups/groupsLoader";
 import friendsLoader from "./pages/friends/friendsLoader";
 import dashboardLoader from "./pages/dashboard/dashboardLoader";
 import floatingConversationsLoader from "./components/floating-conversations/floatingConversationsLoader";
+import currentFloatingConversationLoader from "./components/floating-conversations/current-floating-conversation/currentFloatingConversationLoader";
 
 // Component Loaders
 import AppLoader from "./pages/app/app-loader/AppLoader";
@@ -165,9 +166,16 @@ const router = createBrowserRouter([
         loader: logoutLoader
     },
     {
+        path: "/get-floating-conversations",
+        loader: floatingConversationsLoader
+    },
+    {
+        path: "/get-floating-conversations/:id",
+        loader: currentFloatingConversationLoader
+    },
+    {
         path: "/send-message",
         action: floatingConversationsAction,
-        loader: floatingConversationsLoader
     }
 ]);
 

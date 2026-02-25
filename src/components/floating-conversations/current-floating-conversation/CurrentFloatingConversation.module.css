@@ -53,14 +53,6 @@
         }
     }
 
-    /* .separator { */
-    /*     height: 2px; */
-    /*     width: 95%; */
-    /*     background-color: var(--light-dark-font-dimmed); */
-    /*     border-radius: 5px; */
-    /*     align-self: center; */
-    /* } */
-
     .container {
         display: flex;
         flex-direction: column;
@@ -99,5 +91,35 @@
             border: 2px solid var(--color-secondary);
         }
 
+    }
+}
+
+.current-conversation.fetch-error {
+
+    .error,
+    .details {
+        text-align: center;
+        font-style: italic;
+        opacity: .8;
+    }
+
+    .container {
+        align-items: center;
+
+        .icon {
+            background-image: var(--gradient-main-colors);
+            color: transparent;
+            background-clip: text;
+            font-size: var(--icon-size-giant);
+        }
+
+    }
+
+    .error {
+        font-size: .85rem;
+    }
+
+    .error::first-letter {
+        text-transform: capitalize;
     }
 }

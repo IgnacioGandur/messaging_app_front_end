@@ -2,7 +2,10 @@ import styles from "./SingleFloatingConversation.module.css";
 import type Conversation from "../../../types/conversation";
 import type { Status } from "../useConversations";
 import { formatDistanceToNow } from "date-fns";
-
+import OnlineUsersContext from "../../../contexts/OnlineUsersContext";
+import { useContext } from "react";
+import { spawn } from "node:child_process";
+import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";
 
 interface SingleFloatingConversationProps {
     setStatus: React.Dispatch<React.SetStateAction<Status>>;
@@ -20,6 +23,8 @@ const SingleFloatingConversation = ({
     const isGroup = conversation.isGroup;
     const userB = conversation.participants.find(p => p.userId !== loggedUserId)?.user;
     const lastMesage = conversation.messages[0];
+    const onlineUsers = useContext(OnlineUsersContext);
+    const isuserBOnline = onlineUsers.find(u => u.userId === userB?.id);
 
     return <button
         onClick={() => {
@@ -35,13 +40,24 @@ const SingleFloatingConversation = ({
                 ? conversation.title
                 : `${userB?.firstName} ${userB?.lastName}`}
         </h2>
-        <img
-            className={styles.ppf}
-            src={isGroup
-                ? conversation.profilePicture
-                : userB?.profilePictureUrl}
-            alt={conversation.title || `${userB?.firstName} ${userB?.lastName}`}
-        />
+        <div className={styles["ppf-wrapper"]}>
+            {(isuserBOnline && !isGroup) && (
+                <ActiveIndicator
+                    style={{
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                    }}
+                />
+            )}
+            <img
+                className={styles.ppf}
+                src={isGroup
+                    ? conversation.profilePicture
+                    : userB?.profilePictureUrl}
+                alt={conversation.title || `${userB?.firstName} ${userB?.lastName}`}
+            />
+        </div>
         <div
             className={styles["last-message"]}
         >
