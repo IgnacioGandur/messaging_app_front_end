@@ -2,11 +2,21 @@
     font-size: var(--font-size-small);
     display: flex;
     align-items: center;
-    gap: var(--size-tiny);
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 3px;
     opacity: .8;
 
     .text {
+        flex: 0 0 auto;
         font-weight: var(--font-thickness-thick);
+        word-break: keep-all;
+    }
+
+    .date {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
     }
 
     .date::first-letter {

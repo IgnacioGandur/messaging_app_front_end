@@ -76,7 +76,6 @@
     .options {
         background-color: var(--light-dark-background);
         border-radius: var(--rounding-medium);
-        padding: var(--size-very-small);
         gap: var(--size-very-small);
         box-shadow: var(--shadow-1);
         position-anchor: --options-anchor;
@@ -91,22 +90,26 @@
         opacity: 0;
 
         .option {
-            min-width: 200px;
             text-decoration: none;
             color: var(--light-dark-font);
             border-radius: var(--rounding-medium);
-            padding: var(--size-very-small);
+            padding: var(--size-small) calc(var(--size-small) * 2);
             display: flex;
             align-items: center;
             gap: var(--size-very-small);
             transition: all 300ms ease-in-out;
+            background-color: var(--light-dark-background);
+            outline: none;
+            border: none;
 
             .icon {
                 font-size: var(--icon-size-normal);
             }
 
             .text {
+                flex: 1;
                 font-weight: var(--font-thickness-thick);
+                text-align: center;
             }
         }
 

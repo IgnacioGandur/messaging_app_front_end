@@ -1,4 +1,5 @@
 .tooltip-container {
+    border-radius: var(--rounding-total);
     position: relative;
 
     .indicator {

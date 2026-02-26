@@ -78,11 +78,36 @@
         }
     }
 
-    .container {
+    .container,
+    .empty-conversations {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         padding: var(--size-small);
         padding-top: 0;
+    }
+
+    .empty-conversations {
+        gap: var(--size-normal);
+        padding: var(--size-normal);
+        align-items: center;
+        text-align: center;
+
+        .icon {
+            font-size: var(--icon-size-giant);
+            background-image: var(--gradient-main-colors);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .text {
+            font-size: .9rem;
+            font-style: italic;
+            opacity: .9;
+
+            a {
+                color: var(--color-main);
+            }
+        }
     }
 }

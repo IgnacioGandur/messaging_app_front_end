@@ -4,7 +4,6 @@ import { createBrowserRouter } from "react-router";
 import Home from "./pages/home/Home";
 import App from "./pages/app/App";
 import Register from "./pages/register/Register";
-import Logout from "./pages/logout/Logout";
 import Login from "./pages/login/Login";
 import Users from "./pages/users/Users";
 import UserProfile from "./pages/users/user-profile/UserProfile";
@@ -50,6 +49,8 @@ import RedirectIfNotLogged from "./components/redirects/RedirectIfNotLogged";
 import NotFoundPage from "./pages/not-found-page/NotFoundPage";
 import ServerErrorPage from "./pages/server-error-page/ServerErrorPage";
 import Dashboard from "./pages/dashboard/Dashboard";
+import friendshipRequestsLoader from "./components/navbar/friendship-requests/friendshipRequestsLoader";
+import respondFriendshipRequestAction from "./components/navbar/friendship-requests/respondFriendshipRequestAction";
 
 const router = createBrowserRouter([
     {
@@ -175,6 +176,14 @@ const router = createBrowserRouter([
     {
         path: "/send-message",
         action: floatingConversationsAction,
+    },
+    {
+        path: "/get-friendship-requests",
+        loader: friendshipRequestsLoader
+    },
+    {
+        path: "/respond-friendship-request",
+        action: respondFriendshipRequestAction
     }
 ]);
 

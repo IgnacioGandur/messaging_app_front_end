@@ -25,6 +25,7 @@
             border-radius: var(--rounding-total);
             object-fit: cover;
             object-position: center;
+            align-self: end;
         }
 
         .content {

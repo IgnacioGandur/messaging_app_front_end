@@ -1,6 +1,7 @@
 import styles from "./Tooltip.module.css";
 
 interface Tooltip {
+    tooltipClassName?: string;
     indicator?: string | number;
     popoverTarget?: string;
     anchorName?: string;
@@ -10,6 +11,7 @@ interface Tooltip {
 };
 
 const Tooltip = ({
+    tooltipClassName,
     indicator,
     popoverTarget = "default",
     anchorName = "--anchor",
@@ -48,7 +50,10 @@ const Tooltip = ({
             }}
             popover="auto"
             id={popoverTarget}
-            className={styles.tooltip}
+            className={`
+                ${tooltipClassName}
+                ${styles.tooltip}
+            `}
         >
             {children}
         </div>

@@ -1,6 +1,6 @@
 import styles from "./FloatingConversations.module.css";
 
-import { useRouteLoaderData } from "react-router";
+import { useRouteLoaderData, NavLink } from "react-router";
 import useConversations from "./useConversations";
 
 import FloatingConversationsError from "./floating-conversations-error/FloatingConversationsError";
@@ -66,17 +66,32 @@ const FloatingConversations = () => {
                                 />
                             </div>
                         </header>
-                        <ul className={styles.container}>
-                            {conversations.map((conversation) => {
-                                return <SingleFloatingConversation
-                                    setStatus={setStatus}
-                                    loggedUserId={rootData.user!.id}
-                                    key={conversation.id}
-                                    setCurrentConversationId={setCurrentConversationId}
-                                    conversation={conversation}
-                                />
-                            })}
-                        </ul>
+                        {conversations.length === 0 ? (
+                            <div className={styles["empty-conversations"]}>
+                                <h3>You don't have conversations</h3>
+                                <span className={`
+                                    material-symbols-rounded
+                                    ${styles.icon}
+                                `}>
+                                    inbox
+                                </span>
+                                <p className={styles.text}>
+                                    You can look for users to chat with <NavLink to="/users">here!</NavLink>
+                                </p>
+                            </div>
+                        ) : (
+                            <ul className={styles.container}>
+                                {conversations.map((conversation) => {
+                                    return <SingleFloatingConversation
+                                        setStatus={setStatus}
+                                        loggedUserId={rootData.user!.id}
+                                        key={conversation.id}
+                                        setCurrentConversationId={setCurrentConversationId}
+                                        conversation={conversation}
+                                    />
+                                })}
+                            </ul>
+                        )}
                     </>)
                 }
             </div>

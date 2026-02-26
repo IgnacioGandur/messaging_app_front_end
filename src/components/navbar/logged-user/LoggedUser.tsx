@@ -1,20 +1,5 @@
 import styles from "./LoggedUser.module.css";
-import { Fragment } from "react";
-import { Form, NavLink } from "react-router";
-
-type Link = {
-    to: string;
-    text: string;
-    icon: string;
-};
-
-const links: Link[] = [
-    {
-        to: "/logout",
-        text: "Logout",
-        icon: "logout"
-    }
-];
+import { Form } from "react-router";
 
 type LoggedUserProps = {
     user: {
@@ -83,24 +68,6 @@ const LoggedUser = ({ user }: LoggedUserProps) => {
                     </span>
                 </button>
             </Form>
-            {/* {links.map((link: Link, index) => { */}
-            {/*     return <Fragment */}
-            {/*         key={link.text} */}
-            {/*     > */}
-            {/*         <NavLink */}
-            {/*             to={link.to} */}
-            {/*             className={styles.option} */}
-            {/*         > */}
-            {/*             <span className={`material-symbols-rounded ${styles.icon}`}> */}
-            {/*                 {link.icon} */}
-            {/*             </span> */}
-            {/*             <span className={styles.text}> */}
-            {/*                 {link.text} */}
-            {/*             </span> */}
-            {/*         </NavLink> */}
-            {/*         {links.length - 2 === index && <div className={styles.separator}></div>} */}
-            {/*     </Fragment> */}
-            {/* })} */}
         </div>
     </div>
 }
