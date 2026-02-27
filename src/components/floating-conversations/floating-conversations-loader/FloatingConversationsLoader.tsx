@@ -1,4 +1,3 @@
-import Header from "../header/Header";
 import styles from "./FloatingConversationsLoader.module.css";
 
 interface FloatingConversationsLoaderProps {
@@ -9,9 +8,13 @@ const FloatingConversationsLoader = ({
     message
 }: FloatingConversationsLoaderProps) => {
     return <div className={styles.loader}>
-        <Header
-            title={message}
-        />
+        <header className={styles.header}>
+            <h3
+                className={styles.title}
+            >
+                {message}
+            </h3>
+        </header>
         <div className={styles["icon-wrapper"]}>
             <span className={`material-symbols-rounded ${styles.icon}`}>
                 progress_activity

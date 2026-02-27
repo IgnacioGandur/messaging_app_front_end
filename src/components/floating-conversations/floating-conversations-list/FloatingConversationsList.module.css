@@ -1,5 +1,3 @@
-.current-floating-conversation,
-/* .conversations-hidden, */
 .conversations {
     max-width: 375px;
     width: 100%;
@@ -8,41 +6,11 @@
     bottom: var(--size-small);
     right: var(--size-small);
     display: flex;
-    border-radius: 50px;
+    flex-direction: column;
+    gap: var(--size-small);
     background-color: var(--light-dark-background);
     border: 2px solid var(--light-dark-font-dimmed);
     transition: var(--transition-normal);
-}
-
-/* .conversations-hidden:hover, */
-/* .conversations-hidden:focus-visible { */
-/*     border: 2px solid var(--color-secondary); */
-/* } */
-
-/* .conversations-hidden { */
-/*     display: flex; */
-/*     align-items: center; */
-/*     gap: var(--size-small); */
-/*     max-width: 275px; */
-/*     padding: var(--size-normal); */
-/**/
-/*     .icon { */
-/*         font-size: var(--icon-size-normal); */
-/*     } */
-/**/
-/*     .separator { */
-/*         min-width: 5px; */
-/*         min-height: 5px; */
-/*         border-radius: var(--rounding-total); */
-/*         background-color: var(--light-dark-font-dimmed); */
-/*     } */
-/* } */
-
-.current-floating-conversation,
-.conversations {
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-small);
     border-radius: 25px;
     padding: 0;
 

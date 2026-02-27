@@ -30,9 +30,10 @@ const useConversations = () => {
     }, [fetcher, isAuthenticated]);
 
     const conversations = fetcher.data?.data?.conversations ?? [];
-    const isLoading = fetcher.state === "loading";
-    const error = (isAuthenticated && fetcher.data?.success === false)
-        ? fetcher.data.message
+    const isLoading = fetcher.state !== "idle";
+    const error = (isAuthenticated
+        && fetcher.data?.success === false)
+        ? "We were not able to retrieve you conversations."
         : null;
 
     return {

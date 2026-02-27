@@ -29,6 +29,7 @@ const FloatingMessages = ({
             const previousMessage = reversedArray[i - 1];
             const nextMessage = reversedArray[i + 1];
             const isYourMessage = m.senderId === loggedUserId;
+            const isDeleted = m.deleted;
 
             const showPpf = (!nextMessage
                 || nextMessage?.senderId !== m.senderId);
@@ -39,8 +40,7 @@ const FloatingMessages = ({
                 ? differenceInHours(m.createdAt, previousMsgDate)
                 : Infinity;
 
-            // Show date only if message is first message or gap between messages is >= 12 hours.
-
+            // Show date only if message is first message or gap between messages is >= 1 hour.
             const showDate = i === 0 || hoursBetween >= 1;
 
             return <Fragment
@@ -51,13 +51,62 @@ const FloatingMessages = ({
                         {format(m.createdAt, "dd/LL/yyyy, hh:mm aa")}
                     </span>
                 )}
+                {(m.attachments && !m.deleted) && (
+                    m.attachments.map((a) => {
+                        return <div className={`${isYourMessage && styles.you} ${styles.message}`}>
+                            {!isYourMessage
+                                && showPpf
+                                && !m.content
+                                ? (
+                                    <img
+                                        className={styles.ppf}
+                                        src={m.sender.profilePictureUrl}
+                                        alt={m.sender.username}
+                                    />
+                                ) : (
+                                    !isYourMessage && (
+                                        <div className={styles.pad}></div>
+                                    )
+                                )}
+                            <div className={styles.content}>
+                                {a.fileType.includes("image") ? (
+                                    <img
+                                        src={a.fileUrl}
+                                        alt="Conversation image."
+                                        className={styles.image}
+                                    />
+                                ) : (
+                                    <a
+                                        key={"a-" + a.id}
+                                        href={`${a.fileUrl}?download`}
+                                        className={styles.file}
+                                    >
+                                        <p className={styles.title}>
+                                            Attachment
+                                        </p>
+                                        <div
+                                            className={styles.wrapper}
+                                        >
+                                            <span className={`material-symbols-rounded ${styles.icon}`}>
+                                                file_save
+                                            </span>
+                                            <p className={styles.filename}>
+                                                {a.fileName}
+                                            </p>
+                                        </div>
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    })
+                )}
                 <div
                     className={`
                     ${styles.message} 
                     ${isYourMessage
                             ? styles.you
                             : ""}
-                `}
+                    `}
                 >
                     {!isYourMessage && showPpf ? (
                         <img
@@ -71,7 +120,10 @@ const FloatingMessages = ({
                         )
                     )}
                     <span
-                        className={styles.content}
+                        className={`
+                            ${styles.content}
+                            ${isDeleted && styles.deleted}
+                        `}
                     >
                         {m.content}
                     </span>

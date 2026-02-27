@@ -37,6 +37,59 @@
             text-align: left;
             background-color: var(--color-main-dimmed);
         }
+
+        .image {
+            width: 225px;
+            border-radius: var(--rounding-medium);
+        }
+
+        .file {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-areas:
+                "title title"
+                "icon filename";
+            gap: var(--size-very-small);
+            text-decoration: none;
+            color: var(--light-dark-font);
+            cursor: pointer;
+            position: relative;
+
+            .title {
+                grid-area: title;
+                font-size: .8rem;
+                font-weight: 700;
+                text-decoration: underline;
+            }
+
+            .wrapper {
+                display: grid;
+                grid-column: 1/-1;
+                grid-template-columns: subgrid;
+                grid-template-rows: subgrid;
+                grid-template-areas:
+                    "icon filename";
+                gap: var(--size-small);
+                padding: var(--size-very-small);
+                border-radius: var(--rounding-medium);
+                border: 1px solid var(--light-dark-font-dimmed);
+
+                .icon {
+                    grid-area: icon;
+                    font-size: var(--icon-size-normal);
+                    position: relative;
+                }
+
+                .filename {
+                    grid-area: filename;
+                    align-self: center;
+                }
+            }
+        }
+
+        .deleted {
+            background-color: var(--color-error-dimmed);
+        }
     }
 
     .message.you {
@@ -46,6 +99,10 @@
             background-color: var(--color-secondary-dimmed);
             text-align: right;
             align-self: flex-end;
+        }
+
+        .deleted {
+            background-color: var(--color-error-dimmed);
         }
     }
 

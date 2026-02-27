@@ -1,0 +1,32 @@
+.conversations-hidden {
+    max-width: 340px;
+    width: 100%;
+    position: absolute;
+    bottom: var(--size-small);
+    right: var(--size-small);
+    display: flex;
+    border-radius: 50px;
+    background-color: var(--light-dark-background);
+    border: 2px solid var(--light-dark-font-dimmed);
+    transition: var(--transition-normal);
+    display: flex;
+    align-items: center;
+    gap: var(--size-small);
+    padding: var(--size-normal);
+
+    .icon {
+        font-size: var(--icon-size-normal);
+    }
+
+    .separator {
+        min-width: 5px;
+        min-height: 5px;
+        border-radius: var(--rounding-total);
+        background-color: var(--light-dark-font-dimmed);
+    }
+}
+
+.conversations-hidden:hover,
+.conversations-hidden:focus-visible {
+    border: 2px solid var(--color-secondary);
+}

@@ -42,7 +42,7 @@
 
         .ring {
             background-image: var(--gradient-main-colors);
-            padding: 3px;
+            padding: 2px;
 
             .wrapper {
                 padding: 7px;

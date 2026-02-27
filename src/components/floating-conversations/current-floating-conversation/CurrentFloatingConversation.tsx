@@ -20,16 +20,16 @@ import { NavLink } from "react-router";
 
 // Contexts
 import { useOnlineUsersContext } from "../../../contexts/OnlineUsersContext";
+import { useRouteLoaderData } from "react-router";
+import type RootLoaderDataProps from "../../../types/rootLoaderData";
 
 interface CurrentFloatingConversationProps {
-    loggedUserId: number;
     className: string;
     setStatus: React.Dispatch<React.SetStateAction<Status>>;
     conversationId: number;
 };
 
 const CurrentFloatingConversation = ({
-    loggedUserId,
     className,
     conversationId,
     setStatus,
@@ -39,6 +39,8 @@ const CurrentFloatingConversation = ({
         conversation
     } = useCurrentFloatingConversation(conversationId);
 
+    const rootData = useRouteLoaderData("root") as RootLoaderDataProps;
+    const loggedUserId = rootData?.user?.id;
     const { onlineUsers, lastSeenUpdated } = useOnlineUsersContext();
 
     const fetcher = useFetcher();
@@ -166,17 +168,25 @@ const CurrentFloatingConversation = ({
                     onClick={() => setStatus("list")}
                 />
                 <MiniButton
-                    title="Back to conversations"
+                    isLink={true}
+                    to={"/conversations/" + conversationId}
+                    title="Open in conversations page"
+                    icon="expand_content"
+                />
+                <MiniButton
+                    title="Close this conversation"
                     icon="close"
                     onClick={() => setStatus("hide")}
                 />
             </div>
         </header>
-        <FloatingMessages
-            isSendingMessage={isSendingMessage}
-            loggedUserId={loggedUserId}
-            messages={conversation.messages}
-        />
+        {loggedUserId && (
+            <FloatingMessages
+                isSendingMessage={isSendingMessage}
+                loggedUserId={loggedUserId}
+                messages={conversation.messages}
+            />
+        )}
         <fetcher.Form
             method="POST"
             className={styles["message-form"]}
