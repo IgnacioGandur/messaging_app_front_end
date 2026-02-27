@@ -2,7 +2,7 @@ import { formatDistanceToNow } from "date-fns";
 import styles from "./LastActive.module.css";
 
 interface LastActiveProps {
-    className: string;
+    className?: string;
     lastActive: Date | string;
 };
 

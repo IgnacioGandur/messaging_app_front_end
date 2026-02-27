@@ -1,6 +1,7 @@
 import { redirect, type ActionFunctionArgs } from "react-router"
 import apiRequest from "../../utils/apiRequest";
 import type Conversation from "../../types/conversation";
+import socket from "../../socket";
 
 interface ResponseType {
     success: boolean;
@@ -22,7 +23,13 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
             }),
         };
 
-        return await apiRequest(url, options);
+        const result = await apiRequest<ResponseType>(url, options);
+
+        if (result.success) {
+            socket.emit("friendship:send_request", { userBId });
+        };
+
+        return result;
     };
 
     if (intent === "cancel-friendship-request") {

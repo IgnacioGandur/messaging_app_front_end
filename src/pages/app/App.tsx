@@ -24,7 +24,8 @@ const App = () => {
     const loaderData = useRouteLoaderData("root");
     const [showSidebar, setShowSidebar] = useState(false);
     const { onlineUsers, lastSeenUpdated } = useOnlineUsers();
-    const showFloatingConversations = loaderData?.success && !location.pathname.includes("conversations");
+    const showFloatingConversations = loaderData?.success
+        && !location.pathname.includes("conversations");
 
     const toggleSidebar = () => {
         setShowSidebar((prev) => !prev);
@@ -36,20 +37,18 @@ const App = () => {
                 id: userId,
                 username,
                 profilePictureUrl,
-                lastActive,
             } = loaderData.user;
 
             socket.auth = {
                 userId,
                 username,
                 profilePictureUrl,
-                lastActive
             };
 
             socket.connect();
+
             return () => {
                 socket.disconnect();
-                socket.emit("user_disconnected", { userId: loaderData.user.id, lastActive: new Date() })
             };
         }
     }, [loaderData]);

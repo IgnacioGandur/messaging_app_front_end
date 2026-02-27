@@ -17,7 +17,9 @@ const useFriendshipRequests = () => {
 
     const requests = fetcher.data?.friendshipRequests;
     const isLoading = fetcher.state !== "idle";
-    const error = !!(fetcher.data && fetcher.data.success === false) ? "We were not able to fetch your friendship requests." : null;
+    const error = !!(fetcher.data && fetcher.data.success === false)
+        ? "We were not able to fetch your friendship requests."
+        : null;
 
     return {
         requests,

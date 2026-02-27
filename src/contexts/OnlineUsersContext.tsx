@@ -1,9 +1,17 @@
 import { createContext, useContext } from "react";
-import type { OnlineUser } from "../hooks/useOnlineUsers";
+
+export interface OnlineUser {
+    userId: number;
+    username: string;
+    profilePictureUrl: string;
+    lastActive: Date;
+};
+
+export type LastSeen = Record<number, Date>;
 
 interface OnlineUsersContextType {
     onlineUsers: OnlineUser[];
-    lastSeenUpdated: Record<number, string>;
+    lastSeenUpdated: LastSeen;
 };
 
 const OnlineUsersContext = createContext<OnlineUsersContextType | null>(null);

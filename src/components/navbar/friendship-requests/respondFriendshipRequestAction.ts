@@ -3,7 +3,6 @@ import type { ActionFunctionArgs } from "react-router";
 type Status = "ACCEPTED" | "REJECTED";
 
 const respondFriendshipRequestAction = async ({ request }: ActionFunctionArgs) => {
-    await new Promise(r => setTimeout(r, 3000));
     const formData = await request.formData();
     const friendshipId = formData.get("friendshipId");
     const status = formData.get("status") as Status;

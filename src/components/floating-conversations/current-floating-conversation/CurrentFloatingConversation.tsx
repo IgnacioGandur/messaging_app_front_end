@@ -47,6 +47,7 @@ const CurrentFloatingConversation = ({
     const isGroup = conversation?.isGroup;
     const userB = conversation?.participants.find(p => p.userId !== loggedUserId)?.user;
     const isUserBOnline = onlineUsers.find(u => u.userId === userB?.id);
+    const userBLastActive = userB?.id ? lastSeenUpdated[userB?.id] : undefined;
 
     const title = isGroup
         ? conversation.title
@@ -149,9 +150,11 @@ const CurrentFloatingConversation = ({
                         </span>
                     ) : (userB && !isGroup) && (
                         <LastActive
-                            lastActive={lastSeenUpdated[userB.id]
-                                ? lastSeenUpdated[userB.id]
-                                : userB.lastActive}
+                            lastActive={
+                                userBLastActive
+                                    ? userBLastActive
+                                    : userB.lastActive
+                            }
                         />
                     )
                 )}
