@@ -110,13 +110,19 @@ const FriendshipRequests = () => {
                     <ul className={styles.container}>
                         {requests.map((f) => {
                             const user = f.userA;
+
+                            if (!user) return;
+
                             const name = user.firstName + " " + user.lastName;
                             const isActive = onlineUsers.some(u => u.userId === user.id);
                             const isRespondingThisRequest = fetcher.state !== "idle"
                                 && (fetcher.formData?.get("friendshipId")?.toString() === String(f.id));
 
                             return isRespondingThisRequest ? (
-                                <div className={styles["loader-wrapper"]}>
+                                <div
+                                    key={f.id}
+                                    className={styles["loader-wrapper"]}
+                                >
                                     <span className={`
                                             ${styles.icon}
                                             material-symbols-rounded

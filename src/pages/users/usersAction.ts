@@ -2,12 +2,17 @@ import { redirect, type ActionFunctionArgs } from "react-router"
 import apiRequest from "../../utils/apiRequest";
 import type Conversation from "../../types/conversation";
 import socket from "../../socket";
+import type Friendship from "../../types/friendship";
 
 interface ResponseType {
     success: boolean;
     message: string;
     conversation: Conversation;
 }
+
+interface FriendshipRequestType extends Omit<ResponseType, "conversation"> {
+    friendship: Friendship;
+};
 
 export default async function usersAction({ request }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -23,23 +28,13 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
             }),
         };
 
-        const result = await apiRequest<ResponseType>(url, options);
+        const result = await apiRequest<FriendshipRequestType>(url, options);
 
         if (result.success) {
-            socket.emit("friendship:send_request", { userBId });
+            socket.emit("friendship:send_request", { userBId, friendship: result.friendship });
         };
 
         return result;
-    };
-
-    if (intent === "cancel-friendship-request") {
-        const friendshipId = formData.get("friendshipId");
-        const url = import.meta.env.VITE_API_BASE + `/friendships/${friendshipId}`;
-        const options: RequestInit = {
-            method: "DELETE",
-        };
-
-        return await apiRequest(url, options);
     };
 
     if (intent === "handle-friendship-response") {
@@ -57,7 +52,33 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
             }),
         };
 
-        return await apiRequest(url, options);
+        const result = await apiRequest<FriendshipRequestType>(url, options);
+
+        if (result.success) {
+            socket.emit(`friendship:${status === "ACCEPTED" ? "accept" : "cancel_request"}`, result.friendship);
+        };
+
+        return result;
+    }
+
+    if (intent === "remove-friend") {
+        const friendshipId = formData.get("friendshipId");
+        const url = `${import.meta.env.VITE_API_BASE}/friendships/${friendshipId}`;
+        const options: RequestInit = {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include"
+        };
+
+        const result = await apiRequest<FriendshipRequestType>(url, options);
+
+        if (result.success) {
+            socket.emit("friendship:remove", result.friendship);
+        };
+
+        return result;
     }
 
     if (intent === "send-message") {
@@ -75,19 +96,5 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
         } else {
             return result;
         }
-    }
-
-    if (intent === "remove-friend") {
-        const friendshipId = formData.get("friendshipId");
-        const url = `${import.meta.env.VITE_API_BASE}/friendships/${friendshipId}`;
-        const options: RequestInit = {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include"
-        };
-
-        return await apiRequest(url, options);
     }
 }

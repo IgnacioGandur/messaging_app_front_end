@@ -6,6 +6,6 @@ export default interface Friendship {
     userBId: number;
     createdAt: Date;
     status: "ACCEPTED" | "PENDING";
-    userA: User;
-    userB: User;
+    userA?: User;
+    userB?: User;
 }

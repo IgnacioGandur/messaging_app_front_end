@@ -1,4 +1,5 @@
 import type { ActionFunctionArgs } from "react-router";
+import socket from "../../../socket";
 
 type Status = "ACCEPTED" | "REJECTED";
 
@@ -23,7 +24,13 @@ const respondFriendshipRequestAction = async ({ request }: ActionFunctionArgs) =
     };
 
     const response = await fetch(url, options);
-    return await response.json();
+    const result = await response.json();
+
+    if (result?.friendship?.status === "ACCEPTED") {
+        socket.emit("friendship:accept", result.friendship);
+    };
+
+    return result;
 };
 
 export default respondFriendshipRequestAction;

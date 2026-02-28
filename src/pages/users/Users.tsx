@@ -21,6 +21,7 @@ import SingleUser from "./single-user/SingleUser";
 // Types
 import type User from "../../types/user";
 import type Friendship from "../../types/friendship";
+import useFriendshipsSocket from "./useFriendshipsSocket";
 
 interface LoaderDataType {
     users: User[];
@@ -42,6 +43,7 @@ const Users = () => {
     const users = loaderData?.users;
     const usersMetadata = loaderData?.meta;
     const friendships: Friendship[] = loaderData?.friendships;
+    const { updatedFriendships } = useFriendshipsSocket(friendships);
     const currentSearch = searchParams.get("search") || "";
 
     // const isSubmitting = fetcher.state === "submitting";
@@ -133,7 +135,7 @@ const Users = () => {
                             >
                                 <SingleUser
                                     user={user}
-                                    friendships={friendships}
+                                    friendships={updatedFriendships}
                                     removeFriendship={removeFriendship}
                                     handleFriendshipResponse={handleFriendshipResponse}
                                     sendFriendshipRequest={sendFriendshipRequest}

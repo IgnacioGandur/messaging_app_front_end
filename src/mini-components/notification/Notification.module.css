@@ -1,0 +1,44 @@
+.notification {
+    padding: var(--size-small);
+    background-color: var(--light-dark-background);
+    border: 1px solid var(--light-dark-font-dimmed);
+    box-shadow: var(--shadow-1);
+    display: flex;
+    align-items: center;
+    border-radius: var(--rounding-medium);
+    gap: var(--size-very-small);
+    opacity: 0;
+    transform: translateY(-100%);
+    animation: appear 250ms ease-in-out forwards;
+
+    .icon {
+        font-size: var(--icon-size-normal);
+        background-image: var(--gradient-main-colors);
+        background-clip: text;
+        color: transparent;
+    }
+
+    .separator {
+        width: 7px;
+        height: 7px;
+        background-color: red;
+        border-radius: var(--rounding-total);
+        background-image: var(--gradient-main-colors);
+    }
+
+    .text {
+        font-style: italic;
+        font-size: .92rem;
+    }
+
+    .text::first-letter {
+        text-transform: capitalize;
+    }
+}
+
+@keyframes appear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
