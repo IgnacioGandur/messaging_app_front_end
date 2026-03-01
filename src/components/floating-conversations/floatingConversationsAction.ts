@@ -1,4 +1,6 @@
 import type { ActionFunctionArgs } from "react-router";
+import socket from "../../socket";
+import type { SendMessageResponse } from "../../pages/conversations/child-routes/current-conversation/currentConversationAction";
 
 const floatingConversationsAction = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
@@ -14,7 +16,11 @@ const floatingConversationsAction = async ({ request }: ActionFunctionArgs) => {
     };
 
     const response = await fetch(url, options);
-    const result = await response.json();
+    const result = await response.json() as SendMessageResponse;
+
+    if (result.success) {
+        socket.emit("notification:message", result.sentMessage);
+    };
 
     return result;
 }

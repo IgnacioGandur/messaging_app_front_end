@@ -1,0 +1,82 @@
+.notification-message {
+    text-decoration: none;
+    padding: var(--size-small);
+    background-color: var(--light-dark-background);
+    border: 2px solid var(--light-dark-font-dimmed);
+    box-shadow: var(--shadow-1);
+    display: flex;
+    align-items: center;
+    border-radius: var(--rounding-medium);
+    gap: var(--size-small);
+    opacity: 0;
+    transform: translateY(-100%);
+    animation: appear 250ms ease-in-out forwards;
+    width: 100%;
+    max-width: 300px;
+    transition: var(--transition-normal);
+
+
+    .indicator {
+        width: 7px;
+        height: 7px;
+        border-radius: var(--rounding-total);
+        background-image: var(--gradient-main-colors);
+        flex-shrink: 0;
+    }
+
+    .content {
+        display: grid;
+        grid-template-areas:
+            "ppf name"
+            "ppf message"
+        ;
+        gap: 0 var(--size-very-small);
+
+        .ppf {
+            grid-area: ppf;
+            width: 45px;
+            height: 45px;
+            border-radius: var(--rounding-total);
+            object-fit: cover;
+            object-position: center;
+            border: 1px solid var(--light-dark-font-dimmed);
+        }
+
+        .name,
+        .message,
+        .group-message,
+        .group-message>.message-content {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .name {
+            grid-area: name;
+            align-self: end;
+        }
+
+        .message,
+        .group-message {
+            display: flex;
+            align-items: center;
+            gap: var(--size-very-small);
+            font-size: .9rem;
+            font-style: italic;
+            opacity: .9;
+        }
+    }
+}
+
+.notification-message:hover,
+.notification-message:focus-visible {
+    border: 2px solid var(--color-secondary);
+}
+
+@keyframes appear {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -2,6 +2,19 @@ import { toast } from "react-hot-toast";
 import supabase from "../../../../supabase/supabase";
 import { redirect, type ActionFunctionArgs } from "react-router"
 import updateProfilePictureAction from "../../../../utils/updateProfilePictureAction";
+import socket from "../../../../socket";
+import type Message from "../../../../types/message";
+import type Conversation from "../../../../types/conversation";
+
+interface MessageWithConversation extends Message {
+    conversation: Conversation;
+};
+
+export interface SendMessageResponse {
+    success: boolean;
+    message: string;
+    sentMessage: MessageWithConversation;
+};
 
 export default async function currentConversationAction({ request, params }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -19,6 +32,7 @@ export default async function currentConversationAction({ request, params }: Act
                 formData, "group_avatars", `groups/${params.conversationId}`
             );
         };
+
         case "delete-message": {
             const messageId = formData.get("messageId");
             const url = import.meta.env.VITE_API_BASE + `/conversations/${params.conversationId}/messages/${messageId}`;
@@ -141,7 +155,13 @@ export default async function currentConversationAction({ request, params }: Act
             };
 
             const response = await fetch(url, options);
-            const result = await response.json();
+            const result = await response.json() as SendMessageResponse;
+
+            if (result.success) {
+                socket.emit("message:send", result.sentMessage);
+                socket.emit("notification:message", result.sentMessage);
+            };
+
             return result;
         };
 

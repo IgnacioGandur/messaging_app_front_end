@@ -8,7 +8,7 @@
         height: 1rem;
         border-radius: var(--rounding-total);
         background-color: var(--color-success);
-        border: 3px solid var(--light-dark-background);
+        border: 2px solid var(--light-dark-background);
     }
 
     .text {

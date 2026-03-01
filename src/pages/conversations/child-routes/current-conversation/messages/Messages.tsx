@@ -115,7 +115,7 @@ const Messages = ({
         ) : (
             messages.map((m, i) => {
                 return <SingleMessage
-                    key={m.id}
+                    key={m.id + "-" + new Date()}
                     message={m}
                     index={i}
                     messages={messages}

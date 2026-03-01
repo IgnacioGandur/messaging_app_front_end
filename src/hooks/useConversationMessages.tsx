@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import apiRequestLoader from "../utils/apiRequestLoader";
 import type { CurrentConversationLoaderData } from "../pages/conversations/child-routes/current-conversation/CurrentConversation";
 import type Message from "../types/message";
+import socket from "../socket";
 
 interface MoreMessagesResponse {
     success: boolean;
@@ -53,6 +54,21 @@ export const useConversationMessages = (
             setCursor(loaderData.messageCursorId);
         }
     }, [loaderData]);
+
+    useEffect(() => {
+        const receiveMessage = (payload: Message) => {
+            setMessages((prev) => ([
+                ...prev,
+                payload,
+            ]));
+        };
+
+        socket.on("message:receive", receiveMessage);
+
+        return () => {
+            socket.off("message:receive", receiveMessage);
+        };
+    }, []);
 
     return {
         messages,
