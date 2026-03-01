@@ -159,7 +159,7 @@
             padding: var(--size-big);
             gap: var(--size-big);
             display: flex;
-            justify-content: space-between;
+            justify-content: space-evenly;
             flex-direction: row;
             align-items: flex-start;
             flex-wrap: wrap;

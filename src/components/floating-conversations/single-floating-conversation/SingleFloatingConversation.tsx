@@ -1,6 +1,6 @@
 import styles from "./SingleFloatingConversation.module.css";
 import type Conversation from "../../../types/conversation";
-import type { Status } from "../useConversations";
+import type { Status } from "../useFloatingConversations";
 import { formatDistanceToNow } from "date-fns";
 import { useOnlineUsersContext } from "../../../contexts/OnlineUsersContext";
 import ActiveIndicator from "../../../mini-components/active-indicator/ActiveIndicator";

@@ -160,6 +160,7 @@ export default async function currentConversationAction({ request, params }: Act
             if (result.success) {
                 socket.emit("message:send", result.sentMessage);
                 socket.emit("notification:message", result.sentMessage);
+                socket.emit("conversations:update", result.sentMessage.conversation);
             };
 
             return result;

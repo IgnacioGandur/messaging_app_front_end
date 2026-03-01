@@ -17,6 +17,9 @@ import CurrentPageHeader from "../../components/current-page-header/CurrentPageH
 import SearchForm from "../../components/search-form/SearchForm";
 import ChatsSidebar from "./chats-sidebar/ChatsSidebar";
 
+// Hook
+import useConversations from "./useConversations";
+
 const Conversations = () => {
     const rootData = useRouteLoaderData("root");
     const loggedUser = rootData?.user;
@@ -30,6 +33,7 @@ const Conversations = () => {
         }
     };
     const conversations: Conversation[] = loaderData?.data.conversations;
+    const { updatedConversations } = useConversations(conversations);
     const conversationsCount = loaderData?.data.count;
     const [searchParams] = useSearchParams();
     const currentSearch = searchParams.get("search") || "";
@@ -57,7 +61,7 @@ const Conversations = () => {
         )}
         <div className={styles.wrapper}>
             <ChatsSidebar
-                conversations={conversations}
+                conversations={updatedConversations}
                 loggedUserId={loggedUser.id}
             />
             <Outlet />

@@ -15,7 +15,7 @@ interface ApiResponse {
 
 export type Status = "hide" | "list" | "conversation";
 
-const useConversations = () => {
+const useFloatingConversations = () => {
     const fetcher = useFetcher<ApiResponse>();
     const [currentConversationId, setCurrentConversationId] = useState<number | null>(null);
     const [status, setStatus] = useState<Status>("hide");
@@ -47,4 +47,4 @@ const useConversations = () => {
     }
 }
 
-export default useConversations;
+export default useFloatingConversations;

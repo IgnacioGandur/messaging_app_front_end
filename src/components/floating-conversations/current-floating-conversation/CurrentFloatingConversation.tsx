@@ -13,7 +13,7 @@ import LastActive from "../../../mini-components/last-active/LastActive";
 import useCurrentFloatingConversation from "./useCurrentFloatingConversation";
 
 // Types
-import type { Status } from "../useConversations";
+import type { Status } from "../useFloatingConversations";
 import FloatingConversationsLoader from "../floating-conversations-loader/FloatingConversationsLoader";
 import FloatingMessages from "./floating-messages/FloatingMessages";
 import { NavLink } from "react-router";

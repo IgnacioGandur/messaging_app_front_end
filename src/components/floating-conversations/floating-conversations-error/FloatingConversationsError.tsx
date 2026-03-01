@@ -1,5 +1,5 @@
 import MiniButton from "../mini-button/MiniButton";
-import type { Status } from "../useConversations";
+import type { Status } from "../useFloatingConversations";
 import styles from "./FloatingConversationsError.module.css";
 
 interface FloatingConversationsErrorProps {

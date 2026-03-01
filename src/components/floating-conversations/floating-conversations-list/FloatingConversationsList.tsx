@@ -8,7 +8,7 @@ import SingleFloatingConversation from "../single-floating-conversation/SingleFl
 import MiniButton from "../mini-button/MiniButton";
 
 // Hooks
-import useConversations, { type Status } from "../useConversations";
+import useFloatingConversations, { type Status } from "../useFloatingConversations";
 import { useRouteLoaderData } from "react-router";
 import type RootLoaderDataProps from "../../../types/rootLoaderData";
 import type Conversation from "../../../types/conversation";
@@ -31,7 +31,7 @@ const FloatingConversationsList = ({
     const loggedUserId = rootData?.user?.id;
     const {
         error,
-    } = useConversations();
+    } = useFloatingConversations();
 
     if (error) return <FloatingConversationsError
         setStatus={setStatus}

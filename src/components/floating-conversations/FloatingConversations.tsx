@@ -1,7 +1,7 @@
 import styles from "./FloatingConversations.module.css";
 
 // Hooks
-import useConversations from "./useConversations";
+import useFloatingConversations from "./useFloatingConversations";
 
 // Components
 import CurrentFloatingConversation from "./current-floating-conversation/CurrentFloatingConversation";
@@ -16,7 +16,7 @@ const FloatingConversations = () => {
         setCurrentConversationId,
         conversations,
         isLoading,
-    } = useConversations();
+    } = useFloatingConversations();
 
     return status === "hide" ? (
         <FloatingConversationsHidden
