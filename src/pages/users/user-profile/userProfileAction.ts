@@ -1,13 +1,16 @@
+import socket from "../../../socket";
 import { redirect } from "react-router";
 import apiRequest from "../../../utils/apiRequest";
 
 import type Conversation from "../../../types/conversation";
 import type { ActionFunctionArgs } from "react-router";
+import type Message from "../../../types/message";
 
 interface MessageResponseType {
     success: boolean;
     message: string;
     conversation: Conversation;
+    createdMessage?: Message;
 };
 
 const userProfileAction = async ({ request, params }: ActionFunctionArgs) => {
@@ -27,7 +30,16 @@ const userProfileAction = async ({ request, params }: ActionFunctionArgs) => {
         };
 
         const result = await apiRequest<MessageResponseType>(url, options);
+
         if (result.success) {
+            socket.emit("notification:message_from_profile", {
+                createdMessage: result.createdMessage
+                    ? result.createdMessage
+                    : result.conversation.messages[0]
+                ,
+                recipientId
+            });
+
             return redirect(`/conversations/${result.conversation.id}`);
         } else {
             return result;

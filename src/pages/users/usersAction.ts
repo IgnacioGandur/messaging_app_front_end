@@ -92,6 +92,7 @@ export default async function usersAction({ request }: ActionFunctionArgs) {
         const result = await apiRequest<ResponseType>(url, options);
 
         if (result?.success) {
+            socket.emit("nofication:message", result.conversation);
             return redirect(`/conversations/${result.conversation.id}`);
         } else {
             return result;

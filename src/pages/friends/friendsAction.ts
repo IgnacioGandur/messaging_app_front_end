@@ -1,5 +1,13 @@
 import { redirect } from "react-router";
 import type { ActionFunctionArgs } from "react-router";
+import socket from "../../socket";
+import type Conversation from "../../types/conversation";
+
+interface MessageResponse {
+    success: boolean;
+    message: string;
+    conversation: Conversation;
+};
 
 export default async function friendsAction({ request }: ActionFunctionArgs) {
     try {
@@ -39,9 +47,10 @@ export default async function friendsAction({ request }: ActionFunctionArgs) {
             };
 
             const response = await fetch(url, options);
-            const result = await response.json();
+            const result = await response.json() as MessageResponse;
 
             if (result?.success) {
+                socket.emit("notification:message", result.conversation);
                 return redirect(`/conversations/${result.conversation.id}`);
             } else {
                 return result;

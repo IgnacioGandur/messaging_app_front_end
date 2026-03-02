@@ -99,7 +99,10 @@ const Friends = () => {
                         {friends.map((f) => {
                             const user = f.userAId === loggedUser.id ? f.userB : f.userA;
 
+                            if (!user) throw "No user.";
+
                             return <SingleFriend
+                                key={user.id}
                                 user={user}
                                 friendship={f}
                                 deleteFriendship={deleteFriendship}

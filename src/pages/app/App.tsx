@@ -29,6 +29,12 @@ interface MessagePayload extends Message {
     conversation: Conversation;
 }
 
+interface MessageFromProfile {
+    recipientId: number;
+    conversation: Conversation;
+    createdMessage: Message;
+};
+
 const App = () => {
     const location = useLocation();
     const loaderData = useRouteLoaderData("root");
@@ -85,10 +91,30 @@ const App = () => {
             };
         };
 
+        const receiveMessageFromProfile = (payload: MessageFromProfile) => {
+            if (!isInConversationsPath) {
+                const { createdMessage } = payload;
+                const message = createdMessage.content;
+                const name = createdMessage.sender.firstName + " " + payload.createdMessage.sender.lastName;
+                const ppf = createdMessage.sender.profilePictureUrl;
+                const to = "/conversations/" + payload.createdMessage.conversationId;
+
+                toast.custom(<NotificationMessage
+                    to={to}
+                    isGroup={false}
+                    message={message}
+                    name={name}
+                    profilePictureUrl={ppf}
+                />);
+            };
+        };
+
         socket.on("notification:receive_message", notifyMessage);
+        socket.on("notification:receive_message_from_profile", receiveMessageFromProfile);
 
         return () => {
             socket.off("notification:receive_message", notifyMessage);
+            socket.off("notification:receive_message_from_profile", receiveMessageFromProfile);
         };
     }, [isInConversationsPath]);
 

@@ -55,10 +55,12 @@
         .name {
             grid-area: name;
             align-self: end;
+            text-transform: capitalize;
         }
 
         .message,
         .group-message {
+            align-self: start;
             display: flex;
             align-items: center;
             gap: var(--size-very-small);

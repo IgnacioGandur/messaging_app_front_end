@@ -4,7 +4,6 @@ import styles from "./NotificationMessage.module.css";
 interface NotificationMessageProps {
     to: string;
     message: string;
-    icon?: string;
     name: string;
     profilePictureUrl: string;
     isGroup: boolean;
@@ -18,7 +17,6 @@ const NotificationMessage = ({
     message,
     isGroup,
     senderName,
-    icon = "notifications"
 }: NotificationMessageProps) => {
     return <NavLink
         to={to}
