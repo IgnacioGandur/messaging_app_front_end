@@ -72,6 +72,7 @@ const CustomInput = ({
                     </div>
                 )}
                 <input
+                    autoComplete={type === "password" ? "on" : "off"}
                     id={id}
                     className={styles.input}
                     type={showPassword ? "password" : "text"}

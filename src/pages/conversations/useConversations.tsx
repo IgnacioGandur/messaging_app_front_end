@@ -22,7 +22,7 @@ const useConversations = (conversations: Conversation[]) => {
         return () => {
             socket.off("conversations:update_conversation", updateConversation);
         };
-    }, [updatedConversations]);
+    }, []);
 
     return {
         updatedConversations,

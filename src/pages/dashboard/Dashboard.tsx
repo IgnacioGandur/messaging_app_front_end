@@ -65,11 +65,25 @@ const Dashboard = () => {
         }));
     };
 
+    const deleteAccount = () => {
+        fetcher.submit(
+            {
+                intent: "delete-account",
+            },
+            {
+                method: "DELETE",
+            }
+        )
+    };
+
     const isUpdatingProfilePicture = fetcher.state !== "idle"
         && fetcher.formData?.get("intent")?.toString() === "update-profile-picture";
 
     const isUpdatingUserProfile = fetcher.state !== "idle"
         && fetcher.formData?.get("intent")?.toString() === "update-profile-info";
+
+    const isDeletingAccount = fetcher.state !== "idle"
+        && fetcher.formData?.get("intent")?.toString() === "delete-account";
 
     return <main className={styles.dashboard}>
         {(actionData && !actionData?.success) && (
@@ -88,6 +102,42 @@ const Dashboard = () => {
             icon="ar_on_you"
             title="You"
             className={styles["current-profile"]}
+            headerChildren={<Tooltip
+                icon="delete"
+                ariaText="Delete your account"
+                className={styles["delete-account"]}
+                tooltipClassName={styles["delete-tooltip"]}
+            >
+                <div className={styles.wrapper}>
+                    {isDeletingAccount ? (
+                        <div className={styles["delete-loader"]}>
+                            <h4 className={styles.title}>
+                                Deleting your account, please wait...
+                            </h4>
+                            <div className={styles["spinner-container"]}>
+                                <span className={`material-symbols-rounded ${styles.icon}`}>
+                                    progress_activity
+                                </span>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <h4 className={styles.title}>
+                                Are you sure you want to delete your account?
+                            </h4>
+                            <p className={styles.para}>
+                                (This action will delete everything related to your account)
+                            </p>
+                            <button
+                                onClick={deleteAccount}
+                                className={styles.confirm}
+                            >
+                                Yes
+                            </button>
+                        </>
+                    )}
+                </div>
+            </Tooltip>}
         >
             <h3
                 className={styles.name}
@@ -164,7 +214,7 @@ const Dashboard = () => {
                             case "lastName": icon = "signature"; break;
                             case "password": icon = "lock"; break;
                             case "confirmPassword": icon = "lock_reset"; break;
-                        }
+                        };
 
                         return <CustomInput
                             key={key}
@@ -176,7 +226,7 @@ const Dashboard = () => {
                             value={value}
                             onChange={handleFieldsUpdate}
                             required={!/password/i.test(key)}
-                        />
+                        />;
                     })}
                     <p className={styles["password-message"]}>
                         (Leave the passwords fields blank if you don't want to update your password)

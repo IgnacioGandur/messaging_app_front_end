@@ -5,6 +5,7 @@ interface SectionProps {
     title: string;
     className?: string;
     contentClassName?: string;
+    headerChildren?: React.ReactNode;
 };
 
 const Section = ({
@@ -12,6 +13,7 @@ const Section = ({
     title,
     className,
     contentClassName,
+    headerChildren,
     children
 }: React.PropsWithChildren<SectionProps>) => {
     return <section className={`${styles["section"]} ${className}`}>
@@ -26,6 +28,7 @@ const Section = ({
             >
                 {title}
             </h2>
+            {headerChildren}
         </header>
         <div className={`${styles.content} ${contentClassName}`}>
             {children}

@@ -1,0 +1,99 @@
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--size-big);
+    gap: var(--size-big);
+
+    .header {
+        margin-top: auto;
+
+        .title {
+            font-size: var(--font-size-giant);
+            font-family: var(--font-special);
+            font-weight: var(--font-thickness-thinnest);
+            width: min-content;
+            position: relative;
+        }
+
+        .title::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: .25rem;
+            border-radius: 50px;
+            background-size: 250%;
+            background-position: center left;
+            background-image: linear-gradient(to right,
+                    transparent,
+                    transparent,
+                    transparent,
+                    transparent,
+                    var(--color-main),
+                    var(--color-secondary));
+            transition: var(--transition-normal);
+        }
+
+        .title:hover::before {
+            background-position: center right;
+        }
+    }
+
+    .paragraph {
+        max-width: 50%;
+        gap: var(--size-tiny);
+        font-family: var(--font-secondary);
+        position: relative;
+        gap: var(--size-very-small);
+        display: flex;
+        font-size: .9rem;
+        text-align: center;
+    }
+
+    .author {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--size-very-small);
+        margin-top: auto;
+
+        .title {
+            font-family: var(--font-secondary);
+            font-weight: var(--font-thickness-thin);
+            font-size: var(--font-size-normal);
+        }
+
+        .image-container {
+            width: fit-content;
+            height: fit-content;
+            position: relative;
+            display: grid;
+            place-items: center;
+
+            .argentina {
+                width: 25px;
+                object-fit: cover;
+                object-position: center;
+                border-radius: var(--rounding-total);
+                aspect-ratio: 1/1;
+            }
+        }
+
+        .image-container::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 115%;
+            height: 115%;
+            background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+            z-index: -1;
+            border-radius: var(--rounding-total);
+            filter: blur(4px);
+        }
+    }
+}

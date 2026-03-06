@@ -80,10 +80,11 @@ const App = () => {
             const groupPpf = payload.conversation.profilePicture;
 
             if (!isInConversationsPath) {
+                console.log(payload);
                 toast.custom(<NotificationMessage
                     to={`/conversations/${payload.conversationId}`}
                     name={name}
-                    message={payload.content}
+                    message={payload.content ?? "Sent a file..."}
                     profilePictureUrl={(isGroup ? groupPpf : userPpf)!}
                     isGroup={isGroup}
                     senderName={senderName}

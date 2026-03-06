@@ -54,10 +54,12 @@ const Login = () => {
         {hasInputErrors && <InputErrors
             message={loginResult?.message}
             errors={loginResult?.errors} />}
-        {message && (<p
-            className={styles.message}
-        >{message}</p>)}
         <div className={styles.wrapper}>
+            {message && (<p
+                className={styles.message}
+            >
+                {message}
+            </p>)}
             <div className={styles.container}>
                 <div className={styles.deco}>
                     <div className={styles["title-container"]}>

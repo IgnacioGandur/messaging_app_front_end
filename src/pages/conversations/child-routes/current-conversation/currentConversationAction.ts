@@ -141,6 +141,14 @@ export default async function currentConversationAction({ request, params }: Act
 
                     const responseWithAttachment = await fetch(url, options);
                     const resultWithAttachment = await responseWithAttachment.json();
+
+                    if (resultWithAttachment.success) {
+                        socket.emit("notification:message", {
+                            conversation: resultWithAttachment.sentMessage.conversation,
+                            sender: resultWithAttachment.sentMessage.sender
+                        });
+                    }
+
                     return resultWithAttachment;
                 };
             };

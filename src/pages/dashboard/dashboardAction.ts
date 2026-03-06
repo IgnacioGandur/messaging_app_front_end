@@ -4,6 +4,7 @@ import updateProfilePictureAction from "../../utils/updateProfilePictureAction";
 
 import type User from "../../types/user";
 import type { ActionFunctionArgs } from "react-router";
+import { redirect } from "react-router";
 
 interface ApiResponse {
     success: boolean;
@@ -44,7 +45,29 @@ export default async function dashboardAction({ request }: ActionFunctionArgs) {
 
             result = await apiRequest(url, options);
             break;
-        }
+        };
+
+        case "delete-account": {
+            await new Promise(r => setTimeout(r, 3000));
+            const options: RequestInit = {
+                method: "DELETE",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            };
+
+            const url = `${import.meta.env.VITE_API_BASE}/me`;
+
+            const response = await fetch(url, options);
+            const result = await response.json() as ApiResponse;
+
+            if (result.success) {
+                return redirect("/");
+            }
+
+            return result;
+        };
 
         default: throw "No intent selected!";
     }

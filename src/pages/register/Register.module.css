@@ -6,22 +6,23 @@
     max-width: 1600px;
     position: relative;
 
-    .message {
-        position: absolute;
-        top: var(--size-normal);
-        left: 50%;
-        transform: translateX(-50%);
-        border: 1px solid var(--color-warning);
-        background-color: var(--color-warning-dimmed);
-        padding: var(--size-small);
-        border-radius: var(--rounding-medium);
-    }
-
     .wrapper {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+
+        .message {
+            position: absolute;
+            top: var(--size-normal);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid var(--color-warning);
+            background-color: var(--color-warning-dimmed);
+            padding: var(--size-small);
+            border-radius: var(--rounding-medium);
+        }
 
         .container {
             height: 80%;

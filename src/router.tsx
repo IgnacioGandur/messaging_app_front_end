@@ -52,6 +52,10 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import friendshipRequestsLoader from "./components/navbar/friendship-requests/friendshipRequestsLoader";
 import respondFriendshipRequestAction from "./components/navbar/friendship-requests/respondFriendshipRequestAction";
 
+import Info from "./pages/about/children/info/Info";
+import Tools from "./pages/about/children/tools/Tools";
+import Author from "./pages/about/children/author/Author";
+
 const router = createBrowserRouter([
     {
         id: "root",
@@ -153,7 +157,21 @@ const router = createBrowserRouter([
             },
             {
                 path: "/about",
-                Component: About
+                Component: About,
+                children: [
+                    {
+                        index: true,
+                        Component: Info
+                    },
+                    {
+                        path: "tools",
+                        Component: Tools
+                    },
+                    {
+                        path: "author",
+                        Component: Author
+                    },
+                ]
             },
             {
                 path: "*",

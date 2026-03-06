@@ -17,6 +17,61 @@
         grid-area: input-errors;
     }
 
+    .delete-account {
+        margin-left: auto;
+
+        .wrapper {
+            width: 300px;
+            padding: var(--size-small);
+            border-radius: var(--rounding-medium);
+            border: 1px solid var(--light-dark-font-dimmed);
+            display: flex;
+            flex-direction: column;
+            gap: var(--size-small);
+            text-align: center;
+
+            .delete-loader {
+                display: flex;
+                flex-direction: column;
+                gap: var(--size-small);
+
+                .spinner-container {
+                    padding: var(--size-normal);
+
+                    .icon {
+                        font-size: var(--icon-size-big);
+                        background-image: var(--gradient-main-colors);
+                        background-clip: text;
+                        color: transparent;
+                        animation: spin 750ms linear infinite;
+                    }
+                }
+            }
+
+            .title {}
+
+            .para {
+                font-size: .85rem;
+            }
+
+            .confirm {
+                padding: var(--size-very-small);
+                border: 1px solid var(--light-dark-font-dimmed);
+                outline: none;
+                border-radius: var(--rounding-small);
+                font-weight: var(--font-thickness-thick);
+                background-color: transparent;
+                transition: var(--transition-normal);
+            }
+
+            .confirm:hover,
+            .confirm:focus-visible {
+                background-color: var(--color-error-dimmed);
+                border: 1px solid var(--color-error);
+            }
+        }
+    }
+
     .header {
         grid-area: header;
     }
