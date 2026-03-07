@@ -5,7 +5,7 @@ import {
     useLoaderData,
     useRouteLoaderData,
     useNavigation,
-    useParams
+    useParams,
 } from "react-router";
 
 // Components
@@ -35,7 +35,7 @@ export interface CurrentConversationLoaderData {
     conversation: Conversation | Group;
     error?: boolean;
     errors?: InputErrorsType[];
-};
+}
 
 const CurrentConversation = () => {
     const navigation = useNavigation();
@@ -43,61 +43,70 @@ const CurrentConversation = () => {
     const { conversationId } = useParams();
 
     if (!loaderData?.success) {
-        return <NoConversation>
-            <InputErrors
-                message={loaderData.message}
-                errors={loaderData.errors}
-            />
-        </NoConversation>
+        return (
+            <NoConversation>
+                <InputErrors
+                    message={loaderData.message}
+                    errors={loaderData.errors}
+                />
+            </NoConversation>
+        );
     }
 
     const rootData = useRouteLoaderData("root") as RootLoaderDataProps;
     const loggedUser = rootData?.user;
 
     const conversation = loaderData?.conversation as Group;
-    const userB = conversation.participants.find((p) =>
-        p.user.id !== loggedUser!.id)?.user
-        || {
+    const userB =
+        conversation.participants.find((p) => p.user.id !== loggedUser!.id)
+            ?.user ||
+        ({
             firstName: "Deleted",
             lastName: "User.",
             username: "###",
             profilePictureUrl: deletedUserImage,
             id: 0,
-            joinedOn: new Date()
-        } as User;
+            joinedOn: new Date(),
+        } as User);
+
+    const userBIsDeleted =
+        conversation.participants.find((p) => p.userId !== loggedUser!.id)
+            ?.user === undefined;
 
     const {
         messages,
         hasMoreMessages,
         isLoadingMoreMessages,
-        loadOlderMessages
+        loadOlderMessages,
     } = useConversationMessages(loaderData, conversationId);
 
     const isPageLoading = navigation.state === "loading";
 
-    if (isPageLoading) return <Loader />
+    if (isPageLoading) return <Loader />;
 
-    return <section
-        className={conversation.isGroup ? styles["group-conversation"] : styles["private-conversation"]}
-    >
-        {conversation.isGroup ? (
-            <GroupDetails
-                group={conversation}
+    return (
+        <section
+            className={
+                conversation.isGroup
+                    ? styles["group-conversation"]
+                    : styles["private-conversation"]
+            }
+        >
+            {conversation.isGroup ? (
+                <GroupDetails group={conversation} />
+            ) : (
+                <PrivateConversationDetails userB={userB} />
+            )}
+            <Messages
+                key={conversation.id}
+                isLoadingOlderMessages={isLoadingMoreMessages}
+                loadOlderMessages={loadOlderMessages}
+                hasMoreMessages={hasMoreMessages}
+                messages={messages}
             />
-        ) : (
-            <PrivateConversationDetails
-                userB={userB}
-            />
-        )}
-        <Messages
-            key={conversation.id}
-            isLoadingOlderMessages={isLoadingMoreMessages}
-            loadOlderMessages={loadOlderMessages}
-            hasMoreMessages={hasMoreMessages}
-            messages={messages}
-        />
-        <MessageForm />
-    </section>
-}
+            {!userBIsDeleted && <MessageForm />}
+        </section>
+    );
+};
 
 export default CurrentConversation;

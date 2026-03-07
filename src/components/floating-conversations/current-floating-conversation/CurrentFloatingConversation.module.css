@@ -1,7 +1,7 @@
 .current-conversation {
     padding: 0;
 
-    >* {
+    > * {
         padding: var(--size-small);
     }
 
@@ -15,12 +15,12 @@
             display: grid;
             grid-template-areas:
                 "ppf title"
-                "ppf last-active"
-            ;
+                "ppf last-active";
             gap: 0 var(--size-very-small);
             text-decoration: none;
 
             .ppf {
+                border: 1px solid var(--light-dark-font-dimmed);
                 grid-area: ppf;
                 width: 3rem;
                 height: 3rem;
@@ -91,17 +91,15 @@
             background-color: var(--color-secondary-dimmed);
             border: 2px solid var(--color-secondary);
         }
-
     }
 }
 
 .current-conversation.fetch-error {
-
     .error,
     .details {
         text-align: center;
         font-style: italic;
-        opacity: .8;
+        opacity: 0.8;
     }
 
     .container {
@@ -113,11 +111,10 @@
             background-clip: text;
             font-size: var(--icon-size-giant);
         }
-
     }
 
     .error {
-        font-size: .85rem;
+        font-size: 0.85rem;
     }
 
     .error::first-letter {

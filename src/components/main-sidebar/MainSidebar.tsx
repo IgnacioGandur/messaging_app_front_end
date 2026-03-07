@@ -10,18 +10,15 @@ import argentina from "../../assets/images/argentina.svg";
 interface MainSidebarProps {
     showSidebar: boolean;
     toggleSidebar: () => void;
-};
+}
 
 interface Link {
     path: string;
     text: string;
     icon: string;
-};
+}
 
-const MainSidebar = ({
-    showSidebar,
-    toggleSidebar
-}: MainSidebarProps) => {
+const MainSidebar = ({ showSidebar, toggleSidebar }: MainSidebarProps) => {
     const loaderData = useRouteLoaderData("root") as RootLoaderDataProps;
     const { user } = loaderData;
     const isAuthenticated = !!(loaderData.success && user);
@@ -38,14 +35,18 @@ const MainSidebar = ({
     if (isAuthenticated) {
         links.push(
             { path: "/users", text: "Users", icon: "groups" },
-            { path: "/conversations", text: "Conversations", icon: "conversation" },
+            {
+                path: "/conversations",
+                text: "Conversations",
+                icon: "conversation",
+            },
             { path: "/friends", text: "Friends", icon: "handshake" },
             { path: "/groups", text: "Groups", icon: "communities" },
         );
     } else {
         links.push(
             { path: "/register", text: "Register", icon: "signature" },
-            { path: "/login", text: "Login", icon: "login" }
+            { path: "/login", text: "Login", icon: "login" },
         );
     }
 
@@ -64,85 +65,90 @@ const MainSidebar = ({
 
         return () => {
             document.removeEventListener("mousedown", handleClick);
-        }
+        };
     }, [showSidebar, toggleSidebar]);
 
-    return showSidebar ? <aside
-        ref={sidebarRef}
-        className={styles["main-sidebar"]}
-    >
-        <div className={styles["logo-container"]}>
-            <div className={styles["image-container"]}>
-                <div className={styles.mask}></div>
+    return showSidebar ? (
+        <aside
+            ref={sidebarRef}
+            className={styles["main-sidebar"]}
+        >
+            <div className={styles["logo-container"]}>
+                <div className={styles["image-container"]}>
+                    <div className={styles.mask}></div>
+                    <img
+                        className={styles.image}
+                        src={logo}
+                        alt="Website's logo"
+                    />
+                </div>
+                <h2 className={styles.title}>Chateá</h2>
+                <button
+                    onClick={toggleSidebar}
+                    className={styles["hide-sidebar"]}
+                >
+                    <span className="material-symbols-rounded">
+                        arrow_left_alt
+                    </span>
+                </button>
+            </div>
+            <ul className={styles.links}>
+                {links.map((link: Link) => {
+                    return (
+                        <NavLink
+                            prefetch="none"
+                            key={link.path}
+                            to={link.path}
+                            className={({ isActive }) =>
+                                isActive
+                                    ? `${styles.active} ${styles.link} ${link.text === "About" && styles.about}`
+                                    : `${styles.link} ${link.text === "About" && styles.about}`
+                            }
+                            viewTransition
+                        >
+                            {({ isPending }) =>
+                                isPending ? (
+                                    <div className={styles["container"]}>
+                                        <BarLoader
+                                            className={styles.loader}
+                                            color={"var(--color-secondary)"}
+                                        />
+                                    </div>
+                                ) : (
+                                    <>
+                                        <span
+                                            className={`material-symbols-rounded ${styles.icon}`}
+                                        >
+                                            {link.icon}
+                                        </span>
+                                        <div className={styles.separator}></div>
+                                        <span className={styles.text}>
+                                            {link.text}
+                                        </span>
+                                    </>
+                                )
+                            }
+                        </NavLink>
+                    );
+                })}
+            </ul>
+            <div className={styles.info}>
+                <p className={styles.author}>Made by Ignacio Gandur</p>
                 <img
-                    className={styles.image}
-                    src={logo}
-                    alt="Website's logo"
+                    className={styles.argentina}
+                    src={argentina}
+                    alt="Argentina's flag"
                 />
             </div>
-            <h2 className={styles.title}>
-                Chateá
-            </h2>
-            <button
-                onClick={toggleSidebar}
-                className={styles["hide-sidebar"]}
-            >
-                <span className="material-symbols-rounded">
-                    arrow_left_alt
-                </span>
-            </button>
-        </div>
-        <ul className={styles.links}>
-            {links.map((link: Link) => {
-                return <NavLink
-                    prefetch="none"
-                    key={link.path}
-                    to={link.path}
-                    className={({ isActive }) => isActive
-                        ? `${styles.active} ${styles.link}`
-                        : `${styles.link} ${link.text === "About" && styles.about}`
-                    }
-                    viewTransition
-                >
-                    {({ isPending }) => isPending ? (
-                        <div className={styles["container"]}>
-                            <BarLoader
-                                className={styles.loader}
-                                color={"var(--color-secondary)"}
-                            />
-                        </div>
-                    ) : (
-                        <>
-                            <span className={`material-symbols-rounded ${styles.icon}`}>
-                                {link.icon}
-                            </span>
-                            <div className={styles.separator}></div>
-                            <span className={styles.text}>
-                                {link.text}
-                            </span>
-                        </>
-                    )}
-                </NavLink>
-            })}
-        </ul>
-        <div className={styles.info}>
-            <p className={styles.author}>
-                Made by Ignacio Gandur
-            </p>
-            <img
-                className={styles.argentina}
-                src={argentina}
-                alt="Argentina's flag"
-            />
-        </div>
-    </aside> : <button
-        onClick={toggleSidebar}
-        className={styles["show-sidebar"]}
-    >
-        <span className="material-symbols-rounded">
-            menu
-        </span>
-    </button>
+        </aside>
+    ) : (
+        <button
+            onClick={toggleSidebar}
+            className={styles["show-sidebar"]}
+        >
+            <span className="material-symbols-rounded">menu</span>
+        </button>
+    );
 };
 
 export default MainSidebar;
