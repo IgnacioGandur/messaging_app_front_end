@@ -1,6 +1,4 @@
-.home {}
-
-.home-logged {
+.home {
     padding: var(--size-big);
     max-width: 1240px;
     align-self: center;
@@ -9,7 +7,7 @@
     align-items: center;
     gap: var(--size-big);
 
-    >* {
+    > * {
         width: 100%;
     }
 
@@ -21,9 +19,11 @@
             font-family: var(--font-secondary);
             font-weight: var(--font-thickness-thinnest);
             text-align: center;
-            background-image: linear-gradient(45deg,
-                    var(--color-main),
-                    var(--color-secondary));
+            background-image: linear-gradient(
+                45deg,
+                var(--color-main),
+                var(--color-secondary)
+            );
             background-clip: text;
             color: transparent;
         }
@@ -39,7 +39,7 @@
         scale: 1.2;
         animation: appear 2.5s ease-in-out forwards;
 
-        >* {
+        > * {
             width: 100%;
             height: 100%;
             display: grid;
@@ -52,16 +52,20 @@
 
         .background {
             background-image:
-                radial-gradient(circle at center, transparent, var(--light-dark-background) 40%),
+                radial-gradient(
+                    circle at center,
+                    transparent,
+                    var(--light-dark-background) 40%
+                ),
                 url("/wiggle.png");
             z-index: 1;
         }
 
         .blob-wrapper {
-            max-width: 500px;
+            max-width: 400px;
             z-index: 2;
 
-            >* {
+            > * {
                 display: grid;
             }
         }
@@ -72,21 +76,74 @@
 
             .logo {
                 width: 100%;
-                max-width: 230px;
-                opacity: .5;
+                max-width: 200px;
+                opacity: 0.5;
             }
         }
     }
 
     .bottom-text {
         max-width: 100%;
-    }
 
-    .sub-title-section {
-        font-size: var(--font-size-big);
-        text-align: center;
-        font-family: var(--font-secondary);
-        font-weight: var(--font-thickness-thin);
+        .sub-title-section {
+            font-size: var(--font-size-big);
+            text-align: center;
+            font-family: var(--font-secondary);
+            font-weight: var(--font-thickness-thin);
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .home {
+        .title-section {
+            .title {
+                font-size: 4rem;
+            }
+        }
+        .blob-section {
+            .blob-wrapper {
+                max-width: 300px;
+            }
+            .logo-wrapper {
+                .logo {
+                    max-width: 130px;
+                }
+            }
+        }
+
+        .bottom-text {
+            .sub-title-section {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .home {
+        padding: 0;
+        .title-section {
+            .title {
+                font-size: 2.5rem;
+            }
+        }
+        .blob-section {
+            .blob-wrapper {
+                max-width: 325px;
+            }
+            .logo-wrapper {
+                .logo {
+                    max-width: 150px;
+                }
+            }
+        }
+
+        .bottom-text {
+            .sub-title-section {
+                font-size: 1.25rem;
+            }
+        }
     }
 }
 

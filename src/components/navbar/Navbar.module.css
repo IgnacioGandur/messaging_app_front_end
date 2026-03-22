@@ -110,3 +110,16 @@
         gap: var(--size-very-small);
     }
 }
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        .icon-container {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navbar {
+    }
+}

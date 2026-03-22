@@ -3,17 +3,15 @@ import { useState, useEffect } from "react";
 import type Conversation from "../../types/conversation";
 
 const useConversations = (conversations: Conversation[]) => {
-    const [updatedConversations, setUpdatedConversations] = useState<Conversation[]>(conversations);
+    const [updatedConversations, setUpdatedConversations] =
+        useState<Conversation[]>(conversations);
 
     useEffect(() => {
         const updateConversation = (payload: Conversation) => {
             setUpdatedConversations((prev) => {
-                const updatedArr = prev.filter(c => c.id !== payload.id);
+                const updatedArr = prev.filter((c) => c.id !== payload.id);
 
-                return [
-                    payload,
-                    ...updatedArr
-                ];
+                return [payload, ...updatedArr];
             });
         };
 

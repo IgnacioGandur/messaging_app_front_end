@@ -2,19 +2,18 @@
     display: grid;
     grid-template-areas:
         "empty label label"
-        "users-n input button"
-    ;
+        "users-n input button";
     grid-template-columns: 1fr auto;
     gap: var(--size-tiny);
 
-    >:not(.label) {
+    > :not(.label) {
         border-radius: var(--rounding-small);
         padding: var(--size-very-small);
     }
 
     .users-amount {
         grid-area: users-n;
-        opacity: .75;
+        opacity: 0.75;
         font-size: var(--font-size-small);
         align-self: flex-end;
     }
@@ -22,7 +21,7 @@
     .label {
         grid-area: label;
         font-size: var(--font-size-small);
-        opacity: .75;
+        opacity: 0.75;
     }
 
     .input {
@@ -45,5 +44,20 @@
     .search-button:focus-visible {
         background-color: var(--color-secondary);
         color: white;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .search-form {
+        width: 100%;
+        padding: 0;
+        gap: var(--size-very-small);
+        grid-template-areas:
+            "label label users-n"
+            "input input button";
+
+        .search-button {
+            align-self: stretch;
+        }
     }
 }

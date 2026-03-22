@@ -20,7 +20,7 @@
     .name {
         grid-area: name;
         text-transform: capitalize;
-        font-size: .9rem;
+        font-size: 0.9rem;
         align-self: center;
     }
 
@@ -54,6 +54,8 @@
                 outline: none;
                 cursor: pointer;
                 position: relative;
+                max-width: 300px;
+                width: 100%;
 
                 .image-preview {
                     border-radius: var(--rounding-medium);
@@ -72,7 +74,7 @@
 
             .image:hover {
                 .text {
-                    opacity: .5;
+                    opacity: 0.5;
                 }
             }
         }
@@ -115,7 +117,7 @@
 
             .title {
                 grid-area: title;
-                font-size: .8rem;
+                font-size: 0.8rem;
                 font-weight: 700;
                 text-decoration: underline;
             }
@@ -125,8 +127,7 @@
                 grid-column: 1/-1;
                 grid-template-columns: subgrid;
                 grid-template-rows: subgrid;
-                grid-template-areas:
-                    "icon filename";
+                grid-template-areas: "icon filename";
                 gap: calc(var(--size-tiny) * 2);
                 padding: var(--size-tiny);
                 border-radius: var(--rounding-small);
@@ -148,7 +149,7 @@
                     top: 50%;
                     right: -var(--size-tiny);
                     transform: translateY(-50%);
-                    opacity: .75;
+                    opacity: 0.75;
                 }
 
                 .filename {
@@ -163,8 +164,8 @@
         grid-area: date;
         align-self: center;
         text-transform: capitalize;
-        font-size: .8rem;
-        opacity: .8;
+        font-size: 0.8rem;
+        opacity: 0.8;
         text-align: end;
     }
 }
@@ -180,16 +181,12 @@
 .message.show-sender {
     grid-template-areas:
         "ppf name date"
-        "pad message date"
-    ;
+        "pad message date";
     grid-template-columns: auto 1fr var(--date-size);
-
 }
 
 .message.hidden-sender {
-    grid-template-areas:
-        "pad message date"
-    ;
+    grid-template-areas: "pad message date";
     grid-template-columns: auto 1fr var(--date-size);
 
     .pad {
@@ -203,7 +200,6 @@
 
         .message-content,
         .file {
-
             .title {
                 text-align: end;
             }
@@ -214,23 +210,19 @@
 .message.you.show-sender {
     grid-template-areas:
         "name ppf date"
-        "message pad date"
-    ;
+        "message pad date";
     grid-template-columns: 1fr auto var(--date-size);
     justify-items: end;
 }
 
 .message.you.hidden-sender {
-    grid-template-areas:
-        "message pad date"
-    ;
+    grid-template-areas: "message pad date";
     grid-template-columns: 1fr auto var(--date-size);
     justify-items: end;
 }
 
 .message.userB {
     .message-wrapper {
-
         .message-content,
         .file {
             background-color: var(--color-main-dimmed);
@@ -240,7 +232,6 @@
 
 .message.deleted {
     .message-wrapper {
-
         .message-content,
         .file {
             background-color: var(--color-error-dimmed);
@@ -250,4 +241,61 @@
 
 .message.last-message {
     margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 480px) {
+    .message {
+        .message-wrapper {
+            .message-content {
+                .image {
+                }
+            }
+        }
+
+        .date {
+            display: none;
+        }
+
+        > * {
+            border: 1px solid purple;
+        }
+    }
+
+    .message.show-sender {
+        grid-template-areas:
+            "ppf name"
+            "pad message";
+        grid-template-columns: auto 1fr;
+    }
+    .message.hidden-sender {
+        grid-template-areas: "pad message";
+        grid-template-columns: auto 1fr;
+    }
+
+    .message.you.show-sender {
+        grid-template-areas:
+            "name"
+            "message";
+        grid-template-columns: 1fr;
+        justify-items: end;
+
+        .ppf,
+        .pad {
+            display: none;
+        }
+    }
+
+    .message.you.hidden-sender {
+        grid-template-areas: "message";
+        grid-template-columns: 1fr;
+        justify-items: end;
+
+        .ppf,
+        .pad {
+            display: none;
+        }
+    }
 }

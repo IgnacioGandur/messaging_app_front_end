@@ -28,3 +28,14 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+    .online-users {
+        .users-n {
+            border: 2px solid red !important;
+            left: initial;
+            right: 0;
+            bottom: 0;
+        }
+    }
+}

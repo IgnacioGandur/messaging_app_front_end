@@ -27,3 +27,10 @@
         }
     }
 }
+
+@media screen and (max-width: 480px) {
+    .filtering {
+        flex-wrap: wrap;
+        gap: var(--size-small);
+    }
+}

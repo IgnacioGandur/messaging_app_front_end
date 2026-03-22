@@ -2,8 +2,7 @@
     display: grid;
     grid-template-areas:
         "ppf name date buttons"
-        "ppf username username buttons"
-    ;
+        "ppf username username buttons";
     align-content: center;
     grid-template-columns: auto auto 1fr auto;
     gap: 0 var(--size-very-small);
@@ -38,13 +37,13 @@
 
     .friends-since {
         grid-area: date;
-        opacity: .75;
-        font-size: .85rem;
+        opacity: 0.75;
+        font-size: 0.85rem;
     }
 
     .username {
         grid-area: username;
-        opacity: .75;
+        opacity: 0.75;
         font-style: italic;
     }
 
@@ -54,5 +53,13 @@
         align-items: center;
         gap: inherit;
         align-self: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .friend {
+        .friends-since {
+            display: none;
+        }
     }
 }

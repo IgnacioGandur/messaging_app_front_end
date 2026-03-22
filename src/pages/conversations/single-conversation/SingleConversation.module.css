@@ -3,8 +3,7 @@
     grid-template-areas:
         "ppf date date"
         "ppf name name"
-        "ppf message message"
-    ;
+        "ppf message message";
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr 1fr;
     padding: var(--size-very-small);
@@ -21,20 +20,24 @@
 
         .group-icon {
             position: absolute;
-            left: -.25rem;
-            bottom: -.25rem;
-            font-variation-settings: 'FILL' 1;
+            left: -0.25rem;
+            bottom: -0.25rem;
+            font-variation-settings: "FILL" 1;
             font-size: var(--icon-size-default);
             padding: var(--size-tiny);
             border-radius: var(--rounding-total);
-            background-image: linear-gradient(45deg, var(--color-secondary), var(--color-main));
+            background-image: linear-gradient(
+                45deg,
+                var(--color-secondary),
+                var(--color-main)
+            );
             background-clip: text;
             color: transparent;
         }
     }
 
     .ppf,
-    .group-ppf-container>.ppf {
+    .group-ppf-container > .ppf {
         width: 60px;
         height: 60px;
         border: 1px solid var(--light-dark-font-dimmed);
@@ -61,7 +64,7 @@
         gap: var(--size-tiny);
 
         .you {
-            opacity: .75;
+            opacity: 0.75;
             font-style: italic;
         }
     }
@@ -69,7 +72,7 @@
     .date {
         grid-area: date;
         font-size: var(--font-size-small);
-        opacity: .75;
+        opacity: 0.75;
         font-style: italic;
         align-self: center;
     }
@@ -83,8 +86,7 @@
     grid-template-areas:
         "ppf date date"
         "ppf name name"
-        "ppf message message"
-    ;
+        "ppf message message";
 }
 
 .conversation:has(.loader) {
@@ -109,6 +111,17 @@
 .conversation.active {
     border: 1px solid var(--color-secondary);
     background-color: var(--color-secondary-dimmed);
+}
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 480px) {
+    .conversation {
+        > :not(.ppf, .group-ppf-container) {
+            display: none;
+        }
+    }
 }
 
 @keyframes spin {

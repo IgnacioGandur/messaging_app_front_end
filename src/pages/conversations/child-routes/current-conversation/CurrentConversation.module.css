@@ -34,7 +34,7 @@
 
             .participants-n {
                 font-size: var(--font-size-small);
-                opacity: .75;
+                opacity: 0.75;
             }
         }
 

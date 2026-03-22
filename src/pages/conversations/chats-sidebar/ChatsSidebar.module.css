@@ -31,3 +31,13 @@
         background-color: var(--light-dark-font-dimmed);
     }
 }
+
+@media screen and (max-width: 768px) {
+}
+
+@media screen and (max-width: 480px) {
+    .chats-sidebar {
+        min-width: initial;
+        max-width: initial;
+    }
+}

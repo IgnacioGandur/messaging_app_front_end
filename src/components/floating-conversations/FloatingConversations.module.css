@@ -1,5 +1,4 @@
 .current-floating-conversation,
-/* .conversations-hidden, */
 .conversations {
     max-width: 375px;
     width: 100%;
@@ -14,30 +13,6 @@
     transition: var(--transition-normal);
 }
 
-/* .conversations-hidden:hover, */
-/* .conversations-hidden:focus-visible { */
-/*     border: 2px solid var(--color-secondary); */
-/* } */
-
-/* .conversations-hidden { */
-/*     display: flex; */
-/*     align-items: center; */
-/*     gap: var(--size-small); */
-/*     max-width: 275px; */
-/*     padding: var(--size-normal); */
-/**/
-/*     .icon { */
-/*         font-size: var(--icon-size-normal); */
-/*     } */
-/**/
-/*     .separator { */
-/*         min-width: 5px; */
-/*         min-height: 5px; */
-/*         border-radius: var(--rounding-total); */
-/*         background-color: var(--light-dark-font-dimmed); */
-/*     } */
-/* } */
-
 .current-floating-conversation,
 .conversations {
     display: flex;
@@ -46,7 +21,7 @@
     border-radius: 25px;
     padding: 0;
 
-    >* {
+    > * {
         padding: var(--size-small);
     }
 
@@ -101,9 +76,9 @@
         }
 
         .text {
-            font-size: .9rem;
+            font-size: 0.9rem;
             font-style: italic;
-            opacity: .9;
+            opacity: 0.9;
 
             a {
                 color: var(--color-main);

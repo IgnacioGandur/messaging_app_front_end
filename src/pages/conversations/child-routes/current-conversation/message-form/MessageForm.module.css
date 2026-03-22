@@ -1,5 +1,5 @@
 .loader {
-    --opacity: .65;
+    --opacity: 0.65;
 
     border-top: 1px solid var(--light-dark-font-dimmed);
     padding: var(--size-normal);
@@ -8,17 +8,18 @@
     gap: var(--size-normal);
     align-items: center;
 
-    >* {
+    > * {
         opacity: var(--opacity);
     }
 
     .text {
         font-weight: 700;
-        font-size: .85rem;
+        font-size: 0.85rem;
     }
 }
 
 .send-message {
+    background-color: var(--light-dark-background);
     height: 75px;
     border-top: 1px solid var(--light-dark-font-dimmed);
     display: flex;
@@ -65,5 +66,15 @@
             font-size: var(--icon-size-normal);
             color: var(--light-dark-font);
         }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .send-message {
+        width: 100%;
+        height: fit-content;
+        position: absolute;
+        bottom: 0;
+        left: 0;
     }
 }

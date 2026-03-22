@@ -21,6 +21,7 @@ import ChatsSidebar from "./chats-sidebar/ChatsSidebar";
 import useConversations from "./useConversations";
 
 const Conversations = () => {
+    console.log('mounted')
     const rootData = useRouteLoaderData("root");
     const loggedUser = rootData?.user;
     const loaderData = useLoaderData() as {

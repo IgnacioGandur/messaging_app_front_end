@@ -7,18 +7,18 @@ import { SyncLoader } from "react-spinners";
 interface MessageType {
     message: string;
     attachment: null | File;
-};
+}
 
 const MessageForm = () => {
     const fetcher = useFetcher({ key: "message-form" });
-    const [message, setMessage] = useState<MessageType>({ message: "", attachment: null });
-    const handleMessage = (
-        _: string,
-        value: string
-    ) => {
+    const [message, setMessage] = useState<MessageType>({
+        message: "",
+        attachment: null,
+    });
+    const handleMessage = (_: string, value: string) => {
         setMessage((prev) => ({
             ...prev,
-            message: value
+            message: value,
         }));
     };
 
@@ -29,14 +29,10 @@ const MessageForm = () => {
                 size=".6rem"
                 className={styles.animation}
             />
-            <p
-                className={styles.text}
-            >
-                Sending message...
-            </p>
+            <p className={styles.text}>Sending message...</p>
         </div>
-    ) :
-        (<fetcher.Form
+    ) : (
+        <fetcher.Form
             id="message-form"
             method="post"
             className={styles["send-message"]}
@@ -62,11 +58,11 @@ const MessageForm = () => {
                     name="attachment"
                     type="file"
                     onChange={(e) => {
-                        const file = e.target.files?.[0] ?? null
+                        const file = e.target.files?.[0] ?? null;
 
                         setMessage((prev) => ({
                             ...prev,
-                            attachment: file
+                            attachment: file,
                         }));
                     }}
                 />
@@ -90,8 +86,7 @@ const MessageForm = () => {
                 </span>
             </button>
         </fetcher.Form>
-        )
+    );
 };
-
 
 export default MessageForm;

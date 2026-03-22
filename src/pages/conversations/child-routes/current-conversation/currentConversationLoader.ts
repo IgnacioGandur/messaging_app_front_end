@@ -6,16 +6,18 @@ interface ConversationResponse {
     success: boolean;
     message: string;
     conversation: Conversation;
-};
+}
 
-export default async function currentConversationLoader({ params }: LoaderFunctionArgs) {
+export default async function currentConversationLoader({
+    params,
+}: LoaderFunctionArgs) {
     const url = `${import.meta.env.VITE_API_BASE}/conversations/${params.conversationId}`;
     const options: RequestInit = {
         method: "GET",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        credentials: "include"
+        credentials: "include",
     };
 
     const result = await apiRequestLoader<ConversationResponse>(url, options);

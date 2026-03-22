@@ -6,7 +6,7 @@ import {
     useActionData,
     useSearchParams,
     useNavigation,
-    Form
+    Form,
 } from "react-router";
 
 // Components
@@ -18,14 +18,14 @@ import FormButton from "../../components/form-button/FormButton";
 import type { LoginResponseType } from "./loginAction";
 
 export const Submitter = ({ text }: { text: string }) => {
-    return <div className={styles.submitting}>
-        <span className={`material-symbols-rounded ${styles.icon}`}>
-            progress_activity
-        </span>
-        <p className={styles["submiting-message"]}>
-            {text}
-        </p>
-    </div>
+    return (
+        <div className={styles.submitting}>
+            <span className={`material-symbols-rounded ${styles.icon}`}>
+                progress_activity
+            </span>
+            <p className={styles["submiting-message"]}>{text}</p>
+        </div>
+    );
 };
 
 const Login = () => {
@@ -36,7 +36,7 @@ const Login = () => {
     const message = searchParams.get("message");
     const [userInputs, setUserInputs] = useState({
         username: "",
-        password: ""
+        password: "",
     });
 
     const loginResult = actionData;
@@ -46,74 +46,87 @@ const Login = () => {
     const handleUserInputs = (field: string, value: string) => {
         setUserInputs((prevInputs) => ({
             ...prevInputs,
-            [field]: value
+            [field]: value,
         }));
     };
 
-    return <main className={styles["login"]}>
-        {hasInputErrors && <InputErrors
-            message={loginResult?.message}
-            errors={loginResult?.errors} />}
-        <div className={styles.wrapper}>
-            {message && (<p
-                className={styles.message}
-            >
-                {message}
-            </p>)}
-            <div className={styles.container}>
-                <div className={styles.deco}>
-                    <div className={styles["title-container"]}>
-                        <h1 className={styles.title}>
-                            Welcome back!
-                        </h1>
-                    </div>
-                    <div className={styles["blob-container"]}>
-                        <div className={styles.background}></div>
-                        <div className={styles["blob-wrapper"]}>
-                            <Blob
-                                onlyGlow={true}
-                            />
+    return (
+        <main className={styles["login"]}>
+            {hasInputErrors && (
+                <InputErrors
+                    message={loginResult?.message}
+                    errors={loginResult?.errors}
+                />
+            )}
+            <div className={styles.wrapper}>
+                {message && <p className={styles.message}>{message}</p>}
+                <div className={styles.container}>
+                    <div className={styles.deco}>
+                        <div className={styles["title-container"]}>
+                            <h1 className={styles.title}>Welcome back!</h1>
+                        </div>
+                        <div className={styles["blob-container"]}>
+                            <div className={styles.background}></div>
+                            <div className={styles["blob-wrapper"]}>
+                                <Blob onlyGlow={true} />
+                            </div>
                         </div>
                     </div>
-                </div>
-                {isSubmittingForm ? (
-                    <Submitter text="Login, please wait..." />
-                ) : (
-                    <div className={styles["form-wrapper"]}>
-                        <Form
-                            method="post"
-                            className={styles.form}
-                        >
-                            <h2
-                                className={`${styles.title} ${styles.login}`}
+                    {isSubmittingForm ? (
+                        <Submitter text="Login, please wait..." />
+                    ) : (
+                        <div className={styles["form-wrapper"]}>
+                            <Form
+                                method="post"
+                                className={styles.form}
                             >
-                                Enter your username and password.
-                            </h2>
-                            {Object.entries(userInputs).map(([key, value]) => {
-                                return <CustomInput
-                                    key={key}
-                                    id={key}
-                                    name={key}
-                                    type={key === "password" ? "password" : "text"}
-                                    labelText={key}
-                                    googleIcon={key === "password" ? "key" : "badge"}
-                                    value={value}
-                                    onChange={handleUserInputs}
-                                    placeholder={key === "password" ? "*****" : "john_doe"}
-                                    required={true}
+                                <h2
+                                    className={`${styles.title} ${styles.login}`}
+                                >
+                                    Enter your username and password.
+                                </h2>
+                                {Object.entries(userInputs).map(
+                                    ([key, value]) => {
+                                        return (
+                                            <CustomInput
+                                                key={key}
+                                                id={key}
+                                                name={key}
+                                                type={
+                                                    key === "password"
+                                                        ? "password"
+                                                        : "text"
+                                                }
+                                                labelText={key}
+                                                googleIcon={
+                                                    key === "password"
+                                                        ? "key"
+                                                        : "badge"
+                                                }
+                                                value={value}
+                                                onChange={handleUserInputs}
+                                                placeholder={
+                                                    key === "password"
+                                                        ? "*****"
+                                                        : "john_doe"
+                                                }
+                                                required={true}
+                                            />
+                                        );
+                                    },
+                                )}
+                                <FormButton
+                                    showGlow={true}
+                                    text="Login"
+                                    type="submit"
                                 />
-                            })}
-                            <FormButton
-                                showGlow={true}
-                                text="Login"
-                                type="submit"
-                            />
-                        </Form>
-                    </div>
-                )}
+                            </Form>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
-    </main >
-}
+        </main>
+    );
+};
 
 export default Login;

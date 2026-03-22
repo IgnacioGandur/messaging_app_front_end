@@ -33,7 +33,7 @@
             border-radius: var(--rounding-big);
             box-shadow: var(--shadow-1);
 
-            >* {
+            > * {
                 height: 100%;
                 flex: 1;
             }
@@ -44,7 +44,7 @@
                 align-items: center;
                 justify-content: space-between;
 
-                >* {
+                > * {
                     flex: 1;
                 }
 
@@ -57,7 +57,11 @@
                         font-weight: var(--font-thickness-thinnest);
                         width: 100%;
                         text-align: center;
-                        background-image: linear-gradient(45deg, var(--color-main), var(--color-secondary));
+                        background-image: linear-gradient(
+                            45deg,
+                            var(--color-main),
+                            var(--color-secondary)
+                        );
                         color: transparent;
                         background-clip: text;
                         text-align: center;
@@ -80,7 +84,13 @@
                     }
 
                     .background {
-                        background-image: radial-gradient(circle at 50% 100%, transparent, var(--light-dark-background) 55%), url("/wiggle.png");
+                        background-image:
+                            radial-gradient(
+                                circle at 50% 100%,
+                                transparent,
+                                var(--light-dark-background) 55%
+                            ),
+                            url("/wiggle.png");
                         background-repeat: repeat;
                     }
 
@@ -110,7 +120,7 @@
                     padding: var(--size-normal);
                     gap: var(--size-normal);
                     border-radius: var(--rounding-medium);
-                    box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, .1);
+                    box-shadow: 0px 0px 7px 1px rgba(0, 0, 0, 0.1);
                     margin-right: 3rem;
 
                     .title {
@@ -142,7 +152,7 @@
 
                 .submiting-message {
                     font-size: var(--font-size-small);
-                    opacity: .75;
+                    opacity: 0.75;
                     font-style: italic;
                 }
             }
@@ -160,12 +170,12 @@
         position: absolute;
         top: 0;
         left: 0;
-        background-image:
-            linear-gradient(to right,
-                var(--light-dark-background),
-                transparent 10% 90%,
-                var(--light-dark-background));
-        ;
+        background-image: linear-gradient(
+            to right,
+            var(--light-dark-background),
+            transparent 10% 90%,
+            var(--light-dark-background)
+        );
     }
 }
 
@@ -180,8 +190,7 @@
                         "firstName lastName"
                         "username username"
                         "password confirmPassword"
-                        "button button"
-                    ;
+                        "button button";
                     grid-template-columns: 1fr 1fr;
                     grid-auto-rows: max-content;
 
@@ -199,6 +208,115 @@
 
                     .button {
                         grid-column: 1/-1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1475px) {
+    .register,
+    .login {
+        .wrapper {
+            .container {
+                height: 100%;
+                width: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding: var(--size-big);
+                gap: var(--size-big);
+
+                > * {
+                    height: initial;
+                    flex: initial;
+                }
+
+                .deco {
+                    justify-content: center;
+
+                    .title-container {
+                        flex: initial;
+                        padding: 0;
+                        height: max-content;
+                    }
+
+                    .blob-container {
+                        display: none;
+                    }
+                }
+
+                .form-wrapper {
+                    flex: 1;
+                    width: 100%;
+                    border-radius: var(--rounding-medium);
+
+                    .form {
+                        border: 1px solid var(--light-dark-font-dimmed);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .register,
+    .login {
+        .wrapper {
+            .container {
+                .deco {
+                    .title-container {
+                        .title {
+                            font-size: 3.5rem;
+                        }
+                    }
+                }
+                .form-wrapper {
+                    .form {
+                        margin: 0;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .register,
+    .login {
+        .wrapper {
+            .container {
+                padding: var(--size-normal);
+
+                .deco {
+                    .title-container {
+                        .title {
+                            font-size: 3rem;
+                        }
+                    }
+                }
+
+                .form-wrapper {
+                    flex: 1;
+
+                    .form {
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        box-shadow: none;
+                        display: flex;
+                        flex-direction: column;
+                        margin-right: initial;
+                        padding: var(--size-normal);
+                        justify-content: flex-start;
+                        gap: var(--size-big);
+
+                        .title {
+                            display: none;
+                        }
                     }
                 }
             }
